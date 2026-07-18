@@ -456,9 +456,24 @@
           <div class="field-note">If less than the time period, contributions stop early and the balance keeps compounding on its own.</div>
         </div>
         <div class="field">
-          <label>Target amount <span class="val" id="g_goalVal">Off</span></label>
-          <div class="dollar-input"><span>$</span><input type="number" id="g_goal" value="" placeholder="Optional" min="0" step="10000"></div>
-          <div class="field-note">Shows a goal line on the chart and when it's projected to be reached.</div>
+          <label>Retirement goal <span class="val" id="g_goalVal">Off</span></label>
+          <div class="mode-toggle" style="margin-bottom:10px;">
+            <button type="button" class="mode-btn active" data-goaltype="income" onclick="setGoalType('income')">Monthly income</button>
+            <button type="button" class="mode-btn" data-goaltype="lump" onclick="setGoalType('lump')">Lump sum</button>
+          </div>
+          <div id="g_goalIncomeFields">
+            <div class="field-note" style="margin-top:0; margin-bottom:8px;">How much does the client want to spend per month in retirement?</div>
+            <div class="dollar-input" style="margin-bottom:8px;"><span>$</span><input type="number" id="g_goalIncome" value="" placeholder="e.g. 4000" min="0" step="100"></div>
+            <div style="display:flex; gap:10px;">
+              <div class="stream-mini"><label>Years it should last</label><input type="number" id="g_goalYears" value="25" min="1" step="1"></div>
+              <div class="stream-mini"><label>Return during retirement</label><input type="number" id="g_goalRate" value="4" min="0" step="0.25"></div>
+            </div>
+            <div class="field-note">Calculates the lump sum needed at retirement to pay this monthly income for that many years, then compares it to the projected balance.</div>
+          </div>
+          <div id="g_goalLumpFields" style="display:none;">
+            <div class="dollar-input"><span>$</span><input type="number" id="g_goal" value="" placeholder="Optional" min="0" step="10000"></div>
+            <div class="field-note">Shows a goal line on the chart and when it's projected to be reached.</div>
+          </div>
         </div>
         <div class="field">
           <label>Optimistic / conservative range <span class="val" id="g_bandVal">Off</span></label>
@@ -711,6 +726,34 @@ const LOGO_FULL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAvYAAAJgCAYAAAD
 const els = id => document.getElementById(id);
 let linkedMode = false;
 let cpfMode = false;
+let goalType = 'income'; // 'income' (monthly retirement spend) | 'lump' (flat target)
+function setGoalType(type){
+  goalType = type;
+  document.querySelectorAll('[data-goaltype]').forEach(b=>b.classList.toggle('active', b.dataset.goaltype===type));
+  els('g_goalIncomeFields').style.display = type==='income' ? 'block' : 'none';
+  els('g_goalLumpFields').style.display = type==='lump' ? 'block' : 'none';
+  renderAll();
+  autoSaveDraft();
+}
+function requiredCorpus(monthlyIncome, years, rate){
+  const rm = (rate/100)/12;
+  const n = Math.round(years*12);
+  if(rm<=0) return monthlyIncome * n;
+  return monthlyIncome * (1 - Math.pow(1+rm, -n)) / rm;
+}
+function getGoalInfo(){
+  if(goalType==='income'){
+    const income = parseFloat(els('g_goalIncome').value);
+    if(!isFinite(income) || income<=0) return null;
+    const years = parseFloat(els('g_goalYears').value)||25;
+    const rate = parseFloat(els('g_goalRate').value)||0;
+    const corpus = requiredCorpus(income, years, rate);
+    return {value: corpus, label: 'Needed: '+fmt$(corpus), type:'income', income, years, rate};
+  }
+  const goalRaw = parseFloat(els('g_goal').value);
+  if(!isFinite(goalRaw) || goalRaw<=0) return null;
+  return {value: goalRaw, label: 'Goal: '+fmt$(goalRaw), type:'lump'};
+}
 function setCpfMode(on){
   cpfMode = on;
   document.querySelectorAll('[data-cpf]').forEach(b=>b.classList.toggle('active', (b.dataset.cpf==='on')===on));
@@ -938,9 +981,8 @@ function renderGrowth(){
   els('g_returnVal').textContent = parseFloat(els('g_return').value).toFixed(1)+'%';
   els('g_yearsVal').textContent = els('g_years').value + ' years';
   els('g_contribYearsVal').textContent = els('g_contribYears').value + ' years';
-  const goalRaw = parseFloat(els('g_goal').value);
-  const goal = isFinite(goalRaw) && goalRaw>0 ? goalRaw : null;
-  els('g_goalVal').textContent = goal ? fmt$(goal) : 'Off';
+  const goalInfo = getGoalInfo();
+  els('g_goalVal').textContent = goalInfo ? fmt$(goalInfo.value) : 'Off';
   const bandSpread = parseFloat(els('g_band').value)||0;
   els('g_bandVal').textContent = bandSpread>0 ? '\u00b1'+bandSpread.toFixed(1)+'%' : 'Off';
 
@@ -955,6 +997,8 @@ function renderGrowth(){
 
   const chartOpts = {};
   const legendExtra = [];
+  const retireOffset = getRetirementOffset();
+  const usingRetirePoint = retireOffset!=null && retireOffset<=inputs.years;
 
   if(bandSpread>0){
     const lowSim = simulateGrowth({...inputs, rate: Math.max(0, inputs.rate-bandSpread)});
@@ -962,23 +1006,28 @@ function renderGrowth(){
     chartOpts.band = {lowValues: lowSim.yearly.map(y=>y.balance), highValues: highSim.yearly.map(y=>y.balance), color:'#A9793C'};
     legendExtra.push(`<div class="item"><span class="swatch" style="background:var(--gold);opacity:.35"></span>${(inputs.rate-bandSpread).toFixed(1)}%\u2013${(inputs.rate+bandSpread).toFixed(1)}% range</div>`);
   }
-  if(goal){
-    chartOpts.goalValue = goal;
-    chartOpts.goalLabel = 'Goal: ' + fmt$(goal);
-    const hitIndex = sim.yearly.findIndex(y=>y.balance>=goal);
-    const goalNote = els('g-goal-note');
+  const goalNote = els('g-goal-note');
+  if(goalInfo){
+    chartOpts.goalValue = goalInfo.value;
+    chartOpts.goalLabel = goalInfo.label;
+    const compareIndex = usingRetirePoint ? Math.round(retireOffset) : sim.yearly.length-1;
+    const compareYear = sim.yearly[compareIndex].year;
+    const projectedAtPoint = sim.yearly[compareIndex].balance;
+    const gap = projectedAtPoint - goalInfo.value;
+    const pointPhrase = usingRetirePoint ? `at retirement (${yearPhrase(compareYear)})` : `by the end of the ${inputs.years}-year horizon`;
     goalNote.style.display = 'block';
-    if(hitIndex>=0){
-      goalNote.innerHTML = `<b>On track:</b> the ${fmt$(goal)} goal is projected to be reached by ${yearPhrase(sim.yearly[hitIndex].year)}, with ${inputs.years-sim.yearly[hitIndex].year} years of the horizon still to spare.`;
+    const basis = goalInfo.type==='income'
+      ? `funding ${fmt$(goalInfo.income)}/month for ${goalInfo.years} years at ${goalInfo.rate}% in retirement`
+      : `the ${fmt$(goalInfo.value)} goal`;
+    if(gap>=0){
+      goalNote.innerHTML = `<b>On track:</b> ${pointPhrase}, the plan is projected to reach ${fmt$(projectedAtPoint)} \u2014 a surplus of ${fmt$(gap)} over the ${fmt$(goalInfo.value)} needed for ${basis}.`;
     } else {
-      const shortfall = goal - sim.finalBalance;
-      goalNote.innerHTML = `<b>Falls short:</b> at these numbers, the plan is projected to reach ${fmt$(sim.finalBalance)} by the end of the horizon \u2014 ${fmt$(shortfall)} short of the ${fmt$(goal)} goal.`;
+      goalNote.innerHTML = `<b>Falls short:</b> ${pointPhrase}, the plan is projected to reach ${fmt$(projectedAtPoint)} \u2014 ${fmt$(-gap)} short of the ${fmt$(goalInfo.value)} needed for ${basis}.`;
     }
   } else {
-    els('g-goal-note').style.display = 'none';
+    goalNote.style.display = 'none';
   }
-  const retireOffset = getRetirementOffset();
-  if(retireOffset!=null && retireOffset<=inputs.years){
+  if(usingRetirePoint){
     chartOpts.markerIndex = Math.round(retireOffset);
     chartOpts.markerLabel = 'Retirement';
     legendExtra.push(`<div class="item"><span class="swatch" style="background:var(--ink);opacity:.55"></span>Retirement marker</div>`);
@@ -1464,28 +1513,33 @@ function saveReport(){
   const gGrowth = gSim.finalBalance - gSim.totalContributed;
   const gGrowthPct = gSim.totalContributed>0 ? (gGrowth/gSim.totalContributed)*100 : 0;
 
-  const gGoalRaw = parseFloat(els('g_goal').value);
-  const gGoal = isFinite(gGoalRaw) && gGoalRaw>0 ? gGoalRaw : null;
+  const gGoalInfo = getGoalInfo();
   const gBandSpread = parseFloat(els('g_band').value)||0;
   const gChartOpts = {};
   let gGoalNoteHtml = '';
+  const gRetireOffset = getRetirementOffset();
+  const gUsingRetirePoint = gRetireOffset!=null && gRetireOffset<=gInputs.years;
   if(gBandSpread>0){
     const lowSim = simulateGrowth({...gInputs, rate: Math.max(0, gInputs.rate-gBandSpread)});
     const highSim = simulateGrowth({...gInputs, rate: gInputs.rate+gBandSpread});
     gChartOpts.band = {lowValues: lowSim.yearly.map(y=>y.balance), highValues: highSim.yearly.map(y=>y.balance), color:'#A9793C'};
   }
-  if(gGoal){
-    gChartOpts.goalValue = gGoal;
-    gChartOpts.goalLabel = 'Goal: ' + fmt$(gGoal);
-    const hitIndex = gSim.yearly.findIndex(y=>y.balance>=gGoal);
-    if(hitIndex>=0){
-      gGoalNoteHtml = `<div class="rp-narrative"><b>On track:</b> the ${fmt$(gGoal)} goal is projected to be reached by ${yearPhrase(gSim.yearly[hitIndex].year)}, with ${gInputs.years-gSim.yearly[hitIndex].year} years of the horizon still to spare.</div>`;
-    } else {
-      gGoalNoteHtml = `<div class="rp-narrative"><b>Falls short:</b> at these numbers, the plan is projected to reach ${fmt$(gSim.finalBalance)} by the end of the horizon \u2014 ${fmt$(gGoal-gSim.finalBalance)} short of the ${fmt$(gGoal)} goal.</div>`;
-    }
+  if(gGoalInfo){
+    gChartOpts.goalValue = gGoalInfo.value;
+    gChartOpts.goalLabel = gGoalInfo.label;
+    const compareIndex = gUsingRetirePoint ? Math.round(gRetireOffset) : gSim.yearly.length-1;
+    const compareYear = gSim.yearly[compareIndex].year;
+    const projectedAtPoint = gSim.yearly[compareIndex].balance;
+    const gap = projectedAtPoint - gGoalInfo.value;
+    const pointPhrase = gUsingRetirePoint ? `at retirement (${yearPhrase(compareYear)})` : `by the end of the ${gInputs.years}-year horizon`;
+    const basis = gGoalInfo.type==='income'
+      ? `funding ${fmt$(gGoalInfo.income)}/month for ${gGoalInfo.years} years at ${gGoalInfo.rate}% in retirement`
+      : `the ${fmt$(gGoalInfo.value)} goal`;
+    gGoalNoteHtml = gap>=0
+      ? `<div class="rp-narrative"><b>On track:</b> ${pointPhrase}, the plan is projected to reach ${fmt$(projectedAtPoint)} \u2014 a surplus of ${fmt$(gap)} over the ${fmt$(gGoalInfo.value)} needed for ${basis}.</div>`
+      : `<div class="rp-narrative"><b>Falls short:</b> ${pointPhrase}, the plan is projected to reach ${fmt$(projectedAtPoint)} \u2014 ${fmt$(-gap)} short of the ${fmt$(gGoalInfo.value)} needed for ${basis}.</div>`;
   }
-  const gRetireOffset = getRetirementOffset();
-  if(gRetireOffset!=null && gRetireOffset<=gInputs.years){
+  if(gUsingRetirePoint){
     gChartOpts.markerIndex = Math.round(gRetireOffset);
     gChartOpts.markerLabel = 'Retirement';
   }
@@ -1826,6 +1880,7 @@ function collectAllData(){
   data.__expenseStreams = expenseStreams;
   data.__linkedMode = linkedMode;
   data.__cpfMode = cpfMode;
+  data.__goalType = goalType;
   data.__savedAt = new Date().toISOString();
   return data;
 }
@@ -1846,6 +1901,7 @@ function applyAllData(data){
     if(el) el.value = data[key];
   });
   setCpfMode(!!data.__cpfMode);
+  setGoalType(data.__goalType==='lump' ? 'lump' : 'income');
   if(typeof data.__linkedMode === 'boolean'){
     setMode(data.__linkedMode ? 'linked' : 'independent');
   } else {
