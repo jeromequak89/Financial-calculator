@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Financial Planning Report</title>
+<style>
+  :root{
+    --paper:#F4F5EF;
+    --surface:#FFFFFF;
+    --ink:#15231D;
+    --muted:#666F62;
+    --line:#DCD8C8;
+    --primary:#1F4B3F;
+    --primary-light:#3F7C68;
+    --primary-wash:#E7EEE9;
+    --gold:#A9793C;
+    --gold-wash:#F4EADA;
+    --danger:#9C3B2E;
+    --danger-wash:#F5E5E1;
+    --radius:2px;
+    --serif: ui-serif, Georgia, "Times New Roman", serif;
+    --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    padding:32px 20px 80px;
+    border-top:3px solid var(--gold);
+  }
+  .wrap{max-width:1040px;margin:0 auto;}
+
+  /* Header */
+  .masthead{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:24px;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:18px;
+    margin-bottom:22px;
+    flex-wrap:wrap;
+  }
+  .brand-row{display:flex; align-items:center; gap:14px; margin-bottom:10px;}
+  .brand-row img{height:34px; width:auto; display:block;}
+  .brand-row .brandname{font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); border-left:1px solid var(--line); padding-left:14px;}
+  .mark{
+    display:flex; align-items:center; gap:10px;
+    font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); margin-bottom:8px;
+  }
+  .mark .dot{width:6px;height:6px;background:var(--gold);border-radius:50%;display:inline-block;}
+  h1{
+    font-family:var(--serif); font-weight:600; font-size:34px;
+    margin:0 0 6px; letter-spacing:-0.01em; color:var(--ink);
+  }
+  .sub{color:var(--muted); font-size:14.5px; max-width:560px; line-height:1.5;}
+  .head-actions{display:flex; flex-direction:column; align-items:flex-end; gap:10px;}
+  .save-btn{
+    background:var(--ink); color:#fff; border:none; border-radius:var(--radius);
+    padding:12px 20px; font-family:var(--sans); font-size:14px; font-weight:600;
+    cursor:pointer; display:flex; align-items:center; gap:8px; letter-spacing:.01em;
+    transition:background .15s ease;
+  }
+  .save-btn:hover{background:var(--primary);}
+  .save-btn svg{width:15px;height:15px;}
+  .action-row{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;}
+  .secondary-btn{background:#fff; color:var(--ink); border:1px solid var(--line);}
+  .secondary-btn:hover{background:var(--primary-wash); color:var(--ink);}
+
+  .client-row{
+    display:flex; gap:14px; flex-wrap:wrap;
+  }
+  .client-field{display:flex; flex-direction:column; gap:4px;}
+  .client-field label{font-size:10.5px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted);}
+  .client-field input{
+    border:none; border-bottom:1px solid var(--line); background:transparent;
+    font-family:var(--serif); font-size:14px; padding:2px 0; width:170px; color:var(--ink);
+  }
+  .client-field input:focus{outline:none; border-bottom-color:var(--primary);}
+
+  /* Tabs */
+  .tabs{
+    display:flex; background:var(--surface); border:1px solid var(--line);
+    border-radius:var(--radius); overflow:hidden; margin-bottom:22px;
+  }
+  .tab-btn{
+    flex:1; padding:16px 10px; text-align:center; background:transparent; border:none;
+    font-family:var(--sans); font-size:14px; font-weight:600; color:var(--muted);
+    cursor:pointer; border-right:1px solid var(--line); line-height:1.35;
+    transition:background .15s ease, color .15s ease;
+  }
+  .tab-btn:last-child{border-right:none;}
+  .tab-btn .n{display:block; font-family:var(--mono); font-size:10px; letter-spacing:.12em; color:var(--gold); margin-bottom:5px; font-weight:600;}
+  .tab-btn.active{background:var(--ink); color:#fff;}
+  .tab-btn.active .n{color:var(--gold);}
+  .tab-btn:not(.active):hover{background:var(--primary-wash); color:var(--ink);}
+  .tab-tag{
+    display:inline-block; font-family:var(--mono); font-size:9.5px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--muted); background:var(--paper); border:1px solid var(--line);
+    padding:3px 8px; border-radius:20px; margin-bottom:16px;
+  }
+  .mode-row{display:flex; align-items:center; gap:12px; margin-bottom:14px; flex-wrap:wrap;}
+  .mode-label{font-size:12px; font-weight:600; color:var(--ink);}
+  .mode-toggle{display:inline-flex; border:1px solid var(--line); border-radius:20px; overflow:hidden; background:#fff;}
+  .mode-btn{
+    border:none; background:transparent; padding:6px 16px; font-family:var(--sans); font-size:12px;
+    font-weight:600; color:var(--muted); cursor:pointer; transition:background .15s ease, color .15s ease;
+  }
+  .mode-btn.active{background:var(--ink); color:#fff;}
+  .mode-btn:not(.active):hover{background:var(--primary-wash);}
+  .mode-hint{font-size:11.5px; color:var(--muted); font-style:italic;}
+  .cpf-presets{display:flex; gap:6px; margin-top:8px;}
+  .cpf-btn{
+    border:1px solid var(--gold); background:var(--gold-wash); color:#7A5A2A; border-radius:20px;
+    padding:5px 10px; font-family:var(--sans); font-size:11px; font-weight:600; cursor:pointer;
+  }
+  .cpf-btn:hover{background:#E4D3AE;}
+  .cpf-section-tag{
+    font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+    color:#7A5A2A; border-top:1px dashed var(--gold); padding-top:14px; margin-top:6px; margin-bottom:14px;
+  }
+  .draft-banner{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    background:var(--gold-wash); border:1px solid #E4D3AE; border-radius:2px;
+    padding:11px 16px; margin-bottom:16px; font-size:13px; color:#7A5A2A;
+  }
+  .draft-banner-actions{display:flex; gap:8px; flex-shrink:0;}
+  .draft-banner-actions button{
+    border:none; border-radius:20px; padding:6px 14px; font-family:var(--sans);
+    font-size:12px; font-weight:600; cursor:pointer; background:var(--ink); color:#fff;
+  }
+  .draft-banner-actions button.ghost{background:transparent; color:#7A5A2A; border:1px solid #7A5A2A;}
+  .linked-note{
+    background:var(--primary-wash); border:1px solid #CBDED3; border-radius:2px;
+    padding:12px 14px; font-size:12px; color:#1F4B3F; line-height:1.5; margin-bottom:20px; display:none;
+  }
+  .linked-note b{font-weight:700;}
+
+  .stream-card{
+    border:1px solid var(--line); border-radius:2px; background:#fff;
+    padding:10px 12px; margin-bottom:10px;
+  }
+  .stream-card-top{display:flex; align-items:center; gap:8px; margin-bottom:8px;}
+  .stream-label-input{
+    flex:1; border:none; border-bottom:1px solid var(--line); background:transparent;
+    font-family:var(--sans); font-size:12.5px; font-weight:600; padding:3px 0; color:var(--ink);
+  }
+  .stream-label-input:focus{outline:none; border-bottom-color:var(--primary);}
+  .stream-remove{
+    border:none; background:transparent; color:var(--danger); font-size:16px; line-height:1;
+    cursor:pointer; padding:2px 4px; font-weight:700;
+  }
+  .stream-fields{display:flex; gap:8px;}
+  .stream-fields .dollar-input{flex:1.3; padding:0 8px;}
+  .stream-fields .dollar-input input{padding:7px 4px; font-size:13px;}
+  .stream-mini{flex:1; display:flex; flex-direction:column; gap:2px;}
+  .stream-mini label{font-size:9px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted);}
+  .stream-mini input{
+    border:1px solid var(--line); border-radius:2px; padding:6px 6px; font-family:var(--mono);
+    font-size:12.5px; width:100%; background:#fff; color:var(--ink);
+  }
+  .add-stream-btn{
+    width:100%; border:1px dashed var(--line); background:transparent; border-radius:2px;
+    padding:9px; font-family:var(--sans); font-size:12.5px; font-weight:600; color:var(--primary);
+    cursor:pointer; margin-top:2px; transition:background .15s ease;
+  }
+  .add-stream-btn:hover{background:var(--primary-wash);}
+
+  /* Panels */
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .grid{
+    display:grid; grid-template-columns:280px 1fr; gap:0;
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    overflow:hidden;
+  }
+  @media (max-width:760px){ .grid{grid-template-columns:1fr;} }
+
+  .inputs-col{
+    padding:26px 24px; border-right:1px solid var(--line);
+    background:#FBFAF6;
+  }
+  @media (max-width:760px){ .inputs-col{border-right:none; border-bottom:1px solid var(--line);} }
+
+  .field{margin-bottom:20px;}
+  .field label{
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-size:12.5px; font-weight:600; color:var(--ink); margin-bottom:8px;
+  }
+  .field label .val{font-family:var(--mono); font-weight:600; color:var(--primary); font-size:13px;}
+  .dollar-input{
+    display:flex; align-items:center; border:1px solid var(--line); border-radius:var(--radius);
+    background:#fff; padding:0 12px;
+  }
+  .dollar-input span{color:var(--muted); font-family:var(--mono); font-size:14px;}
+  .dollar-input input{
+    border:none; padding:11px 6px; font-family:var(--mono); font-size:15px;
+    width:100%; background:transparent; color:var(--ink);
+  }
+  .dollar-input input:focus{outline:none;}
+  input[type=range]{
+    -webkit-appearance:none; width:100%; height:2px; background:var(--line); border-radius:2px; margin-top:6px;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:16px; height:16px; border-radius:50%;
+    background:var(--ink); cursor:pointer; border:2px solid #fff; box-shadow:0 0 0 1px var(--ink);
+  }
+  input[type=range]::-moz-range-thumb{
+    width:14px; height:14px; border-radius:50%; background:var(--ink); cursor:pointer; border:2px solid #fff; box-shadow:0 0 0 1px var(--ink);
+  }
+  .field-note{font-size:11.5px; color:var(--muted); margin-top:6px; line-height:1.4;}
+
+  .results-col{padding:28px 30px;}
+
+  .stat-row{display:flex; gap:36px; flex-wrap:wrap; margin-bottom:22px;}
+  .stat{min-width:140px;}
+  .stat .label{font-size:10.5px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:6px;}
+  .stat .value{font-family:var(--serif); font-size:26px; color:var(--ink); font-weight:600;}
+  .stat .value.accent{color:var(--primary);}
+  .stat .value.gold{color:var(--gold);}
+  .stat .value.danger{color:var(--danger);}
+
+  .headline{
+    border-radius:var(--radius); padding:20px 22px; margin-bottom:22px; border:1px solid;
+  }
+  .headline.wash-gold{background:var(--gold-wash); border-color:#E4D3AE;}
+  .headline.wash-green{background:var(--primary-wash); border-color:#CBDED3;}
+  .headline.wash-red{background:var(--danger-wash); border-color:#E5C6BC;}
+  .headline .label{font-size:11px; text-transform:uppercase; letter-spacing:.1em; margin-bottom:6px; font-weight:600;}
+  .headline .note{font-size:12.5px; margin-top:8px; line-height:1.4;}
+  .headline-figures{display:flex; align-items:baseline; gap:18px; flex-wrap:wrap;}
+  .headline-figures .hf-value{font-family:var(--serif); font-size:36px; font-weight:700; line-height:1.1;}
+  .headline-figures .hf-sub{font-size:11px; opacity:.75; margin-top:3px; text-transform:uppercase; letter-spacing:.06em;}
+  .headline-figures .hf-divider{font-size:22px; opacity:.35; align-self:center;}
+
+  .chart-wrap{border:1px solid var(--line); border-radius:var(--radius); padding:18px 18px 8px; background:#fff;}
+  .legend{display:flex; gap:18px; flex-wrap:wrap; margin-bottom:6px; align-items:center;}
+  .legend .item{display:flex; align-items:center; gap:6px; font-size:12px; color:var(--muted);}
+  .axis-note{margin-left:auto; font-size:10.5px; color:var(--muted); font-style:italic;}
+  .legend .swatch{width:10px;height:10px;border-radius:2px;}
+
+  table.datatable{width:100%; border-collapse:collapse; margin-top:18px; font-family:var(--mono); font-size:12.5px;}
+  table.datatable th{
+    text-align:right; font-family:var(--sans); font-size:10.5px; text-transform:uppercase;
+    letter-spacing:.08em; color:var(--muted); padding:8px 6px; border-bottom:1px solid var(--ink); font-weight:600;
+  }
+  table.datatable th:first-child{text-align:left;}
+  table.datatable td{padding:7px 6px; text-align:right; border-bottom:1px solid var(--line); color:var(--ink);}
+  table.datatable td:first-child{text-align:left; color:var(--muted);}
+
+  .disclosure{
+    margin-top:26px; font-size:11px; color:var(--muted); line-height:1.6;
+    border-top:1px solid var(--line); padding-top:14px;
+  }
+
+  /* Report (print-only) */
+  #report{display:none;}
+
+  @page{ size:A4; margin:16mm; }
+
+  @media print{
+    body{padding:0; background:#fff; border-top:none;}
+    .no-print{display:none !important;}
+    #report{display:block;}
+  }
+
+  .report-page{
+    font-family:var(--sans); color:var(--ink);
+    min-height:950px;
+    display:flex; flex-direction:column;
+    page-break-after:always;
+  }
+  .report-page:last-child{page-break-after:auto;}
+
+  .rp-header{display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:22px;}
+  .rp-header .rp-brand{display:flex; align-items:center; gap:10px;}
+  .rp-header img{height:26px; width:auto; display:block;}
+  .rp-header .rp-brandname{font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted);}
+  .rp-header .rp-tag{font-family:var(--mono); font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); border:1px solid var(--gold); padding:3px 9px; border-radius:20px;}
+
+  .rp-body{flex:1;}
+
+  .rp-footer{margin-top:auto; padding-top:14px; border-top:1px solid var(--line); display:flex; align-items:center; justify-content:space-between;}
+  .rp-footer .rp-fbrand{display:flex; align-items:center; gap:8px;}
+  .rp-footer img{height:15px; width:auto; opacity:.75;}
+  .rp-footer .rp-fname{font-family:var(--serif); font-size:11px; color:var(--muted);}
+  .rp-footer .rp-fpage{font-family:var(--mono); font-size:9px; letter-spacing:.06em; color:#9a9a90; text-transform:uppercase;}
+
+  /* cover page */
+  .rp-cover{display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; flex:1; padding:30px 0;}
+  .rp-cover img.rp-coverlogo{height:140px; width:auto; margin-bottom:24px;}
+  .rp-cover .rp-eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); margin-bottom:12px;}
+  .rp-cover h1{font-family:var(--serif); font-size:40px; font-weight:600; margin:0 0 8px; letter-spacing:-0.01em;}
+  .rp-cover .rp-rule{width:64px; height:2px; background:var(--gold); margin:16px 0;}
+  .rp-cover .rp-subtitle{font-family:var(--serif); font-style:italic; font-size:15px; color:var(--muted); max-width:420px; line-height:1.6; margin-bottom:32px;}
+  .rp-cover .rp-prepared{border:1px solid var(--line); border-radius:2px; padding:20px 32px; min-width:300px; background:#fff;}
+  .rp-cover .rp-prepared .rp-row{display:flex; justify-content:space-between; gap:24px; padding:7px 0; font-size:13px; border-bottom:1px solid var(--line);}
+  .rp-cover .rp-prepared .rp-row:last-child{border-bottom:none;}
+  .rp-cover .rp-prepared .rp-row .rp-k{color:var(--muted); text-transform:uppercase; font-size:10px; letter-spacing:.08em;}
+  .rp-cover .rp-prepared .rp-row .rp-v{font-family:var(--serif); font-weight:600;}
+  .rp-cover .rp-toc{margin-top:36px; display:flex; gap:24px;}
+  .rp-cover .rp-toc .rp-item{text-align:left;}
+  .rp-cover .rp-toc .rp-num{font-family:var(--mono); font-size:10px; color:var(--gold); letter-spacing:.1em;}
+  .rp-cover .rp-toc .rp-lbl{font-family:var(--serif); font-size:13px; margin-top:2px;}
+
+  /* section pages */
+  .rp-eyebrow-sm{font-family:var(--mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); margin-bottom:6px;}
+  .rp-section-title{font-family:var(--serif); font-size:23px; font-weight:600; margin:0 0 4px;}
+  .rp-assumptions{font-size:11.5px; color:var(--muted); margin:8px 0 18px; padding-bottom:14px; border-bottom:1px solid var(--line);}
+  .rp-headline{border-radius:2px; padding:18px 22px; margin-bottom:18px; border:1px solid;}
+  .rp-headline.wash-green{background:var(--primary-wash); border-color:#CBDED3;}
+  .rp-headline.wash-red{background:var(--danger-wash); border-color:#E5C6BC;}
+  .rp-headline.wash-gold{background:var(--gold-wash); border-color:#E4D3AE;}
+  .rp-headline .rp-label{font-size:10.5px; text-transform:uppercase; letter-spacing:.1em; margin-bottom:7px; font-weight:600;}
+  .rp-hfigures{display:flex; align-items:baseline; gap:22px; flex-wrap:wrap;}
+  .rp-hfigures .rp-hfvalue{font-family:var(--serif); font-size:32px; font-weight:700; line-height:1;}
+  .rp-hfigures .rp-hfsub{font-size:10.5px; opacity:.75; margin-top:4px; text-transform:uppercase; letter-spacing:.06em;}
+  .rp-hfigures .rp-hfdivider{font-size:22px; opacity:.35;}
+  .rp-headline .rp-hnote{font-size:11.5px; margin-top:9px; line-height:1.4;}
+  .rp-stat-row{display:flex; gap:36px; margin:16px 0 18px;}
+  .rp-stat .rp-slabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin-bottom:5px;}
+  .rp-stat .rp-svalue{font-family:var(--serif); font-size:20px; font-weight:600;}
+  .rp-narrative{font-family:var(--serif); font-size:13px; line-height:1.7; color:#3A4740; background:#FBFAF6; border-left:2px solid var(--gold); padding:13px 17px; margin-top:16px;}
+  .rp-table{width:100%; border-collapse:collapse; margin-top:12px; font-family:var(--mono); font-size:10.5px;}
+  .rp-table th{text-align:right; font-family:var(--sans); font-size:9px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); padding:6px; border-bottom:1px solid var(--ink); font-weight:600;}
+  .rp-table th:first-child{text-align:left;}
+  .rp-table td{padding:5px 6px; text-align:right; border-bottom:1px solid var(--line);}
+  .rp-table td:first-child{text-align:left; color:var(--muted);}
+
+  /* One-page leave-behind summary */
+  .op-page{font-family:var(--sans); color:var(--ink); display:flex; flex-direction:column;}
+  .op-title{font-family:var(--serif); font-size:22px; font-weight:600; margin:2px 0 1px;}
+  .op-subtitle{font-size:11px; color:var(--muted); margin-bottom:14px;}
+  .op-body{display:flex; gap:18px; flex:1;}
+  .op-list{flex:1; display:flex; flex-direction:column; gap:10px; min-width:0;}
+  .op-card{border:1px solid var(--line); border-radius:2px; padding:10px 14px; display:flex; align-items:center; gap:14px;}
+  .op-card .op-card-main{flex:1; min-width:0;}
+  .op-card .op-eyebrow{font-family:var(--mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:2px;}
+  .op-card .op-heading{font-family:var(--serif); font-size:13.5px; font-weight:600; margin-bottom:5px;}
+  .op-card .op-figs{display:flex; gap:16px; margin-bottom:5px;}
+  .op-card .op-fig-value{font-family:var(--serif); font-size:19px; font-weight:700; line-height:1.05;}
+  .op-card .op-fig-sub{font-size:8.5px; text-transform:uppercase; letter-spacing:.04em; opacity:.75; margin-top:2px;}
+  .op-card .op-note{font-size:10px; color:var(--muted); line-height:1.4;}
+  .op-card .op-chart{width:190px; flex-shrink:0;}
+  .op-notes{
+    width:200px; flex-shrink:0; border:1px solid var(--line); border-radius:2px;
+    background-image:repeating-linear-gradient(to bottom, transparent, transparent 27px, var(--line) 28px);
+    padding:14px 12px;
+  }
+  .op-notes .op-notes-label{font-family:var(--mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:8px;}
+</style>
+</head>
+<body>
+
+<div class="wrap no-print">
+  <div class="draft-banner" id="draft-banner" style="display:none;">
+    <span id="draft-banner-text"></span>
+    <div class="draft-banner-actions">
+      <button type="button" onclick="restoreDraft()">Restore</button>
+      <button type="button" class="ghost" onclick="discardDraft()">Discard</button>
+    </div>
+  </div>
+  <div class="masthead">
+    <div>
+      <div class="brand-row"><img id="brandLogo" alt="Financial Architects Advisory"><span class="brandname">Financial Architects Advisory</span></div>
+      <div class="mark"><span class="dot"></span>PREPARED PROJECTION &middot; NOT A GUARANTEE OF FUTURE RESULTS</div>
+      <h1>Financial Planning Report</h1>
+      <div class="sub">Four standalone tools &mdash; growth, inflation, cash flow, and cost of delay each run on their own numbers, so you can open straight to whichever one fits the conversation.</div>
+    </div>
+    <div class="head-actions">
+      <div class="action-row">
+        <button class="save-btn" onclick="saveReport()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+          Save PDF report
+        </button>
+        <button class="save-btn secondary-btn" onclick="saveOnePager()" title="A single condensed page covering all four scenarios">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+          One-page summary
+        </button>
+        <button class="save-btn secondary-btn" onclick="exportClientData()" title="Download all current inputs as a file you can reopen later">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+          Save client file
+        </button>
+        <button class="save-btn secondary-btn" onclick="els('loadFileInput').click()" title="Reopen a previously saved client file">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21V9m0 0l-4 4m4-4l4 4M5 3h14"/></svg>
+          Load client file
+        </button>
+        <input type="file" id="loadFileInput" accept=".json" style="display:none">
+      </div>
+      <div class="client-row">
+        <div class="client-field"><label>Client</label><input id="clientName" placeholder="Client name" value=""></div>
+        <div class="client-field"><label>Prepared by</label><input id="advisorName" placeholder="Your name" value=""></div>
+        <div class="client-field client-field-age"><label>Client age</label><input id="clientAge" type="number" placeholder="Optional" min="0" max="110" style="width:70px;"></div>
+        <div class="client-field client-field-age"><label>Retirement age</label><input id="retirementAge" type="number" placeholder="Optional" min="0" max="110" style="width:70px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mode-row">
+    <span class="mode-label">Growth, Inflation &amp; Cost of Delay:</span>
+    <div class="mode-toggle">
+      <button class="mode-btn active" data-mode="independent" onclick="setMode('independent')">Independent</button>
+      <button class="mode-btn" data-mode="linked" onclick="setMode('linked')">Linked</button>
+    </div>
+    <span class="mode-hint">Cash Flow always runs on its own numbers.</span>
+  </div>
+
+  <div class="mode-row">
+    <span class="mode-label">CPF reference rates:</span>
+    <div class="mode-toggle">
+      <button class="mode-btn active" data-cpf="off" onclick="setCpfMode(false)">Off</button>
+      <button class="mode-btn" data-cpf="on" onclick="setCpfMode(true)">On</button>
+    </div>
+    <span class="mode-hint">Adds CPF OA/SA preset buttons for Singapore clients. Leave off for clients elsewhere.</span>
+  </div>
+  <div class="linked-note" id="cpf-ref-note" style="display:none; background:var(--gold-wash); border-color:#E4D3AE; color:#7A5A2A;">
+    <b>CPF reference (Q3 2026):</b> Ordinary Account 2.5% p.a. &middot; Special/MediSave/Retirement Account 4.0% p.a. (floor, guaranteed through 31 Dec 2026). A CPF OA/SA section appears on the Growth tab so you can enter the client's actual balances and contributions &mdash; this tool does not model contribution caps, bonus interest tiers, or CPF LIFE payouts. Verify current rates and rules at <b>cpf.gov.sg</b> before advising a client.
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="growth"><span class="n">01</span>Growth<br>Projection</button>
+    <button class="tab-btn" data-tab="inflation"><span class="n">02</span>Inflation<br>Impact</button>
+    <button class="tab-btn" data-tab="cashflow"><span class="n">03</span>Cash Flow<br>Timeline</button>
+    <button class="tab-btn" data-tab="delay"><span class="n">04</span>Cost of<br>Delay</button>
+  </div>
+
+  <!-- GROWTH -->
+  <div class="panel active" id="panel-growth">
+    <div class="grid">
+      <div class="inputs-col">
+        <div class="field">
+          <label>Initial lump sum</label>
+          <div class="dollar-input"><span>$</span><input type="number" id="g_lump" value="100000" min="0" step="1000"></div>
+        </div>
+        <div class="field">
+          <label>Monthly contribution</label>
+          <div class="dollar-input"><span>$</span><input type="number" id="g_monthly" value="1000" min="0" step="50"></div>
+        </div>
+        <div class="field">
+          <label>Annual return <span class="val" id="g_returnVal">7.0%</span></label>
+          <input type="range" id="g_return" min="1" max="14" step="0.5" value="7">
+        </div>
+        <div class="field">
+          <label>Time period <span class="val" id="g_yearsVal">20 years</span></label>
+          <input type="range" id="g_years" min="1" max="40" step="1" value="20">
+        </div>
+        <div class="field">
+          <label>Years of contribution <span class="val" id="g_contribYearsVal">20 years</span></label>
+          <input type="range" id="g_contribYears" min="0" max="40" step="1" value="20">
+          <div class="field-note">If less than the time period, contributions stop early and the balance keeps compounding on its own.</div>
+        </div>
+        <div class="field">
+          <label>Target amount <span class="val" id="g_goalVal">Off</span></label>
+          <div class="dollar-input"><span>$</span><input type="number" id="g_goal" value="" placeholder="Optional" min="0" step="10000"></div>
+          <div class="field-note">Shows a goal line on the chart and when it's projected to be reached.</div>
+        </div>
+        <div class="field">
+          <label>Optimistic / conservative range <span class="val" id="g_bandVal">Off</span></label>
+          <input type="range" id="g_band" min="0" max="5" step="0.5" value="0">
+          <div class="field-note">Shades a band above/below the return rate \u2014 e.g. &plusmn;2% around 7% shows a 5%\u20139% range.</div>
+        </div>
+        <div id="g_cpfSection" style="display:none;">
+          <div class="cpf-section-tag">CPF accounts (Q3 2026 floor rates)</div>
+          <div class="field">
+            <label>CPF OA balance today <span class="val">2.5% p.a.</span></label>
+            <div class="dollar-input"><span>$</span><input type="number" id="g_cpfOaBalance" value="0" min="0" step="1000"></div>
+          </div>
+          <div class="field">
+            <label>Monthly OA contribution</label>
+            <div class="dollar-input"><span>$</span><input type="number" id="g_cpfOaMonthly" value="0" min="0" step="50"></div>
+          </div>
+          <div class="field">
+            <label>CPF SA balance today <span class="val">4.0% p.a.</span></label>
+            <div class="dollar-input"><span>$</span><input type="number" id="g_cpfSaBalance" value="0" min="0" step="1000"></div>
+          </div>
+          <div class="field">
+            <label>Monthly SA contribution</label>
+            <div class="dollar-input"><span>$</span><input type="number" id="g_cpfSaMonthly" value="0" min="0" step="50"></div>
+            <div class="field-note">Grows separately at CPF's own rates, alongside the plan above, over the same time period. Does not model contribution caps, bonus interest tiers, or CPF LIFE payouts \u2014 verify current rates and rules at cpf.gov.sg.</div>
+          </div>
+        </div>
+      </div>
+      <div class="results-col">
+        <div class="headline wash-green">
+          <div class="label" style="color:#1F4B3F;">Total growth over the period</div>
+          <div class="headline-figures">
+            <div><div class="hf-value" id="g-growth" style="color:#1F4B3F;">$0</div><div class="hf-sub" style="color:#1F4B3F;">earned on top of what's put in</div></div>
+            <div class="hf-divider" style="color:#1F4B3F;">&mdash;</div>
+            <div><div class="hf-value" id="g-growthpct" style="color:#1F4B3F;">0%</div><div class="hf-sub" style="color:#1F4B3F;">return on total contributed</div></div>
+          </div>
+        </div>
+        <div class="stat-row">
+          <div class="stat"><div class="label">Total contributed</div><div class="value" id="g-contributed">$0</div></div>
+          <div class="stat"><div class="label">Ending balance</div><div class="value accent" id="g-final">$0</div></div>
+        </div>
+        <div class="stat-row" id="g-cpf-stats" style="display:none;">
+          <div class="stat"><div class="label">CPF OA + SA projected</div><div class="value" style="color:#A9793C;" id="g-cpf-total">$0</div></div>
+          <div class="stat"><div class="label">Total retirement wealth (incl. CPF)</div><div class="value accent" id="g-total-incl-cpf">$0</div></div>
+        </div>
+        <div class="linked-note" id="g-goal-note" style="display:none;"></div>
+        <div class="chart-wrap">
+          <div class="legend">
+            <div class="item"><span class="swatch" style="background:var(--primary)"></span>Account balance</div>
+            <div class="item"><span class="swatch" style="background:var(--line)"></span>Total contributed</div>
+            <div class="axis-note" id="g-axisnote"></div>
+          </div>
+          <div id="chart-growth"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INFLATION -->
+  <div class="panel" id="panel-inflation">
+    <div class="grid">
+      <div class="inputs-col">
+        <span class="tab-tag" id="i_tag">Stand-alone &middot; own inputs</span>
+        <div class="linked-note" id="i_linkedNote"></div>
+        <div id="i_standaloneFields">
+          <div class="field">
+            <label>Cash sitting today</label>
+            <div class="dollar-input"><span>$</span><input type="number" id="i_lump" value="100000" min="0" step="1000"></div>
+            <div class="field-note">A lump sum left untouched &mdash; no further deposits or withdrawals.</div>
+          </div>
+          <div class="field">
+            <label>Time period <span class="val" id="i_yearsVal">20 years</span></label>
+            <input type="range" id="i_years" min="1" max="40" step="1" value="20">
+          </div>
+        </div>
+        <div class="field">
+          <label>Bank / savings rate <span class="val" id="i_bankVal">0.5%</span></label>
+          <input type="range" id="i_bankRate" min="0" max="5" step="0.25" value="0.5">
+          <div class="field-note" id="i_bankNote">What a typical savings or current account pays &mdash; set to 0% to show cash earning nothing at all.</div>
+        </div>
+        <div class="field">
+          <label>Inflation rate <span class="val" id="i_inflVal">3.0%</span></label>
+          <input type="range" id="i_inflation" min="0" max="8" step="0.25" value="3">
+          <div class="field-note">Historical U.S. CPI inflation has averaged roughly 3% a year over the long run.</div>
+        </div>
+      </div>
+      <div class="results-col">
+        <div class="headline wash-red" id="i-headline-box">
+          <div class="label" id="i-headline-label" style="color:#7A3D2E;">Purchasing power lost by doing nothing</div>
+          <div class="headline-figures">
+            <div><div class="hf-value" id="i-hf1-value" style="color:#7A3D2E;">$0</div><div class="hf-sub" id="i-hf1-sub" style="color:#7A3D2E;">in today's dollars</div></div>
+            <div class="hf-divider" id="i-hf-divider" style="color:#7A3D2E;">&mdash;</div>
+            <div><div class="hf-value" id="i-hf2-value" style="color:#7A3D2E;">0%</div><div class="hf-sub" id="i-hf2-sub" style="color:#7A3D2E;">of the nominal balance</div></div>
+          </div>
+          <div class="note" id="i-headline-note" style="color:#7A3D2E;">The account balance itself won't shrink &mdash; what it can buy will.</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat"><div class="label" id="i-stat1-label">Nominal balance</div><div class="value accent" id="i-stat1-value">$0</div></div>
+          <div class="stat"><div class="label" id="i-stat2-label">Real value (today's $)</div><div class="value gold" id="i-stat2-value">$0</div></div>
+          <div class="stat" id="i-stat3" style="display:none;"><div class="label" id="i-stat3-label">&nbsp;</div><div class="value" id="i-stat3-value">$0</div></div>
+        </div>
+        <div class="chart-wrap">
+          <div class="legend" id="i-legend"></div>
+          <div id="chart-inflation"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CASH FLOW -->
+  <div class="panel" id="panel-cashflow">
+    <div class="grid">
+      <div class="inputs-col">
+        <span class="tab-tag">Stand-alone &middot; own inputs</span>
+        <div class="field">
+          <label>Starting balance</label>
+          <div class="dollar-input"><span>$</span><input type="number" id="c_start" value="200000" min="0" step="5000"></div>
+        </div>
+        <div class="field">
+          <label>Income streams (credits)</label>
+          <div id="c_streamsList"></div>
+          <button type="button" class="add-stream-btn" onclick="addIncomeStream()">+ Add income stream</button>
+          <div class="field-note">Each stream can start and stop on its own timeline &mdash; e.g. one endowment paying out for 10 years, another for 15.</div>
+        </div>
+        <div class="field">
+          <label>Expense streams (debits)</label>
+          <div id="c_expenseList"></div>
+          <button type="button" class="add-stream-btn" onclick="addExpenseStream()">+ Add expense stream</button>
+          <div class="field-note">Same idea for money going out &mdash; e.g. a mortgage ending in year 12 while living expenses run the full period.</div>
+        </div>
+        <div class="field">
+          <label>Interest on idle balance <span class="val" id="c_rateVal">1.0%</span></label>
+          <input type="range" id="c_rate" min="0" max="8" step="0.25" value="1">
+        </div>
+        <div class="field">
+          <label>Time horizon <span class="val" id="c_yearsVal">15 years</span></label>
+          <input type="range" id="c_years" min="1" max="40" step="1" value="15">
+        </div>
+        <div class="field-note" style="padding-top:10px; border-top:1px solid var(--line);">Shows what happens if nothing changes &mdash; the balance simply runs on its own credits and debits.</div>
+      </div>
+      <div class="results-col">
+        <div class="headline" id="c-headline-box">
+          <div class="label" id="c-headline-label">If nothing changes, after <span id="c-headline-years">15 years</span></div>
+          <div class="headline-figures">
+            <div><div class="hf-value" id="c-endbal">$0</div><div class="hf-sub" id="c-endbal-sub">ending balance</div></div>
+            <div class="hf-divider">&mdash;</div>
+            <div><div class="hf-value" id="c-pct">0%</div><div class="hf-sub" id="c-pct-sub">of starting balance</div></div>
+          </div>
+          <div class="note" id="c-note"></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat"><div class="label">Total credited</div><div class="value accent" id="c-totalcredit">$0</div></div>
+          <div class="stat"><div class="label">Total debited</div><div class="value danger" id="c-totaldebit">$0</div></div>
+        </div>
+        <div class="chart-wrap">
+          <div class="legend">
+            <div class="item"><span class="swatch" style="background:var(--primary-light)"></span>Credit</div>
+            <div class="item"><span class="swatch" style="background:var(--danger)"></span>Debit</div>
+            <div class="item"><span class="swatch" style="background:var(--gold);width:14px;height:2px;border-radius:0"></span>Balance</div>
+            <div class="axis-note" id="c-axisnote"></div>
+          </div>
+          <div id="chart-cashflow"></div>
+        </div>
+        <table class="datatable" id="cashflow-table"></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELAY -->
+  <div class="panel" id="panel-delay">
+    <div class="grid">
+      <div class="inputs-col">
+        <span class="tab-tag" id="d_tag">Stand-alone &middot; own inputs</span>
+        <div class="linked-note" id="d_linkedNote"></div>
+        <div id="d_standaloneFields">
+          <div class="field">
+            <label>Initial lump sum</label>
+            <div class="dollar-input"><span>$</span><input type="number" id="d_lump" value="100000" min="0" step="1000"></div>
+          </div>
+          <div class="field">
+            <label>Monthly contribution</label>
+            <div class="dollar-input"><span>$</span><input type="number" id="d_monthly" value="1000" min="0" step="50"></div>
+          </div>
+          <div class="field">
+            <label>Annual return <span class="val" id="d_returnVal">7.0%</span></label>
+            <input type="range" id="d_return" min="1" max="14" step="0.5" value="7">
+          </div>
+          <div class="field">
+            <label>Time period <span class="val" id="d_yearsVal">20 years</span></label>
+            <input type="range" id="d_years" min="1" max="40" step="1" value="20">
+          </div>
+          <div class="field">
+            <label>Years of contribution <span class="val" id="d_contribYearsVal">20 years</span></label>
+            <input type="range" id="d_contribYears" min="0" max="40" step="1" value="20">
+            <div class="field-note">If less than the time period, contributions stop early in both scenarios below.</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Delay before starting <span class="val" id="d_delayVal">5 years</span></label>
+          <input type="range" id="d_delay" min="0" max="20" step="1" value="5">
+          <div class="field-note">Same lump sum and monthly contribution, invested for less time because of the delay &mdash; end date stays fixed.</div>
+        </div>
+      </div>
+      <div class="results-col">
+        <div class="headline wash-gold">
+          <div class="label">The cost of waiting <span id="d-delayinline">5 years</span></div>
+          <div class="headline-figures">
+            <div><div class="hf-value" id="d-gap">$0</div><div class="hf-sub">smaller ending balance</div></div>
+            <div class="hf-divider">&mdash;</div>
+            <div><div class="hf-value" id="d-pct">0%</div><div class="hf-sub">reduction</div></div>
+          </div>
+          <div class="note" id="d-note"></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat"><div class="label">Start today, ends with</div><div class="value accent" id="d-now">$0</div></div>
+          <div class="stat"><div class="label">Wait, ends with</div><div class="value" id="d-later">$0</div></div>
+        </div>
+        <div class="chart-wrap">
+          <div class="legend">
+            <div class="item"><span class="swatch" style="background:var(--primary)"></span>Start today</div>
+            <div class="item"><span class="swatch" style="background:var(--danger)"></span>Wait, then start</div>
+            <div class="axis-note" id="d-axisnote"></div>
+          </div>
+          <div id="chart-delay"></div>
+        </div>
+        <div class="chart-wrap" style="margin-top:16px;">
+          <div class="legend"><div class="item"><span class="swatch" style="background:var(--gold)"></span>Ending balance by starting point</div><div class="axis-note" id="d-barsaxisnote"></div></div>
+          <div id="chart-delaybars"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclosure">
+    Figures are illustrative projections based on the assumptions entered above, using fixed annual rates of return and inflation. They are not a guarantee or promise of actual investment results, which will vary and could include loss of principal. Consult your financial professional before making decisions based on this report.
+    <div style="margin-top:10px; padding-top:10px; border-top:1px solid var(--line); display:flex; align-items:center; gap:8px;">
+      <img id="footerLogo" alt="" style="height:14px; width:auto; opacity:.7;">
+      <span style="font-family:var(--serif); color:var(--muted);">Financial Architects Advisory &middot; Mastering Your Blueprint of Wealth</span>
+    </div>
+  </div>
+</div>
+
+<!-- PRINT-ONLY REPORT -->
+<div id="report"></div>
+
+<script>
+/* ---------------- embedded brand assets (offline-safe, no external requests) ---------------- */
+const LOGO_FULL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAvYAAAJgCAYAAADh3id+AAApLklEQVR42u3dPdAdxZ0v4P+4VIYAkSAFyKUCl6rAAZBIyeIAbgIbgAOIDAE4EQneADaBxDeRnaAbiE3YxHZgnBgCs4EhMRsYJyKBDcAJOAAHQAIEaJO5gd7XHB3Ox8yZ7pnumeepUkl6P+b09HT3/KZPz5zm9LmzAQAA1O17qgAAAAR7AABAsAcAAAR7AABAsAcAAMEeAAAQ7AEAAMGe7u4psEx/KrBML2kqnTxSYJlucVg6eUEVsAC/ds7r5M8FlumuAst0vrYO0PiAKgAAqJ8ZewAAEOwBAADBHgAAEOwBAADBHgAABHsAAECwBwAABHsAAECwBwAAwR4AABDsAQAAwR4AABDsAQBAsAcAAAR7AABAsAcAAAR7AAAQ7AEAAMEeAAAQ7AEAAMEeAAAEewAAQLAHAAAEewAAQLAHAADBHgAAEOwBAADBHgAAEOwBAECwBwAABHsAAECwBwAABHsAABDsAQAAwR4AACg22H8QEa2qqlarTMqkTBR87Bw/bUqZlEmZuvtm1zdPdNjAj4xdVWuUSZmUCccObUqZlGkWZbp51zctxQEAgBkQ7AEAQLAHAAAEewAAQLAHAAAEewAAEOwBAADBHgAAEOwBAADBHgAABHsAAECwBwAABHsAAECwBwAAwR4AABDsAQAAwR4AABDsAQBAsAcAAAR7AABAsAcAAAR7AAAQ7AEAAMEeAAAQ7AEAAMEeAAAEewAWoh3pNdqCygMg2AMwy1Dfjvx6pZQHQLAHgIwaVQAg2ANQlnbP/wEQ7AGYSdgHQLAHmFXY/Sy+vdG0jYhXZraPTcF13+cGXwDBHoCdgfLU2vcvzjhsTr1ff9wS5tuIeEDTBAR7ALr6aMPXXo7rs9rNSCF46hn0v0x4UfHoju+/HWbwgco0p8+dVQsA02k7hOzjnzkZEV9nLMOpiPhipH3ctt/tCBcc7Z6Lm7bACyCAvbrM2JuxmE9oUCZlUqa6fZW5nr4YcV+aiY7hvlD/UIz7jonzizIpkzIlK1OXYL9pgKMejTIpkzIV7V71VFTbeUudGQ+USZlqLZM19gDT+p+CTjLvTXiCaid8bYBZEOwByjZm4L1vgv0bM9y3A8sHINgDVO6FEUP8ldj8TPU5BMyu+/DqROV7JSIuxXc/O8CSVKCOQdZTcQB2Bu0xgvW+meRmxH1N/Vrvxbf3ETQ96qCZ4Hh6Gg5QNTP2AN8Nd1M+Dezz+O4Mcc1PZHmmorI2EfFuYe0BoPsgZsYeYGd4bkZ+/V2PWWwmeP0xt517X/tuv52oLQAc5IQqAJgszHctS7sSNJsK97kppN6b6Dfz3vfnASZlKQ5AWfat8xY089Xzrp8xWw8I9gAVemSC12x6fF+4P9yLHetRqAeqY409wHfDXLPj+7Wuc2d7cB9ywQVQDDP2AN8Ncauh76G1r40xW25GfrxjvcvLqgmoiZtnAfqF6xJuMiVPfbeOASDYAywrAOI4AxTHUhyA7eGuEfYAEOwB6metOwCCPUBGt2Te/jVVzEx8oApAsAcoVRsRX0XETzO+xs1rr7epDG2Y0ad8dx+10xdUBQj2ACUF+tUg/fuRX/+SME/FnlUFMH+eigPUEupXjXFDaxP7n13vxlpq8QNVAII9wNICfZfADwCCPcABgX7162MG6yZ8aBH1Ot+jr2njMAPW2AOlW3+WfDvB60ONrva4gHbvCMyAGXug5EAPpNfqbzBPZuyBWkL96tcuqiJIEuqfF+phRifP0+fOqgWg1lAikEC3/vJmRDys/8C8mbEHaiKIwGEeXutH+hII9gDCPeg/gGAPkJYneUD3QC/Ug2APUGRIEe6h20WvQA+CPUDRXlMFsNFHqgCWyVNxgJqZlYTt/eJaRNysOmA5zNgDNRPmYfvFrlAPgj0AUPHF7vuqAZbphCoAZhBkgG/dpwpgmczYAwDAQoJ9iY+Su92h66xVJmUaoUxtRHyinv7pvKGn87Er7fhddViMm8qkTLWWyVNxgNQDjKUxADABS3GAlKEeAJiIm2eBoaHeDD2w60LfGAEjMWMPCPVArlB//H3v8IFgDxRMqIdlu2PDhf6mP10vAICBLMUBDnVPRPzPlu89cvT3+Yg4ExHPqC6YnY87Xug3K6G+NSkA+XgqDtDXrqU41tmCcWDf7xgLIBNLcYDeEwJrJ+rVP3Fg6Gd+YY/ljQfaCQj2wMxO5qvras3MAcBIrLEHcoT79Z8zQzd/1lADTMyMPQCpQv22/zPv4w0I9gBAhbwjA4I9sADtjq8JA8s55ru+DsYCyMQaeyB1wGudyAEXejA+M/ZAKk3PrzO/sOYRp9rAvp8xHoBgD1QU7rd9nDzzDnSPHv39oHC/uAv5NrYvw2s3tBEgV8f0ybMAJAj2TcfvMe920PViAMjAjD0AKUP9pv+btZ+vLu/MefcOBHsACnQ+0cUA8w347wv0MA1PxQGgj6tr/396R9AT5pcZ8AHBHoDCXewZ4tbDfSv4AWS8snbzLAAdHXJTrBtpAUZijT0Ah4T6rtxICyDYA1CwPjPvz6sugBEGZktxANgjxXIaS3IAMnPzLAhj0KcdpdyuNgmQkKU4sJwwdvzx7pdUDwM0CX/vG9VJoReeINgDVYSvF1dCPvQJTW8nbpc3qWIStE9jGRyxFAfmHe7bDYGq3RHcLI3g2JUNX/s/mcKZdseQC07tB46YsYflnQh3fcx7GxFPqS4i4ueZwpMQRkraEwj24KS343u/CUt1XAjm9Z8jvx7zaZetUA87TuwedwmLCmnbPiyo6fCzLDfYN5W+BtokLIo19rCAC/jY/pSccLJkogC13i6ttUegh4EsxYFlniSP/37ViZIV9xQW4kCohz6dxFIcWFyod6KkaxtptEkKaY/Ngb+rPbEoZuxhmd5wwqNDyM6tKaQclOfigaF+/Qbbl1Qlgv2N7ljrYNTlPQGi2jI9ljFEPTqjenpAN89y7Ma48LtHuGeLVxK08V9GxL87vyjTAB/V1nEsxYHlBjwz9mw7oTYLLQPluBTXPyW70X6gO0txQJhDO1AuSvNEj3Yg1INgD8AGQ0LR9yd6Xebnhx0v8oR6WOE59rDM4OaZ4aQORSmWeDVhpp7N7WF9zBLoYQMz9rDcEyaMcbEwdFs/VaXGqpX20Ar1INgDsDuApwxHtyW86HzVoRLuD/weCPYALC7UD3Fpw/Y+V8VkCPeb/gCrHcXjLgEWH+ybhNvKtV0hDmAPM/YAy1ZLYH7MoQIQ7AG47vZIf3PrrouEIa+1vq3XHD4AwR6A6z5NuK3zB4b/Pn6ecFsAs2eNPcAybArFudbAtyO9DgArzNhDmQHs16qBzHKG7ZxLcszaAwj2UIX3jv5+WoAhoS9nePELgGAPRbt3Q4ARYhjq5Nr/x1gak3PWHgDBHorXdAxTcGgQf2LAtv6YuCxD+oY+AbA+ULp5FqoIY13CP3RpS2PfyOpGWoCRmLGHCi7AN4Qbs5XUEOojvvsOgVl7AMEeFhvm2y0hSqihTxCfyu83fO3ZGe4n8+k32hT1hgdLcaCacJbrOeEsI9hPvQTGkhxquxDWrqiOGXuo9KK8w0kJIeXY2wm39W4BbVb7J5Xvaz/MKhyYsYeqQtquJTlml9gWdJsFbEsfIFUbarUpamXGHiq4AF/595Ut33fyYYzw/H8TtuVtwerQbUHXNt1uCO+r4+hq23pMlVFVYDBjD9UFNoGGrkE8dbBvCivjl5H2w7eYtz9HxIMd24tZe6p0QhVANQHs+C3i1omGjkq8QbWJdGuabw3rozlsvD32QUT8KHM7hdFYigPlnGTaDX/+GBGfRcTtEfFIxxMV2lXKIJ7DvWv/v5rw4kXf4NilDe3hnbhx2c3dqok5sRQHygr3Q0MN2lOKtjHGRYIbaRm7b2y7CNy3HEdbohpm7GGii+qI+HTL17f9EVwY44JvrJl/N9IyVl9o9rS3tuPFIhTPGnuYzg+2nGAa4QUOCnDCGKkuaI27VMmMPZQRSNY/VdbHmnNoIKn5E13bxNv6RPNgg6s7xl+hHsEeSBbwcwYd5h/qS9nWVG1+/dGXZzQRNji/of01cf1RmE34bBAEeyBh0Nm0FlTA59CgXMK2xnqdrzUBBlzA/rfqQbAHcoWdB3uckBBQal6Ck/NGWv2GKS9cQbAHIuL67JGTD5vcpQp6+bMqICL+RRUw+ytWz7EHqM6cZuuXsF+U1Xe0BWbLjD2AUH/s/on37f495evDkhy6tAtYXLB34968QoAyKZMyLbM/tx229dcJ9qfd8/pjP/nnAacN44EyKVPBZbq488rVUhyAaoPUkNnH8/Hd53nPcT8tyQEWw1IcgDpD/RB3rYX60n1SaD0CCPYADDZk5vnDtf9/XPi+nZmongAEewCSyrmcpImIH1Zw4fJSwm2ZtQcEewBmd5FQi+cTb+85TQEQ7AGYMog/s8BQn6L867P2lzUtYG48FQegrjDbJNrOkG3VuP+5tgdQDDP2AMsJtatOVVIH1scDCPYAswr1Qzy24WtfqBsXCoBgD8D4hszWv5ZwW7Xte1S+7wCCPUDFcn7yaq1eTLhflvcAgj0A2f0i8/ZrnbH+1Yavnc94MQVQHU/FAShLztn6Rv3Mvn6ABTNjD1BuaC1lW3OtM0tyAMEegFGknEF+XJ24IAIEewDyy7nE5PmIeH3GFzwpZ+0B6h0crbEHKC7Upw72zQLq7GREfF1I/QNMwow9QHmE+v519NVE9Q0g2AOwMYjflHBbS6/LIeHeWntAsAdgkP9NuK25z0SbaQcQ7AGK4Jns6cO9WXtAsAdg0lA/xD2qM1ndvi3cA7XyVByAMsKn2Xr1CTCIGXuA6aUMoUt1IWO93KF6AcEegHUvZA7jS51dfjdjHX7sAgoQ7AFY98uE27pdqN+5/0PC+GVNFahuELTGHmBUq2Hz/Yi4L8F2BPt89dKqX6AWZuwBpgud9yXc9quqN3v4thwHEOwByO5JVTDJxRmAYA+w8EDocYz55PzQKgDBHkCo/6d3Em6L/PXmE2kBwR6AjX6ccFtmlNULgGAPMIKUy2buEl4HhXuz9sCsnVAFAKOGyyH+JsxPWv/qHiiaGXsAABDsAQCAWoJ9G9YS1qxVJmVSptF9oJ46l6lVT84vyqRMypSmTF3W2FtTWLdGmZRJmUb3I/WkTM4vyqRMyjR2mSzFAfrOFFwssEyhTJ3KdL7AMrXKVGWb8m4+lJj6T587qxZgXsEbYLG5RhWwZGbsAQBAsAcAAErgA6pgXrwNDQALZcYeAAAEewAAQLAHAAAEewAAQLAHAADBHgAAEOwBAADBHgAAEOwBAECwBwAABHsAAECwBwAABHsAABDsAQAAwR4AABDsAQAAwR4AAAR7AABAsAcAAAR7AABAsAcAAMEeAAAo3wlVUJQ247Yb1csEbbhRFvvOoseBRj+B8ZixX0aoh6W14U1leW7Bx8H4wlTtr9VPQLAnvY82DGCtgazqk2dbwXEsqVyXNZvs7RDtYZN7VI2+hGBPWg8f/f27qGdGBWq/mFhaPat7NnlfFRizEOxJ686jv58wsDg5LPjEpJ2PX49mItWHvte/XtQXgj07vaUKnCAX4I+qQFtVH/YNlspTccr3RkT85GjQfH7Pz/6/iPgyIr46+p2rR/++VTXOSlPgSbSUMj3a4WeeiojfakaTBkBPHwHIcTI+fe6sWijnZLcpLI3xOrlei/rby9B2NXa5ul5cNAtrGzn2edPrfBoRPzDeVNNvx+53Je1vSW2z1UdI5XsdG5y32Lp5toIBt1kbMJoJBpC2gnoqvUxN3Hi/RKOeiirbRwto482G///ggDK1CxkL5ngebQush7bAY9H26EtfjTSeOw/PtExm7Ms+UK7YqcUDEfF2xwBYwgB8KiK+WNBYMtV4YsZ+GfXRN/w0jgXk4ebZZV9IbJst2/XUhnbHn9zlXP3zUaLtdX29HO4Z+Hopyphqf9+urP1/nqHtfJC4/eRsi6m2ve33920vV/2MOW72ed0+9VFC+8gZ6ks8PimPyza39TyvltIGrmYe17ru03MD+tfYx1qwZ/KBuN0zSHdt8Mc/89kIHezOlZ959sD9Pv7axUwn3n3ben/A6w0pR9/9vaPCNj1GIFk/8dyd4MTTZmyLqbfdZjrBxsB+kfoE/cHAemsTtst25LGqBi/0qJNfR8Q3B7bvoRcInyfeXpf9fenA7X+zso3zmc/5xxN1+/bpcof+NeRio9SL1d4sxSk7mExx82zKBt0kLF+K15vTvrUT7H8zsG2VFuz7lK3N3G5yt42SynvIsWhH7qupXjNlu2xH3PeS+t42z0bEy5na4TcRcdMIbanpOZ6P0QZqOAcfv85fIuL+TPtc7ZIsM/Yce2XiAT/lW2lTXYjl3rcpf7/kWYx9Nxk3hZe1Lfi4TH3MP5mofko7JkNmIj+ZYd9rM4X6Y2+N2B/aEdpAm/DnSjgHH7/G/TM+rwn2DHbPhMEgdcf6RUHh/qURj+EYn2BY0yBYw4xLq4xbXYmIMwn3oa30mFwa+PtnZtb3xjg+3y+svCm28acKLkRLev1vag1zluKUf/JsRnqdaxFxc8YO2Yw8ADQTv1bE9ZuOzmd6nbbAfZ5qKU7X1x1SvhzLW9oR20bpr7F+DB6LiNcmCJylHOfUdT3mss4+5R9zmUjK49YkrKN24jbQjlCXqV/reLt3RcSHmY6RpThkDS2H/OnrpgM715hrlMd8vRSv1TXUPxFp3rZuR9rfTa/12YT9Y5PHe2zjSoaT2bb6PCTs5VzSkKNPdd3mrnp6rec+pOgjuY5JivoYO7SPdTHVJjp2m17z0YzlrqmOpxovxtivvw1sL7O8wVywn/cFQc6OneJDrtrMr9e3Dp7e8Vp3Zty333fYt67BoE8ZdtVt3+N5aoI2fnHH917vsZ2fZzzpNRvqNHW773usfr5j2ycH1sGHHcvVJB4XVv//xJ7fvTrCWNQMbDddyrVt/0sMme+OGDqPX/+/MtZLKYFwjDYw5DzRJni9Zss4OocLJcGerK4laOypZs66hvcuP/NUj4782x3f//ue13ov8azHIQPZap1+lmDWZd/PtRMPhA8VNFg3CbeTo22s/u5/7Pj+13u2+dye7d89YpDZ5vd7fub8RMdkzFnV+wdOupQWbNs9ba5JdBzHKnMzQhvo8nopbn7uc57Y5d0D6+XQ157t42AFe47dNKDzdO3kX2YKSbt+/rWR6u+tAgb01W2fSvj6pc5ePJ5wW1M8TnHsen44wTYuVxSGUoSNqdv+vn3Y9sSbv05U9m036l7Y8TtDblI8GbuXY2zyfKL6f6CAMXDXhzXuu9B8aKR2/3HHn7uQoX4+jwVy82w5xnou9L4TZ6obSYY8Lz/1sp4+Nynl3LdmhPaSqwzbtvebiPjZRBcz7Qj9JUZuO2O0jRTbGXrjZDOgH/fxQGz/VOQx++uu/TsVEV9UdBFS0mcY5PiMgibR66e8qT9HGxizXnP3tUP2ZXY3zR47IU/P96Kt0ivbZsDvtQ77zgHrPwcel03b/dlE9e9Ya9dz8UWG+mk0l6TnpLaStpqiDTQzO0ZtpH1CWvEsxRHqWc5xf0bYcrHAIsbztrL2XOqn6u5zqee+NBO0gdv0kxv8YvYVYSlO0QPbmDc9fR4Rp6Ost/FTnhyayvetT3sZ++3OUpY05Dw5WIpzWDvvU5axg2gp7XaMR/g2hfe7Mfre0O0OXVrzakQ8ObAcKdvAmPU6Vl9rJ973Ipixh3lfHNpPdcg8NDNv17X2va7lfiJRGzi0HXzi3LiMMV6wh3JOvsK24A25gh3DxpFrA7fbJG4HfZ1x/p30EaSCPcIvjumBoafLH5bdhpoZ1FVpz2Xv+ufFSi/yb95TlrFD4yFtoJ2wjdR4MSfYA5O6vOckMmRgawd+v7Sg1hS8Lwj1OQJeW0h9/krfy9YGzkTaz/eo0SHPw79fsIfyrqqtIY34d20jWSB5KNM+NBW335IC7JA/cz4mY3/S7McjXAyU9E5O6ReF/4iI16PbxMXjMz0HXz3gd/4q2DNHpyoOcKWdgFM/4aSNbp/a+5dMddWOvM995ZihequCdv9K1PdYwyHtqK3gmNyS6ZiUepzvzLDN72ce+9uC2nSf8TxVGzguz90VnVNz1vfslmZ63GXZYXbsmZcfxriP9WsTdLg+n8hX+741CcuQ8hF7YzzK7JGIeCPD9nN9guqQOm0Gjhc1f/JsqvpZ3U6Xn38vIu7N0F9SPGavTdQ+hvSVdsK+N9Z4luuxo02Cum1H3G7qc3CTuR2lyAaz4pNnOXbnRFfWbceOecjHa089a9Bl3/p8fHm7ZxAachNVk7Fu2xg+eL4xwXFKUe6x2kaNExnNSONCl+N434Gvmeq4tD3C7KHj4smCQn2X4zykjDnHsz7lfjljQG0T7G+fvnbI63hQwQQsxaGmIDC3ZQfr+zXmGvJt5ci9nzHhPmobZe5fKeNCM/FxOWR7fcpxuaK28cnI41mu5Rv/liHQTzF+j/06Y5nl+UOw59gvdaxZ7ltpjxAscU3sO9r95AF/KfXzxoTt/ZkDfufLifrBtmeu/7yi/t8UOEY0I/a1qfvwYsdYwZ5jL+qAxe/bvm1dWVj9/ibRdn48g7bxaiHH5MOE+9hMdEw+zrj9n0xUB4du52RhY8p/ZBhTfxxlG6MNNDH9B2gtKfMI9ozi2sSv30TETcL9ILcVUIYxB/SfaRv/9GQh+3N34n2cIiD8MPOxHfupHbVe2H+w43tvF9D3avpAtWbEfSqpve0qy6/mGuY8FaccUz8Vp0lcjiE3XLUHduBD9u2Q/bsrvjszmXvfUraXXPXb9TWaEdtSyj6Yu48eugSjyVRfqfvT0DaRqn7GOC5D96cZsRylnpfOxPXnsk9xbMYem9rC2sDYbT7XxcDYnwZcBDP2yzPlzO2nPX73mdj/bP0Lcf3egGbAvh3yO3/b8LWXe7zehQ6v+3nHnzv02DwT+z+h79648S3aPusz+34YUN9j1My0b3Z9S7zvBy6N1TcOebu/6Vk/JxPXZddtpX7NJiIePaBPnUlY5pL9I2GdH78j3GTos6+NODY1sf/d7WalbTUDX+eJPdt4+YA2X8JYPuv192bsGUM7QUdq98x6NJXul3Y0z/Zac91fjYjz6mzWxz5G7Hux4LZk7EnflhYX7D3HnrleHTcjlMcAPM925Lj2q5MLqke/0/fsfyUenvsOWooDAMASvDP3HRTsAQCYi13LcL4W7AEAoG6LWOok2AMAMAd/XnoFCPYAAMzBg4L9fm2B5T6v7XbWKpMyKdPoLqonZXJ+USZlKqZMzVLqyXPsAQCYgy/jux9it6jHiFqKAwDAHNy69ArwAVUAAMzFoj/oy4w9AAAI9gAAgGAPAAAI9gAAgGAPAACCPQAAINgDAACCPQAAINgDAIBgDwAACPYAAIBgDwAAfNcJVQCz0qoCYMEaVcCSmbEHAADBHgAAEOyB1LwNDQALZY09CPcAwAyYsQcAAMEeAAAQ7AEAAMEeAAC4zs2zwFjWPzyrSbitaxFxsyqGUfqbG/ShUGbsgTm4WxUAINgD5Jdz9jAi4u+qGHb2sbaQbQGCPTCjUJ87wADp++Ibwj0I9gApg7i1vjDNRe9PJrhoBwR7oCA5l+C8q3qhd7hPuSQHEOwBkrigCmByL6kCEOyB+Uv5Nv0dqhOK6Jtfrf3/edUJgj2wrODwZhz+Nn4bER+vfc2SAOiuSRjubw1PyQHBHli0f024LWvrIU24BwR7gJ2uZN6+tfVQHrP2UIATqgBI6C8Rcf/a1zzeEsrQrPWpNiLujMM+4K3Z0D9bfRSm1WXGvnUlXrVWmZRpxDKth/pXR9h/41Pd7am0cn2wsHbx8czambFcmRZdpi7BvnEFXrVGmZRpwjI9OcJrG5/qbk+lletH2sGgbb2onSuTMk1Xpub0ubNOd0COWQRLcEB/BUbk5lkgR0gAltuHjQcg2AMzYvYP5ttHQx8FwR6Yp5xv6QP53Jmw//nQKhDsAXqFBSCdv2fevnAPgj1QETfgwbwunlPO2gOCPVBpqC9lW8B0/dGSHBDsgRlwMx7ou4BgD1TGDbMwL6cS9kuz9iDYA5WG+tTMHsL4vtjwtSsVjRtA+ORZYPgJ2g2zoH/r31AAM/bAkBN1KdsCyuvzluSAYA9UxA2zoE+7oAfBHqhMyrfVn1v7/6OqF4oN90PC+FeqEwR7oOxQP8QvIuLy2tf+SxXDLMeAWzOPJ8DqVbmbZ4EDTupuqAP9Xr+HwpixB/Z5SBXAIl3LuO0/qF5Iz4w9sMumt8zN2sFyx4DUH0ZnDICEzNgDU14kAGV7NWE/FuJBsAcK4vGWsCxPqgIQ7IH6uXEO2NRfU39o1R2qGAR7IJ8XVAGwwyMJt/Wx6oREV+FungU2MFsP7OvLQ/qzcQEyMGMPCPVAFznvsXFzPQj2AACAYA+sM1sPDOnnfZi1B8EeKPAEve4V1Qmz1Aj3UHAHdfMssOWEarYeMF5ARczYA5tOrEP8VHWCMaSHZzKOR7AoZuyBuyLiw/WxIeEJ3uwbLCPMpxw3rkXEzaoY+jFjD+QM9cB8PZ6w/6+POzepXhDsgbKCuNl6mK/XN3ztg4rGJxDsgVmzBAcYMmbcbSIABHtgfDnXxwLGlhTh3tgCPZxQBbBIt4wQzp2QQbhPtS2z+dDB9zp2KCdog6syzatMX+kagHOeMinTvMrUJdg3rpSr1iiTMlUwUAGkGLecX5Rp0WWyxh4AAGbAGntYnlQzEG3GbQN1+jIiThoXYBpm7IHSLhiAet264WufqRYQ7IFyeWY90PUi/5QqAcEeKNNDqgAYOBkACPZAAd5c+7/ZeiCMCyDYA3Ux6wYcGu6NHyDYAxWduAEAwR4onBtmgaEX/2btQbAHCgv1AMYTEOyBGXhDFQAdeXcPBHugEJtm136iWoDE4wow0AlVADgpAxN4KiJ+qxogneb0ubNqARDggUlyiCqAdCzFAYR6wDgDgj0wY2bSAOMMVMQae8BJFwBmwIw9AAAI9gAAgGAPAAAI9gAAgGAPc9WGR8gBxjsQ7IHqT3Kb/g0wR43xDgR7mHuod7IDhHsQ7IGZhHonO0C4B8EeqMS/OJEB3MCYiGAPVOe2iHjn6N8+IRZYcmhv18ZCN9Ui2APV+F1EfL52ImuO/rROasDMw/3vdoT6JiJO7rkQgFlqTp87qxag3pPb6skstpzIzOYDcx372h3jXGv8Y2nM2EPFF+ZHf1/Z8L0349sZfIA5jn27Qn0Y/1hk5zBjD9VrndCABbo9Ij415sG3zNjDDC7QVQGwQP+IiAtH/7aWHiLihCoA4R6gUu/GjQ8NMB6yaGbsAYDaXT76+4yqYMmssQcAgBnoMmP/Xli7VrNWmZRJmSj42JVWrns0FeOBMilTwWX66a5vmrEH1gcx61MBoELW2AOroR7A+AOCPTCDk6rZemBMt4d3CkGwB4R6oHqfqgIQ7AGhHqjXU3Hj8htLcSABN8+CUC/UA1OMP43xCNIyYw9CPcDYmj1jEyDYA0I9UHnQF+5BsAcAhHsQ7IFlnTwfd+IEhHsQ7IH6ve7ECRQe7l9VFdDPCVUAiz95AhifYAbM2ANDmfUHAMEeEOoBAMEeKCHUe8scAAR7AABAsAemYrYeOB4LLMkDwR6Yaai/7ehnHlJVMHvN2rgACPZAZaH+lzt+5vOjv99SXbAIF4R7KORK+/S5s2oB6BvsmwO/Dyx3fAAyM2MPOKkDKRz3/auqAgR7oL4QL9QD685vGB8s04ERnFAFQA/NygnaiRrYNka0G74OZGbGHjjkxB1x4w20jRM3sCXEGxtgrM7n5lkAIDHL82ACluIAQgCQmr4ME7AUBygt4Fu7D9NdXAOCPcCgQHEqblynL2SAC2tAsAcqCxIREV+sfM1b+DB9v/yTagDBHqBvqN9EuIdpHPe9hyPiD6oDBHuAlCEfyO/FDeH+cX0TBHuArkH+4bCuHkrwxdr/GxfeUB/PsQemCvaW20C5/XL1EbTtlsAPFMaMPTBFeADK7Z9tRDy4EuKbiHg1rj+9CiiYGXtgynBv9g/0SyARM/bAFFbf7k8xg9+GZ3AjlGv/INgbLBJ6ttDBXpmUqcQyrc4KfpKwTCWMWdpTvWG0tvPdah0+PXIdaOfKpEyFlclSHKB2m5YPtBFxLSJuVj3MvN2vt/0U27UUByplKQ4wR01E3KQamLEnjv4+maHvALWe/MzYA5XbdsOfmUeW2vaBhTJjD8wh2HT9Osy5Lxz/eU91gGAPUHOoX38yjllM5m79w6TePPrafaoGlumEKgBmEm4irs9U3ivUs7D2b9kZEBFm7IE6bZuVvy9BwPGIX6Zqz1NvAxDsASaRY4byD2tB6ZJqZiSpPwfFBSos8cToqTgAN4Sh44uGXM8Jh13tbug2QruF5bLGHuC6x47+fngtFB3PfApJpArwOUO3dgoLZikOwHWvHf391trXL6saKtAI9YBgD7Db86qAntYfvXrsmbWfWQ3lAII9QAJ/2hDKVsPXNVVED9uC+itr33dzKyDYAyT28IZAthq6bj5wu55Mslw37QnvzZb2AiDYAwzUbPh7yLpln4C7bP+7cuzPH/39lYs/QLAHyEeoIrerR3+f3HIxeew1VQUI9gCH2zYr3ybaNtrXcXtq9rSRR1QXINgDlOn8gb9necZ8w/0uN6sqQLAHSOv9RNt5d+DvbwqCV4X+2V0oeQY9kGYwOX3urFoASB8kI4bfeLtpG27KPeyCqJlBuwDY6YQqACg+lHKYRnkAwR6AocF8aIhr4tslJE2CbbcdXq+UixkBGOAA1tgDlOtCwm1tei7/0Gf1pwj0q6H+/pWvv+fwAwj2AHNxfPPtcxm2fWbifWs3XGD8deUi496BFzG7LiAABHsAOoXK1DPgl1f+/XSibf56wjq6fUcIX/3a0DC+Gugt7wEEewAmuThY//fxp5f+NtFr/OuE+/f4SGH7mfAoSUCwB2ACu2aojz/s6lKi13puwv18uefFzaEe06SAJfEce4C6An+TaHvvRtqbcw/Zn2bgz0TG3weojhl7gPLlCKcXCtgfN7QCCPYAiwz3qWbrS9KOfEEDMFs+oAqAqS5UjkP9pYh4K64/x/7OiLiYaPsAyxpYrbEHWJSS1p6brQdIyIw9wLI0ygIwT9bYAwCAYA8AAAj2AADAaMG+Dc8arlmrTMqkTKO7RT11LlOrnpxflEmZlClNmbrcPOvmpro1yqRMyjS6r9WTMjm/KJMyKdPYZbIUBwAAZkCwBwAAwR4AABDsAQAAwR4AABDsAQBAsAcAAAR7AABAsAcAAAR7AAAQ7AEAAMEeAAAQ7AEAAMEeAAAEewAAQLAHAAAEewAAQLAHAADBHgAAEOwBAADBHgAAEOwBAECwBwAABHsAAECwBwAABHsAABDsAQAAwR4AABDsAQAAwR4AAAR7AABAsAcAAAR7AABAsAcAAMEeAACYa7Bvj/5Qp1aZlEmZRveIeupcplY9Ob8okzIpU5oyNafPnTU0AQBA5SzFAQAAwR4AABDsAQAAwR4AABDsAQBAsAcAAAR7AABAsAcAAAR7AAAQ7AEAAMEeAAAQ7AEAAMEeAAAEewAAQLAHAAAEewAAQLAHAADBHgAAEOwBAADBHgAAEOwBAECwBwAABHsAAECwBwAABHsAABDsAQAAwR4AABDsAQAAwR4AAAR7AABAsAcAAAR7AABAsAcAAMEeAAAQ7AEAgGKD/ZWIaFVVtVplUiZlotB6+iQiPnJotCllUiZl6uypXd9sTp87a2gCAIDKWYoDAACCPQAAINgDAACCPQAAINgDAIBgDwAACPYAAIBgDwAACPYAACDYAwAAgj0AACDYAwAAgj0AAAj2AACAYA8AAAj2AACAYA8AAII9AAAg2AMAAII9AAAg2AMAgGAPAAAI9gAAgGAPAAAI9gAAINgDAACCPQAAINgDAACCPQAACPYAAIBgDwAACPYAAIBgDwAAgj0AACDYAwAAxQb7tsByn3foOmuVSZmUaXQXCyzTJceu2jI5vyiTMilTpzI1p8+dNTQBAEDlLMUBAADBHgAAEOwBAADBHgAAEOwBAECwBwAAyvH/AdEO9CdNJOvJAAAAAElFTkSuQmCC";
+
+/* ---------------- shared helpers ---------------- */
+const els = id => document.getElementById(id);
+let linkedMode = false;
+let cpfMode = false;
+function setCpfMode(on){
+  cpfMode = on;
+  document.querySelectorAll('[data-cpf]').forEach(b=>b.classList.toggle('active', (b.dataset.cpf==='on')===on));
+  els('g_cpfSection').style.display = on ? 'block' : 'none';
+  els('cpf-ref-note').style.display = on ? 'block' : 'none';
+}
+const fmt$ = n => (n<0?'-$':'$') + Math.round(Math.abs(n)).toLocaleString('en-US');
+
+/* age-aware labeling: when a client age is set, chart axes / tables / narrative
+   switch from "Year N" to the client's actual age at that point */
+function getClientAge(){
+  const v = parseFloat(els('clientAge').value);
+  return (isFinite(v) && v>0) ? v : null;
+}
+function axisLabels(offsets){
+  const age = getClientAge();
+  return age!=null ? offsets.map(o=>String(Math.round(age+o))) : offsets.map(o=>String(o));
+}
+function axisCaption(){
+  return getClientAge()!=null ? 'Age' : 'Years from now';
+}
+function getRetirementOffset(){
+  const age = getClientAge();
+  const retire = parseFloat(els('retirementAge').value);
+  if(age==null || !isFinite(retire) || retire<=age) return null;
+  return retire - age;
+}
+function yearRowLabel(offset){
+  const age = getClientAge();
+  return age!=null ? `Age ${Math.round(age+offset)}` : `Year ${offset}`;
+}
+function yearPhrase(offset){
+  const age = getClientAge();
+  return age!=null ? `age ${Math.round(age+offset)}` : `year ${offset}`;
+}
+
+function fmtShort(v){
+  const sign = v<0?'-':'';
+  v = Math.abs(v);
+  if(v>=1000000) return sign+'$'+(v/1000000).toFixed(1)+'M';
+  if(v>=1000) return sign+'$'+Math.round(v/1000)+'K';
+  return sign+'$'+Math.round(v);
+}
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ---------------- SVG chart builders ---------------- */
+function lineChartSVG(years, series, H, opts){
+  H = H || 260;
+  opts = opts || {};
+  const W=600,ML=56,MR=14,MT=14,MB=26;
+  const plotW=W-ML-MR, plotH=H-MT-MB;
+  const allVals = series.flatMap(s=>s.values);
+  if(opts.band) allVals.push(...opts.band.highValues, ...opts.band.lowValues);
+  if(opts.goalValue) allVals.push(opts.goalValue);
+  let maxY = Math.max(...allVals, 1);
+  maxY = maxY * 1.08;
+  const n = years.length;
+  const x = i => ML + (n<=1?0:(i/(n-1))*plotW);
+  const y = v => MT + plotH - (v/maxY)*plotH;
+
+  let gridLines = '';
+  for(let g=0; g<=4; g++){
+    const gy = MT + (g/4)*plotH;
+    const val = maxY - (g/4)*maxY;
+    gridLines += `<line x1="${ML}" y1="${gy}" x2="${W-MR}" y2="${gy}" stroke="#E3E0D2" stroke-width="1"/>`;
+    gridLines += `<text x="${ML-8}" y="${gy+3}" text-anchor="end" font-family="ui-monospace,monospace" font-size="9.5" fill="#8A8F81">${fmtShort(val)}</text>`;
+  }
+  let xLabels = '';
+  const step = Math.max(1, Math.ceil(n/7));
+  for(let i=0;i<n;i+=step){
+    xLabels += `<text x="${x(i)}" y="${H-6}" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9.5" fill="#8A8F81">${years[i]}</text>`;
+  }
+  let bandSvg = '';
+  if(opts.band){
+    const lowPts = opts.band.lowValues.map((v,i)=>`${x(i)},${y(v)}`);
+    const highPts = opts.band.highValues.map((v,i)=>`${x(i)},${y(v)}`).reverse();
+    bandSvg = `<polygon points="${lowPts.concat(highPts).join(' ')}" fill="${opts.band.color||'#A9793C'}" opacity="0.14"/>`;
+  }
+  let paths = '';
+  series.forEach(s=>{
+    const pts = s.values.map((v,i)=>`${x(i)},${y(v)}`).join(' ');
+    const dash = s.dashed ? 'stroke-dasharray="5,4"' : '';
+    if(s.fill){
+      const area = `${x(0)},${y(0)} ` + pts + ` ${x(n-1)},${y(0)}`;
+      paths += `<polygon points="${area}" fill="${s.color}" opacity="0.08"/>`;
+    }
+    paths += `<polyline points="${pts}" fill="none" stroke="${s.color}" stroke-width="2.25" ${dash} stroke-linejoin="round" stroke-linecap="round"/>`;
+  });
+  let goalSvg = '';
+  if(opts.goalValue){
+    const gy2 = y(opts.goalValue);
+    goalSvg = `<line x1="${ML}" y1="${gy2}" x2="${W-MR}" y2="${gy2}" stroke="#A9793C" stroke-width="1.5" stroke-dasharray="3,3"/>
+      <text x="${ML+4}" y="${gy2-5}" text-anchor="start" font-family="ui-monospace,monospace" font-size="9.5" font-weight="600" fill="#A9793C">${opts.goalLabel||'Goal'}</text>`;
+  }
+  let markerSvg = '';
+  if(opts.markerIndex!=null && opts.markerIndex>=0 && opts.markerIndex<=n-1){
+    const mx = x(opts.markerIndex);
+    const nearRightEdge = mx > (ML + plotW*0.72);
+    const anchor = nearRightEdge ? 'end' : (mx < ML+plotW*0.28 ? 'start' : 'middle');
+    const tx = anchor==='end' ? mx-4 : (anchor==='start' ? mx+4 : mx);
+    const label = opts.markerLabel||'Milestone';
+    const labelW = label.length*5.6+8;
+    const boxX = anchor==='end' ? tx-labelW : (anchor==='start' ? tx-4 : tx-labelW/2);
+    markerSvg = `<line x1="${mx}" y1="${MT}" x2="${mx}" y2="${MT+plotH}" stroke="#15231D" stroke-width="1" stroke-dasharray="2,3" opacity="0.55"/>
+      <rect x="${boxX}" y="${MT+2}" width="${labelW}" height="13" fill="#F4F5EF" opacity="0.9"/>
+      <text x="${tx}" y="${MT+12}" text-anchor="${anchor}" font-family="ui-sans-serif,sans-serif" font-size="10" font-weight="600" fill="#15231D">${label}</text>`;
+  }
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="overflow:visible;font-family:ui-monospace,monospace">
+    ${gridLines}${bandSvg}${xLabels}${paths}${goalSvg}${markerSvg}
+    <line x1="${ML}" y1="${MT+plotH}" x2="${W-MR}" y2="${MT+plotH}" stroke="#15231D" stroke-width="1"/>
+  </svg>`;
+}
+
+function delayBarsSVG(labels, values, H){
+  H = H || 200;
+  const W=600,ML=56,MR=14,MT=14,MB=26;
+  const plotW=W-ML-MR, plotH=H-MT-MB;
+  const n = values.length;
+  const maxV = Math.max(...values,1)*1.08;
+  const x = i => ML + (i/n)*plotW + (plotW/n)*0.18;
+  const bw = (plotW/n)*0.64;
+  const yv = v => MT + plotH - (v/maxV)*plotH;
+  let bars='', xLabels='';
+  for(let i=0;i<n;i++){
+    const yTop = yv(values[i]);
+    bars += `<rect x="${x(i)}" y="${yTop}" width="${bw}" height="${(MT+plotH)-yTop}" fill="${i===0?'#1F4B3F':'#A9793C'}" opacity="${i===0?1:0.55+0.35*(1-i/n)}"/>`;
+    xLabels += `<text x="${x(i)+bw/2}" y="${H-6}" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9.5" fill="#8A8F81">${labels[i]}</text>`;
+  }
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="overflow:visible;font-family:ui-monospace,monospace">
+    ${bars}${xLabels}
+    <line x1="${ML}" y1="${MT+plotH}" x2="${W-MR}" y2="${MT+plotH}" stroke="#15231D" stroke-width="1"/>
+  </svg>`;
+}
+
+/* Credit/debit ledger chart: credit bars above a zero baseline, debit bars below it, balance line on its own scale */
+function ledgerChartSVG(years, credit, debit, balance, H){
+  H = H || 280;
+  const W=600,ML=56,MR=14,MT=14,MB=26;
+  const plotW=W-ML-MR, plotH=H-MT-MB;
+  const n = years.length;
+  const posMax = Math.max(...credit, 1) * 1.15;
+  const negMax = Math.max(...debit, 1) * 1.15;
+  const baseline = MT + plotH*0.55;
+  const posH = baseline - MT;
+  const negH = (MT+plotH) - baseline;
+  const balMax = Math.max(...balance, 1) * 1.08;
+
+  const x = i => ML + (i/n)*plotW + (plotW/n)*0.15;
+  const bw = (plotW/n)*0.7;
+  const yPos = v => baseline - (v/posMax)*posH;
+  const yNeg = v => baseline + (v/negMax)*negH;
+  const xLine = i => ML + (i/(n-1))*plotW;
+  const yLine = v => MT + plotH - (v/balMax)*plotH;
+
+  let gridLines = '';
+  for(let g=0; g<=3; g++){
+    const gy = MT + (g/3)*posH;
+    const val = posMax - (g/3)*posMax;
+    gridLines += `<line x1="${ML}" y1="${gy}" x2="${W-MR}" y2="${gy}" stroke="#E3E0D2" stroke-width="1"/>`;
+    gridLines += `<text x="${ML-8}" y="${gy+3}" text-anchor="end" font-family="ui-monospace,monospace" font-size="9.5" fill="#8A8F81">${fmtShort(val)}</text>`;
+  }
+  let xLabels = '';
+  const step = Math.max(1, Math.ceil(n/7));
+  for(let i=0;i<n;i+=step){
+    xLabels += `<text x="${x(i)+bw/2}" y="${H-6}" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9.5" fill="#8A8F81">${years[i]}</text>`;
+  }
+  let barsSvg = '';
+  for(let i=0;i<n;i++){
+    const c = credit[i], d = debit[i];
+    const yC = yPos(c);
+    barsSvg += `<rect x="${x(i)}" y="${yC}" width="${bw}" height="${baseline-yC}" fill="#3F7C68"/>`;
+    if(d>0){
+      barsSvg += `<rect x="${x(i)}" y="${baseline}" width="${bw}" height="${yNeg(d)-baseline}" fill="#9C3B2E"/>`;
+    }
+  }
+  const linePts = balance.map((v,i)=>`${xLine(i)},${yLine(v)}`).join(' ');
+
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="overflow:visible;font-family:ui-monospace,monospace">
+    ${gridLines}${xLabels}${barsSvg}
+    <polyline points="${linePts}" fill="none" stroke="#A9793C" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <line x1="${ML}" y1="${baseline}" x2="${W-MR}" y2="${baseline}" stroke="#15231D" stroke-width="1"/>
+  </svg>`;
+}
+
+/* ================= TAB 1: GROWTH ================= */
+function simulateGrowth({lumpSum, monthly, rate, years, contribYears}){
+  const months = Math.round(years*12);
+  const r = (rate/100)/12;
+  let balance = lumpSum, totalContributed = lumpSum;
+  let interestAcc=0, contribAcc=0;
+  const yearly = [{year:0, balance:lumpSum, totalContributed:lumpSum, interestEarned:0, contribThisYear:0}];
+  for(let m=1;m<=months;m++){
+    const interest = balance * r;
+    balance += interest; interestAcc += interest;
+    if(m <= contribYears*12){ balance += monthly; totalContributed += monthly; contribAcc += monthly; }
+    if(m % 12 === 0){
+      yearly.push({year:m/12, balance, totalContributed, interestEarned:interestAcc, contribThisYear:contribAcc});
+      interestAcc=0; contribAcc=0;
+    }
+  }
+  return {yearly, finalBalance:balance, totalContributed};
+}
+function getGrowthInputs(){
+  return {
+    lumpSum: parseFloat(els('g_lump').value)||0,
+    monthly: parseFloat(els('g_monthly').value)||0,
+    rate: parseFloat(els('g_return').value)||0,
+    years: parseInt(els('g_years').value)||1,
+    contribYears: parseInt(els('g_contribYears').value)||0,
+  };
+}
+function computeCpf(years){
+  const oaBalance = parseFloat(els('g_cpfOaBalance').value)||0;
+  const oaMonthly = parseFloat(els('g_cpfOaMonthly').value)||0;
+  const saBalance = parseFloat(els('g_cpfSaBalance').value)||0;
+  const saMonthly = parseFloat(els('g_cpfSaMonthly').value)||0;
+  if(oaBalance<=0 && oaMonthly<=0 && saBalance<=0 && saMonthly<=0) return null;
+  const oa = simulateGrowth({lumpSum:oaBalance, monthly:oaMonthly, rate:2.5, years, contribYears:years});
+  const sa = simulateGrowth({lumpSum:saBalance, monthly:saMonthly, rate:4.0, years, contribYears:years});
+  return {oa, sa, finalBalance: oa.finalBalance + sa.finalBalance};
+}
+function renderGrowth(){
+  els('g_returnVal').textContent = parseFloat(els('g_return').value).toFixed(1)+'%';
+  els('g_yearsVal').textContent = els('g_years').value + ' years';
+  els('g_contribYearsVal').textContent = els('g_contribYears').value + ' years';
+  const goalRaw = parseFloat(els('g_goal').value);
+  const goal = isFinite(goalRaw) && goalRaw>0 ? goalRaw : null;
+  els('g_goalVal').textContent = goal ? fmt$(goal) : 'Off';
+  const bandSpread = parseFloat(els('g_band').value)||0;
+  els('g_bandVal').textContent = bandSpread>0 ? '\u00b1'+bandSpread.toFixed(1)+'%' : 'Off';
+
+  const inputs = getGrowthInputs();
+  const sim = simulateGrowth(inputs);
+  const growth = sim.finalBalance - sim.totalContributed;
+  const growthPct = sim.totalContributed>0 ? (growth/sim.totalContributed)*100 : 0;
+  els('g-growth').textContent = fmt$(growth);
+  els('g-growthpct').textContent = growthPct.toFixed(0)+'%';
+  els('g-contributed').textContent = fmt$(sim.totalContributed);
+  els('g-final').textContent = fmt$(sim.finalBalance);
+
+  const chartOpts = {};
+  const legendExtra = [];
+
+  if(bandSpread>0){
+    const lowSim = simulateGrowth({...inputs, rate: Math.max(0, inputs.rate-bandSpread)});
+    const highSim = simulateGrowth({...inputs, rate: inputs.rate+bandSpread});
+    chartOpts.band = {lowValues: lowSim.yearly.map(y=>y.balance), highValues: highSim.yearly.map(y=>y.balance), color:'#A9793C'};
+    legendExtra.push(`<div class="item"><span class="swatch" style="background:var(--gold);opacity:.35"></span>${(inputs.rate-bandSpread).toFixed(1)}%\u2013${(inputs.rate+bandSpread).toFixed(1)}% range</div>`);
+  }
+  if(goal){
+    chartOpts.goalValue = goal;
+    chartOpts.goalLabel = 'Goal: ' + fmt$(goal);
+    const hitIndex = sim.yearly.findIndex(y=>y.balance>=goal);
+    const goalNote = els('g-goal-note');
+    goalNote.style.display = 'block';
+    if(hitIndex>=0){
+      goalNote.innerHTML = `<b>On track:</b> the ${fmt$(goal)} goal is projected to be reached by ${yearPhrase(sim.yearly[hitIndex].year)}, with ${inputs.years-sim.yearly[hitIndex].year} years of the horizon still to spare.`;
+    } else {
+      const shortfall = goal - sim.finalBalance;
+      goalNote.innerHTML = `<b>Falls short:</b> at these numbers, the plan is projected to reach ${fmt$(sim.finalBalance)} by the end of the horizon \u2014 ${fmt$(shortfall)} short of the ${fmt$(goal)} goal.`;
+    }
+  } else {
+    els('g-goal-note').style.display = 'none';
+  }
+  const retireOffset = getRetirementOffset();
+  if(retireOffset!=null && retireOffset<=inputs.years){
+    chartOpts.markerIndex = Math.round(retireOffset);
+    chartOpts.markerLabel = 'Retirement';
+    legendExtra.push(`<div class="item"><span class="swatch" style="background:var(--ink);opacity:.55"></span>Retirement marker</div>`);
+  }
+
+  const cpfStatsRow = els('g-cpf-stats');
+  const chartSeries = [
+    {values: sim.yearly.map(y=>y.balance), color:'#1F4B3F', fill:true},
+    {values: sim.yearly.map(y=>y.totalContributed), color:'#B8B49C', dashed:true}
+  ];
+  const cpf = cpfMode ? computeCpf(inputs.years) : null;
+  if(cpf){
+    cpfStatsRow.style.display = 'flex';
+    els('g-cpf-total').textContent = fmt$(cpf.finalBalance);
+    els('g-total-incl-cpf').textContent = fmt$(sim.finalBalance + cpf.finalBalance);
+    const combined = sim.yearly.map((y,i)=> y.balance + cpf.oa.yearly[i].balance + cpf.sa.yearly[i].balance);
+    chartSeries.push({values: combined, color:'#A9793C', dashed:true});
+    legendExtra.push(`<div class="item"><span class="swatch" style="background:var(--gold)"></span>Total incl. CPF</div>`);
+  } else {
+    cpfStatsRow.style.display = 'none';
+  }
+
+  els('chart-growth').innerHTML = lineChartSVG(axisLabels(sim.yearly.map(y=>y.year)), chartSeries, null, chartOpts);
+  els('g-axisnote').textContent = 'X-axis: ' + axisCaption();
+  document.querySelectorAll('#panel-growth .legend .item.extra').forEach(el=>el.remove());
+  if(legendExtra.length){
+    els('g-axisnote').insertAdjacentHTML('beforebegin', legendExtra.map(h=>h.replace('class="item"','class="item extra"')).join(''));
+  }
+  return sim;
+}
+
+/* ================= TAB 2: INFLATION ================= */
+function simulateIdleCash({lumpSum, monthly, contribYears, bankRate, years}){
+  const months = Math.round(years*12);
+  const r = (bankRate/100)/12;
+  let balance = lumpSum;
+  const yearly = [{year:0, balance:lumpSum}];
+  for(let m=1;m<=months;m++){
+    balance += balance*r;
+    if(m <= contribYears*12) balance += monthly;
+    if(m % 12 === 0) yearly.push({year:m/12, balance});
+  }
+  return {yearly, finalBalance:balance};
+}
+function simulateInflation(inputs){
+  const infl = (inputs.inflation||0)/100;
+  if(inputs.linked){
+    const g = simulateGrowth({lumpSum:inputs.lumpSum, monthly:inputs.monthly, rate:inputs.rate, years:inputs.years, contribYears:inputs.contribYears});
+    const idle = simulateIdleCash({lumpSum:inputs.lumpSum, monthly:inputs.monthly, contribYears:inputs.contribYears, bankRate:inputs.bankRate, years:inputs.years});
+    const yearly = g.yearly.map((y,i)=>({
+      year:y.year,
+      balance:y.balance,
+      realBalance: y.balance/Math.pow(1+infl, y.year),
+      idleBalance: idle.yearly[i].balance,
+      idleRealBalance: idle.yearly[i].balance/Math.pow(1+infl, y.year),
+    }));
+    return {yearly, finalBalance:g.finalBalance, idleFinalBalance: idle.finalBalance};
+  }
+  const months = Math.round(inputs.years*12);
+  const r = (inputs.bankRate/100)/12;
+  let balance = inputs.lumpSum;
+  const yearly = [{year:0, balance:inputs.lumpSum, realBalance:inputs.lumpSum}];
+  for(let m=1;m<=months;m++){
+    balance += balance*r;
+    if(m % 12 === 0){
+      const yr = m/12;
+      yearly.push({year:yr, balance, realBalance: balance/Math.pow(1+infl, yr)});
+    }
+  }
+  return {yearly, finalBalance:balance};
+}
+function getInflationInputs(){
+  if(linkedMode){
+    const g = getGrowthInputs();
+    return {linked:true, lumpSum:g.lumpSum, monthly:g.monthly, rate:g.rate, years:g.years, contribYears:g.contribYears, bankRate: parseFloat(els('i_bankRate').value)||0, inflation: parseFloat(els('i_inflation').value)||0};
+  }
+  return {
+    linked:false,
+    lumpSum: parseFloat(els('i_lump').value)||0,
+    bankRate: parseFloat(els('i_bankRate').value)||0,
+    inflation: parseFloat(els('i_inflation').value)||0,
+    years: parseInt(els('i_years').value)||1,
+  };
+}
+function renderInflation(){
+  els('i_bankVal').textContent = parseFloat(els('i_bankRate').value).toFixed(2).replace(/\.?0+$/,'').concat('%');
+  els('i_inflVal').textContent = parseFloat(els('i_inflation').value).toFixed(1)+'%';
+  els('i_yearsVal').textContent = els('i_years').value + ' years';
+  const inputs = getInflationInputs();
+  const sim = simulateInflation(inputs);
+  const stat3 = els('i-stat3');
+
+  if(inputs.linked){
+    const investedReal = sim.yearly[sim.yearly.length-1].realBalance;
+    const idleReal = sim.yearly[sim.yearly.length-1].idleRealBalance;
+    const gap = investedReal - idleReal;
+    const gapPct = idleReal>0 ? (gap/idleReal)*100 : 0;
+
+    els('i-headline-box').className = 'headline wash-green';
+    els('i-headline-label').style.color = '#1F4B3F';
+    els('i-headline-label').textContent = 'The real-terms difference: investing vs. leaving it idle';
+    ['i-hf1-value','i-hf2-value','i-hf-divider','i-hf1-sub','i-hf2-sub','i-headline-note'].forEach(id=>els(id).style.color = '#1F4B3F');
+    els('i-hf1-value').textContent = fmt$(gap);
+    els('i-hf1-sub').textContent = 'more purchasing power by investing';
+    els('i-hf2-value').textContent = gapPct.toFixed(0)+'%';
+    els('i-hf2-sub').textContent = 'real-terms advantage over idle cash';
+    els('i-headline-note').textContent = 'Both figures are already adjusted for inflation \u2014 this is the genuine gap in what the money can actually buy.';
+
+    els('i-stat1-label').textContent = 'Invested, real value (today\u2019s $)';
+    els('i-stat1-value').textContent = fmt$(investedReal);
+    els('i-stat2-label').textContent = 'Idle, real value (today\u2019s $)';
+    els('i-stat2-value').textContent = fmt$(idleReal);
+    stat3.style.display = 'block';
+    els('i-stat3-label').textContent = 'Invested, nominal balance';
+    els('i-stat3-value').textContent = fmt$(sim.finalBalance);
+
+    els('i-legend').innerHTML = `
+      <div class="item"><span class="swatch" style="background:var(--primary)"></span>Invested \u2014 nominal</div>
+      <div class="item"><span class="swatch" style="background:var(--gold)"></span>Invested \u2014 real (inflation-adjusted)</div>
+      <div class="item"><span class="swatch" style="background:var(--danger)"></span>Idle in bank \u2014 real (inflation-adjusted)</div>
+      <div class="axis-note">X-axis: ${axisCaption()}</div>
+    `;
+    els('chart-inflation').innerHTML = lineChartSVG(axisLabels(sim.yearly.map(y=>y.year)), [
+      {values: sim.yearly.map(y=>y.balance), color:'#1F4B3F'},
+      {values: sim.yearly.map(y=>y.realBalance), color:'#A9793C', dashed:true},
+      {values: sim.yearly.map(y=>y.idleRealBalance), color:'#9C3B2E', dashed:true}
+    ]);
+  } else {
+    const nominal = sim.finalBalance;
+    const real = sim.yearly[sim.yearly.length-1].realBalance;
+    const lostPct = nominal>0 ? ((nominal-real)/nominal)*100 : 0;
+
+    els('i-headline-box').className = 'headline wash-red';
+    els('i-headline-label').style.color = '#7A3D2E';
+    els('i-headline-label').textContent = 'Purchasing power lost by doing nothing';
+    ['i-hf1-value','i-hf2-value','i-hf-divider','i-hf1-sub','i-hf2-sub','i-headline-note'].forEach(id=>els(id).style.color = '#7A3D2E');
+    els('i-hf1-value').textContent = fmt$(nominal-real);
+    els('i-hf1-sub').textContent = "in today's dollars";
+    els('i-hf2-value').textContent = lostPct.toFixed(0)+'%';
+    els('i-hf2-sub').textContent = 'of the nominal balance';
+    els('i-headline-note').textContent = "The account balance itself won't shrink \u2014 what it can buy will.";
+
+    els('i-stat1-label').textContent = 'Nominal balance';
+    els('i-stat1-value').textContent = fmt$(nominal);
+    els('i-stat2-label').textContent = "Real value (today's $)";
+    els('i-stat2-value').textContent = fmt$(real);
+    stat3.style.display = 'none';
+
+    els('i-legend').innerHTML = `
+      <div class="item"><span class="swatch" style="background:var(--primary)"></span>Nominal balance</div>
+      <div class="item"><span class="swatch" style="background:var(--gold)"></span>Real (inflation-adjusted) value</div>
+      <div class="axis-note">X-axis: ${axisCaption()}</div>
+    `;
+    els('chart-inflation').innerHTML = lineChartSVG(axisLabels(sim.yearly.map(y=>y.year)), [
+      {values: sim.yearly.map(y=>y.balance), color:'#1F4B3F'},
+      {values: sim.yearly.map(y=>y.realBalance), color:'#A9793C', dashed:true}
+    ]);
+  }
+}
+
+/* ================= TAB 3: CASH FLOW (credit/debit depletion) ================= */
+function simulateCashflow({startBalance, streams, debitStreams, rate, years}){
+  const months = Math.round(years*12);
+  const r = (rate/100)/12;
+  let balance = startBalance;
+  let depletedMonth = null;
+  let creditAcc=0, debitAcc=0;
+  const yearly = [{year:0, balance:startBalance, credit:0, debit:0}];
+  for(let m=1;m<=months;m++){
+    const yearIndex = Math.floor((m-1)/12); // 0-based year this month falls in
+    let monthlyCredit = 0;
+    streams.forEach(s=>{
+      if(yearIndex >= s.start && yearIndex < s.start + s.duration) monthlyCredit += s.amount;
+    });
+    let monthlyDebit = 0;
+    debitStreams.forEach(s=>{
+      if(yearIndex >= s.start && yearIndex < s.start + s.duration) monthlyDebit += s.amount;
+    });
+    const interest = balance>0 ? balance*r : 0;
+    balance += interest;
+    balance += monthlyCredit;
+    creditAcc += monthlyCredit + interest;
+    let debit = monthlyDebit;
+    if(balance - debit < 0){
+      debit = Math.max(balance,0);
+      if(depletedMonth===null && monthlyDebit>0) depletedMonth = m;
+    }
+    balance -= debit;
+    debitAcc += debit;
+    if(balance<0) balance = 0;
+    if(m % 12 === 0){
+      yearly.push({year:m/12, balance, credit:creditAcc, debit:debitAcc});
+      creditAcc=0; debitAcc=0;
+    }
+  }
+  return {yearly, finalBalance:balance, depletedMonth};
+}
+
+/* ---- income & expense streams state (Cash Flow tab) ---- */
+let incomeStreams = [
+  {id:1, label:'Endowment A', amount:500, start:0, duration:10},
+  {id:2, label:'Endowment B', amount:300, start:0, duration:15},
+];
+let expenseStreams = [
+  {id:1, label:'Living expenses', amount:3000, start:0, duration:40},
+];
+let streamIdSeq = 3;
+let expenseIdSeq = 2;
+
+function addIncomeStream(){
+  incomeStreams.push({id:streamIdSeq++, label:'New stream', amount:200, start:0, duration:10});
+  renderStreamsList();
+  renderAll();
+  autoSaveDraft();
+}
+function removeStream(id){
+  incomeStreams = incomeStreams.filter(s=>s.id!==id);
+  renderStreamsList();
+  renderAll();
+  autoSaveDraft();
+}
+function updateStream(id, field, value){
+  const s = incomeStreams.find(s=>s.id===id);
+  if(!s) return;
+  if(field==='label') s.label = value;
+  else s[field] = parseFloat(value)||0;
+  renderAll();
+  autoSaveDraft();
+}
+function renderStreamsList(){
+  const container = els('c_streamsList');
+  container.innerHTML = incomeStreams.map(s => `
+    <div class="stream-card">
+      <div class="stream-card-top">
+        <input class="stream-label-input" value="${escapeHtml(s.label)}" onchange="updateStream(${s.id},'label',this.value)">
+        <button type="button" class="stream-remove" onclick="removeStream(${s.id})" title="Remove">&times;</button>
+      </div>
+      <div class="stream-fields">
+        <div class="dollar-input"><span>$</span><input type="number" value="${s.amount}" min="0" step="50" onchange="updateStream(${s.id},'amount',this.value)"></div>
+        <div class="stream-mini"><label>Starts (yr)</label><input type="number" value="${s.start}" min="0" step="1" onchange="updateStream(${s.id},'start',this.value)"></div>
+        <div class="stream-mini"><label>For (yrs)</label><input type="number" value="${s.duration}" min="1" step="1" onchange="updateStream(${s.id},'duration',this.value)"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function addExpenseStream(){
+  expenseStreams.push({id:expenseIdSeq++, label:'New expense', amount:500, start:0, duration:40});
+  renderExpenseList();
+  renderAll();
+  autoSaveDraft();
+}
+function removeExpenseStream(id){
+  expenseStreams = expenseStreams.filter(s=>s.id!==id);
+  renderExpenseList();
+  renderAll();
+  autoSaveDraft();
+}
+function updateExpenseStream(id, field, value){
+  const s = expenseStreams.find(s=>s.id===id);
+  if(!s) return;
+  if(field==='label') s.label = value;
+  else s[field] = parseFloat(value)||0;
+  renderAll();
+  autoSaveDraft();
+}
+function renderExpenseList(){
+  const container = els('c_expenseList');
+  container.innerHTML = expenseStreams.map(s => `
+    <div class="stream-card">
+      <div class="stream-card-top">
+        <input class="stream-label-input" value="${escapeHtml(s.label)}" onchange="updateExpenseStream(${s.id},'label',this.value)">
+        <button type="button" class="stream-remove" onclick="removeExpenseStream(${s.id})" title="Remove">&times;</button>
+      </div>
+      <div class="stream-fields">
+        <div class="dollar-input"><span>$</span><input type="number" value="${s.amount}" min="0" step="50" onchange="updateExpenseStream(${s.id},'amount',this.value)"></div>
+        <div class="stream-mini"><label>Starts (yr)</label><input type="number" value="${s.start}" min="0" step="1" onchange="updateExpenseStream(${s.id},'start',this.value)"></div>
+        <div class="stream-mini"><label>For (yrs)</label><input type="number" value="${s.duration}" min="1" step="1" onchange="updateExpenseStream(${s.id},'duration',this.value)"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function getCashflowInputs(){
+  return {
+    startBalance: parseFloat(els('c_start').value)||0,
+    streams: incomeStreams.map(s=>({amount:s.amount, start:s.start, duration:s.duration})),
+    debitStreams: expenseStreams.map(s=>({amount:s.amount, start:s.start, duration:s.duration})),
+    rate: parseFloat(els('c_rate').value)||0,
+    years: parseInt(els('c_years').value)||1,
+  };
+}
+function renderCashflow(){
+  els('c_rateVal').textContent = parseFloat(els('c_rate').value).toFixed(2).replace(/\.?0+$/,'').concat('%');
+  els('c_yearsVal').textContent = els('c_years').value + ' years';
+  els('c-headline-years').textContent = els('c_years').value + ' years';
+
+  const inputs = getCashflowInputs();
+  const sim = simulateCashflow(inputs);
+  const rows = sim.yearly.filter(y=>y.year>0);
+  const years = rows.map(y=>y.year);
+  const credits = rows.map(y=>y.credit);
+  const debits = rows.map(y=>y.debit);
+  const balances = rows.map(y=>y.balance);
+  const totalCredit = credits.reduce((a,b)=>a+b,0);
+  const totalDebit = debits.reduce((a,b)=>a+b,0);
+  els('c-totalcredit').textContent = fmt$(totalCredit);
+  els('c-totaldebit').textContent = fmt$(totalDebit);
+
+  const start = inputs.startBalance;
+  const change = sim.finalBalance - start;
+  const changePct = start>0 ? (change/start)*100 : 0;
+  const box = els('c-headline-box');
+  els('c-endbal').textContent = fmt$(sim.finalBalance);
+  els('c-pct').textContent = Math.abs(changePct).toFixed(0)+'%';
+  if(change < 0 || sim.depletedMonth){
+    box.className = 'headline wash-red';
+    els('c-endbal-sub').textContent = 'projected ending balance';
+    els('c-pct-sub').textContent = 'of starting balance used up';
+    if(sim.depletedMonth){
+      const depYear = Math.ceil(sim.depletedMonth/12);
+      els('c-note').textContent = `At this rate, the balance is projected to reach $0 by ${yearPhrase(depYear)} \u2014 well before the ${inputs.years}-year horizon.`;
+    } else {
+      els('c-note').textContent = `Spending is outpacing income. The balance shrinks steadily if nothing changes.`;
+    }
+  } else {
+    box.className = 'headline wash-green';
+    els('c-endbal-sub').textContent = 'projected ending balance';
+    els('c-pct-sub').textContent = 'growth on starting balance';
+    els('c-note').textContent = `Income covers expenses with room to spare, so the balance grows instead of depleting.`;
+  }
+
+  els('chart-cashflow').innerHTML = ledgerChartSVG(axisLabels(years), credits, debits, balances);
+  els('c-axisnote').textContent = 'X-axis: ' + axisCaption();
+
+  let rowsHtml = `<tr><th>${axisCaption()}</th><th>Credit</th><th>Debit</th><th>Net</th><th>Ending balance</th></tr>`;
+  const showEvery = Math.max(1, Math.ceil(rows.length/12));
+  rows.forEach((r,i)=>{
+    if(i % showEvery === 0 || i === rows.length-1){
+      const net = r.credit - r.debit;
+      rowsHtml += `<tr><td>${yearRowLabel(r.year)}</td><td style="color:var(--primary-light)">+${fmt$(r.credit)}</td><td style="color:var(--danger)">-${fmt$(r.debit)}</td><td>${net>=0?'+':''}${fmt$(net)}</td><td>${fmt$(r.balance)}</td></tr>`;
+    }
+  });
+  els('cashflow-table').innerHTML = rowsHtml;
+}
+
+/* ================= TAB 4: COST OF DELAY ================= */
+function getDelayInputs(){
+  if(linkedMode){
+    const g = getGrowthInputs();
+    return {lumpSum:g.lumpSum, monthly:g.monthly, rate:g.rate, years:g.years, contribYears:g.contribYears, delay: parseInt(els('d_delay').value)||0};
+  }
+  return {
+    lumpSum: parseFloat(els('d_lump').value)||0,
+    monthly: parseFloat(els('d_monthly').value)||0,
+    rate: parseFloat(els('d_return').value)||0,
+    years: parseInt(els('d_years').value)||1,
+    contribYears: parseInt(els('d_contribYears').value)||0,
+    delay: parseInt(els('d_delay').value)||0,
+  };
+}
+function runDelayScenario(inputs, delay){
+  const investYears = Math.max(0, inputs.years - delay);
+  const sim = simulateGrowth({
+    lumpSum: inputs.lumpSum, monthly: inputs.monthly, rate: inputs.rate,
+    years: investYears, contribYears: Math.min(inputs.contribYears, investYears)
+  });
+  const padded = [];
+  for(let y=0; y<=delay; y++) padded.push({year:y, balance:0});
+  sim.yearly.forEach((row,i)=>{ if(i>0) padded.push({year: delay+row.year, balance: row.balance}); });
+  return {finalBalance: sim.finalBalance, yearly: padded};
+}
+function renderDelay(){
+  els('d_returnVal').textContent = parseFloat(els('d_return').value).toFixed(1)+'%';
+  els('d_yearsVal').textContent = els('d_years').value + ' years';
+  els('d_contribYearsVal').textContent = els('d_contribYears').value + ' years';
+  const delay = parseInt(els('d_delay').value)||0;
+  els('d_delayVal').textContent = delay + (delay===1?' year':' years');
+  els('d-delayinline').textContent = 'after ' + delay + (delay===1?' year':' years');
+
+  const inputs = getDelayInputs();
+  const now = simulateGrowth({lumpSum:inputs.lumpSum, monthly:inputs.monthly, rate:inputs.rate, years:inputs.years, contribYears:Math.min(inputs.contribYears, inputs.years)});
+  const later = runDelayScenario(inputs, delay);
+  const gap = now.finalBalance - later.finalBalance;
+  const pct = now.finalBalance>0 ? (gap/now.finalBalance)*100 : 0;
+
+  els('d-now').textContent = fmt$(now.finalBalance);
+  els('d-later').textContent = fmt$(later.finalBalance);
+  els('d-gap').textContent = fmt$(gap);
+  els('d-pct').textContent = pct.toFixed(0)+'%';
+  els('d-note').textContent = delay===0
+    ? 'No delay entered \u2014 move the slider to see what waiting costs.'
+    : `Waiting ${delay} ${delay===1?'year':'years'} to start costs ${fmt$(gap)} by the end of the plan, even though every other input stays identical.`;
+
+  const years = now.yearly.map(y=>y.year);
+  const laterVals = years.map(y=>{
+    const m = later.yearly.find(r=>r.year===y);
+    return m ? m.balance : 0;
+  });
+  const dRetireOffset = getRetirementOffset();
+  const dMarkerOpts = (dRetireOffset!=null && dRetireOffset<=inputs.years) ? {markerIndex: Math.round(dRetireOffset), markerLabel:'Retirement'} : {};
+  els('chart-delay').innerHTML = lineChartSVG(axisLabels(years), [
+    {values: now.yearly.map(y=>y.balance), color:'#1F4B3F'},
+    {values: laterVals, color:'#9C3B2E', dashed:true}
+  ], null, dMarkerOpts);
+  els('d-axisnote').textContent = 'X-axis: ' + axisCaption();
+
+  const maxDelay = Math.min(inputs.years-1, 15);
+  const ageSet = getClientAge();
+  const labels=[], barVals=[];
+  for(let d=0; d<=maxDelay; d++){
+    labels.push(ageSet!=null ? String(Math.round(ageSet+d)) : (d===0?'Now':'+'+d+'y'));
+    barVals.push(runDelayScenario(inputs, d).finalBalance);
+  }
+  els('chart-delaybars').innerHTML = delayBarsSVG(labels, barVals);
+  els('d-barsaxisnote').textContent = ageSet!=null ? 'X-axis: age when starting' : 'X-axis: years delayed before starting';
+}
+
+/* ---------------- render all + tabs ---------------- */
+function updateLinkedNotes(){
+  const g = getGrowthInputs();
+  const summary = `${fmt$(g.lumpSum)} initial, ${fmt$(g.monthly)}/month for ${g.contribYears} years, ${g.rate}% annual return, ${g.years}-year horizon.`;
+  els('i_tag').textContent = linkedMode ? 'Linked to Growth tab' : 'Stand-alone \u00b7 own inputs';
+  els('d_tag').textContent = linkedMode ? 'Linked to Growth tab' : 'Stand-alone \u00b7 own inputs';
+  els('i_linkedNote').innerHTML = `<b>Linked to Growth tab:</b> ${summary} Adjust those on the Growth tab \u2014 the bank rate and inflation rate here set the "leave it idle" comparison.`;
+  els('d_linkedNote').innerHTML = `<b>Linked to Growth tab:</b> ${summary} Adjust those on the Growth tab \u2014 only the delay slider here is independent.`;
+  els('i_linkedNote').style.display = linkedMode ? 'block' : 'none';
+  els('d_linkedNote').style.display = linkedMode ? 'block' : 'none';
+  els('i_standaloneFields').style.display = linkedMode ? 'none' : 'block';
+  els('d_standaloneFields').style.display = linkedMode ? 'none' : 'block';
+}
+function setMode(mode){
+  linkedMode = (mode === 'linked');
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.toggle('active', b.dataset.mode===mode));
+  updateLinkedNotes();
+  renderAll();
+  autoSaveDraft();
+}
+function renderAll(){
+  updateLinkedNotes();
+  renderGrowth();
+  renderInflation();
+  renderCashflow();
+  renderDelay();
+}
+els('brandLogo').src = LOGO_FULL;
+els('footerLogo').src = LOGO_FULL;
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    els('panel-'+btn.dataset.tab).classList.add('active');
+  });
+});
+document.querySelectorAll('input').forEach(inp=>{
+  inp.addEventListener('input', renderAll);
+  inp.addEventListener('input', autoSaveDraft);
+});
+
+/* ---------------- PDF report (compiles all four independent tabs) ---------------- */
+function pageHeader(){
+  return `<div class="rp-header">
+    <div class="rp-brand"><img src="${LOGO_FULL}"><span class="rp-brandname">Financial Architects Advisory</span></div>
+    <span class="rp-tag">Confidential</span>
+  </div>`;
+}
+function pageFooter(pageNum, total){
+  total = total || 5;
+  return `<div class="rp-footer">
+    <div class="rp-fbrand"><img src="${LOGO_FULL}"><span class="rp-fname">Financial Architects Advisory</span></div>
+    <span class="rp-fpage">Page ${pageNum} of ${total}</span>
+  </div>`;
+}
+
+function saveReport(){
+  const client = els('clientName').value.trim();
+  const advisor = els('advisorName').value.trim();
+  const dateStr = new Date().toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
+
+  const gInputs = getGrowthInputs();
+  const gSim = simulateGrowth(gInputs);
+  const gGrowth = gSim.finalBalance - gSim.totalContributed;
+  const gGrowthPct = gSim.totalContributed>0 ? (gGrowth/gSim.totalContributed)*100 : 0;
+
+  const gGoalRaw = parseFloat(els('g_goal').value);
+  const gGoal = isFinite(gGoalRaw) && gGoalRaw>0 ? gGoalRaw : null;
+  const gBandSpread = parseFloat(els('g_band').value)||0;
+  const gChartOpts = {};
+  let gGoalNoteHtml = '';
+  if(gBandSpread>0){
+    const lowSim = simulateGrowth({...gInputs, rate: Math.max(0, gInputs.rate-gBandSpread)});
+    const highSim = simulateGrowth({...gInputs, rate: gInputs.rate+gBandSpread});
+    gChartOpts.band = {lowValues: lowSim.yearly.map(y=>y.balance), highValues: highSim.yearly.map(y=>y.balance), color:'#A9793C'};
+  }
+  if(gGoal){
+    gChartOpts.goalValue = gGoal;
+    gChartOpts.goalLabel = 'Goal: ' + fmt$(gGoal);
+    const hitIndex = gSim.yearly.findIndex(y=>y.balance>=gGoal);
+    if(hitIndex>=0){
+      gGoalNoteHtml = `<div class="rp-narrative"><b>On track:</b> the ${fmt$(gGoal)} goal is projected to be reached by ${yearPhrase(gSim.yearly[hitIndex].year)}, with ${gInputs.years-gSim.yearly[hitIndex].year} years of the horizon still to spare.</div>`;
+    } else {
+      gGoalNoteHtml = `<div class="rp-narrative"><b>Falls short:</b> at these numbers, the plan is projected to reach ${fmt$(gSim.finalBalance)} by the end of the horizon \u2014 ${fmt$(gGoal-gSim.finalBalance)} short of the ${fmt$(gGoal)} goal.</div>`;
+    }
+  }
+  const gRetireOffset = getRetirementOffset();
+  if(gRetireOffset!=null && gRetireOffset<=gInputs.years){
+    gChartOpts.markerIndex = Math.round(gRetireOffset);
+    gChartOpts.markerLabel = 'Retirement';
+  }
+
+  const iInputs = getInflationInputs();
+  const iSim = simulateInflation(iInputs);
+  const iNominal = iSim.finalBalance;
+  const iReal = iSim.yearly[iSim.yearly.length-1].realBalance;
+  const iLostPct = iNominal>0 ? ((iNominal-iReal)/iNominal)*100 : 0;
+  const iIdleReal = iInputs.linked ? iSim.yearly[iSim.yearly.length-1].idleRealBalance : null;
+  const iGap = iInputs.linked ? iReal - iIdleReal : null;
+  const iGapPct = iInputs.linked && iIdleReal>0 ? (iGap/iIdleReal)*100 : null;
+
+  const cInputs = getCashflowInputs();
+  const cSim = simulateCashflow(cInputs);
+  const cRows = cSim.yearly.filter(y=>y.year>0);
+  const cChange = cSim.finalBalance - cInputs.startBalance;
+  const cChangePct = cInputs.startBalance>0 ? (cChange/cInputs.startBalance)*100 : 0;
+  const showEvery = Math.max(1, Math.ceil(cRows.length/10));
+  let cfTableRows = '';
+  cRows.forEach((r,i)=>{
+    if(i % showEvery === 0 || i === cRows.length-1){
+      const net = r.credit - r.debit;
+      cfTableRows += `<tr><td>${yearRowLabel(r.year)}</td><td style="color:#3F7C68">+${fmt$(r.credit)}</td><td style="color:#9C3B2E">-${fmt$(r.debit)}</td><td>${net>=0?'+':''}${fmt$(net)}</td><td>${fmt$(r.balance)}</td></tr>`;
+    }
+  });
+  const cHeadWash = (cChange<0 || cSim.depletedMonth) ? 'wash-red' : 'wash-green';
+  const cHeadColor = (cChange<0 || cSim.depletedMonth) ? '#7A3D2E' : '#1F4B3F';
+  const cNote = cSim.depletedMonth
+    ? `At this rate, the balance is projected to reach $0 in year ${Math.ceil(cSim.depletedMonth/12)}, before the ${cInputs.years}-year horizon ends. Without a change in course, the runway is shorter than the plan requires.`
+    : (cChange<0 ? `Spending is outpacing income. Left unaddressed, the balance is projected to shrink steadily rather than provide lasting security.` : `Income covers expenses with room to spare, so the balance is projected to grow rather than deplete.`);
+
+  const dInputs = getDelayInputs();
+  const dNow = simulateGrowth({lumpSum:dInputs.lumpSum, monthly:dInputs.monthly, rate:dInputs.rate, years:dInputs.years, contribYears:Math.min(dInputs.contribYears, dInputs.years)});
+  const dLater = runDelayScenario(dInputs, dInputs.delay);
+  const dGap = dNow.finalBalance - dLater.finalBalance;
+  const dPct = dNow.finalBalance>0 ? (dGap/dNow.finalBalance)*100 : 0;
+  const dYears = dNow.yearly.map(y=>y.year);
+  const dLaterVals = dYears.map(y=>{
+    const m = dLater.yearly.find(r=>r.year===y);
+    return m ? m.balance : 0;
+  });
+  const dMaxDelay = Math.min(dInputs.years-1, 15);
+  const dAgeSet = getClientAge();
+  const dLabels=[], dVals=[];
+  for(let d=0; d<=dMaxDelay; d++){ dLabels.push(dAgeSet!=null ? String(Math.round(dAgeSet+d)) : (d===0?'Now':'+'+d+'y')); dVals.push(runDelayScenario(dInputs, d).finalBalance); }
+
+  const clientRow = client ? `<div class="rp-row"><span class="rp-k">Prepared for</span><span class="rp-v">${escapeHtml(client)}</span></div>` : '';
+  const advisorRow = `<div class="rp-row"><span class="rp-k">Prepared by</span><span class="rp-v">${advisor?escapeHtml(advisor):'Financial Architects Advisory'}</span></div>`;
+
+  const pages = [];
+
+  /* ===== PAGE 1: COVER ===== */
+  pages.push(`<div class="report-page">
+    ${pageHeader()}
+    <div class="rp-cover">
+      <img class="rp-coverlogo" src="${LOGO_FULL}">
+      <div class="rp-rule"></div>
+      <div class="rp-subtitle">A four-part projection covering growth, inflation, cash flow, and the cost of waiting &mdash; prepared to guide today's decisions.</div>
+      <div class="rp-prepared">
+        ${clientRow}
+        ${advisorRow}
+        <div class="rp-row"><span class="rp-k">Date</span><span class="rp-v">${dateStr}</span></div>
+      </div>
+      <div class="rp-toc">
+        <div class="rp-item"><div class="rp-num">01</div><div class="rp-lbl">Growth Projection</div></div>
+        <div class="rp-item"><div class="rp-num">02</div><div class="rp-lbl">Inflation Impact</div></div>
+        <div class="rp-item"><div class="rp-num">03</div><div class="rp-lbl">Cash Flow Timeline</div></div>
+        <div class="rp-item"><div class="rp-num">04</div><div class="rp-lbl">Cost of Delay</div></div>
+      </div>
+      <div style="font-size:9.5px; color:#9a9a90; max-width:440px; line-height:1.6; margin-top:34px;">Figures throughout this report are illustrative projections based on the assumptions stated on each page, using fixed annual rates of return and inflation. They are not a guarantee or promise of actual results, which will vary and could include loss of principal. Please consult your financial professional before making decisions based on this report.</div>
+    </div>
+    ${pageFooter(1)}
+  </div>`);
+
+  /* ===== PAGE 2: GROWTH ===== */
+  pages.push(`<div class="report-page">
+    ${pageHeader()}
+    <div class="rp-body">
+      <div class="rp-eyebrow-sm">01 &middot; Growth Projection</div>
+      <h2 class="rp-section-title">Compounding on a disciplined plan</h2>
+      <div class="rp-assumptions">${fmt$(gInputs.lumpSum)} initial, ${fmt$(gInputs.monthly)}/month for ${gInputs.contribYears} years, ${gInputs.rate}% annual return, ${gInputs.years}-year horizon.</div>
+      <div class="rp-headline wash-green">
+        <div class="rp-label" style="color:#1F4B3F;">Total growth over the period</div>
+        <div class="rp-hfigures">
+          <div><div class="rp-hfvalue" style="color:#1F4B3F;">${fmt$(gGrowth)}</div><div class="rp-hfsub" style="color:#1F4B3F;">earned on top of what's put in</div></div>
+          <div class="rp-hfdivider" style="color:#1F4B3F;">&mdash;</div>
+          <div><div class="rp-hfvalue" style="color:#1F4B3F;">${gGrowthPct.toFixed(0)}%</div><div class="rp-hfsub" style="color:#1F4B3F;">return on total contributed</div></div>
+        </div>
+      </div>
+      <div class="rp-stat-row">
+        <div class="rp-stat"><div class="rp-slabel">Total contributed</div><div class="rp-svalue">${fmt$(gSim.totalContributed)}</div></div>
+        <div class="rp-stat"><div class="rp-slabel">Ending balance</div><div class="rp-svalue" style="color:#1F4B3F;">${fmt$(gSim.finalBalance)}</div></div>
+      </div>
+      ${lineChartSVG(axisLabels(gSim.yearly.map(y=>y.year)), [
+        {values: gSim.yearly.map(y=>y.balance), color:'#1F4B3F', fill:true},
+        {values: gSim.yearly.map(y=>y.totalContributed), color:'#B8B49C', dashed:true}
+      ], 300, gChartOpts)}
+      ${gGoalNoteHtml}
+      <div class="rp-narrative">Over ${gInputs.years} years, consistent contributions compound into meaningful growth. The plan is projected to turn ${fmt$(gSim.totalContributed)} of discipline into ${fmt$(gSim.finalBalance)} &mdash; a ${gGrowthPct.toFixed(0)}% return on everything contributed, purely from staying invested.</div>
+    </div>
+    ${pageFooter(2)}
+  </div>`);
+
+  /* ===== PAGE 3: INFLATION ===== */
+  pages.push(`<div class="report-page">
+    ${pageHeader()}
+    <div class="rp-body">
+      <div class="rp-eyebrow-sm">02 &middot; Inflation Impact</div>
+      <h2 class="rp-section-title">${iInputs.linked ? 'Investing vs. leaving it idle' : 'What standing still really costs'}</h2>
+      <div class="rp-assumptions">${iInputs.linked
+        ? `Linked to Growth tab: ${fmt$(iInputs.lumpSum)} initial, ${fmt$(iInputs.monthly)}/month for ${iInputs.contribYears} years, ${iInputs.rate}% invested return vs. ${iInputs.bankRate}% idle bank rate, ${iInputs.inflation}% inflation, ${iInputs.years}-year horizon.`
+        : `${fmt$(iInputs.lumpSum)} sitting idle at ${iInputs.bankRate}% bank interest, ${iInputs.inflation}% inflation, ${iInputs.years}-year horizon.`}</div>
+      ${iInputs.linked ? `
+      <div class="rp-headline wash-green">
+        <div class="rp-label" style="color:#1F4B3F;">The real-terms difference: investing vs. leaving it idle</div>
+        <div class="rp-hfigures">
+          <div><div class="rp-hfvalue" style="color:#1F4B3F;">${fmt$(iGap)}</div><div class="rp-hfsub" style="color:#1F4B3F;">more purchasing power by investing</div></div>
+          <div class="rp-hfdivider" style="color:#1F4B3F;">&mdash;</div>
+          <div><div class="rp-hfvalue" style="color:#1F4B3F;">${iGapPct.toFixed(0)}%</div><div class="rp-hfsub" style="color:#1F4B3F;">real-terms advantage</div></div>
+        </div>
+        <div class="rp-hnote" style="color:#1F4B3F;">Both figures are already adjusted for inflation \u2014 this is the genuine gap in what the money can actually buy.</div>
+      </div>
+      <div class="rp-stat-row">
+        <div class="rp-stat"><div class="rp-slabel">Invested, real value</div><div class="rp-svalue" style="color:#1F4B3F;">${fmt$(iReal)}</div></div>
+        <div class="rp-stat"><div class="rp-slabel">Idle, real value</div><div class="rp-svalue" style="color:#9C3B2E;">${fmt$(iIdleReal)}</div></div>
+        <div class="rp-stat"><div class="rp-slabel">Invested, nominal balance</div><div class="rp-svalue" style="color:#A9793C;">${fmt$(iNominal)}</div></div>
+      </div>
+      ${lineChartSVG(axisLabels(iSim.yearly.map(y=>y.year)), [
+        {values: iSim.yearly.map(y=>y.balance), color:'#1F4B3F'},
+        {values: iSim.yearly.map(y=>y.realBalance), color:'#A9793C', dashed:true},
+        {values: iSim.yearly.map(y=>y.idleRealBalance), color:'#9C3B2E', dashed:true}
+      ], 300)}
+      <div class="rp-narrative">Even a well-invested plan isn't immune to inflation \u2014 growing at ${iInputs.rate}% while prices rise ${iInputs.inflation}% a year still leaves the plan's real purchasing power at ${fmt$(iReal)} rather than the full ${fmt$(iNominal)} nominal figure. But compared to leaving the same contributions idle in a bank at ${iInputs.bankRate}%, which is projected to hold only ${fmt$(iIdleReal)} of real purchasing power, investing still comes out ${fmt$(iGap)} ahead in today's terms.</div>
+      ` : `
+      <div class="rp-headline wash-red">
+        <div class="rp-label" style="color:#7A3D2E;">Purchasing power lost by doing nothing</div>
+        <div class="rp-hfigures">
+          <div><div class="rp-hfvalue" style="color:#7A3D2E;">${fmt$(iNominal-iReal)}</div><div class="rp-hfsub" style="color:#7A3D2E;">in today's dollars</div></div>
+          <div class="rp-hfdivider" style="color:#7A3D2E;">&mdash;</div>
+          <div><div class="rp-hfvalue" style="color:#7A3D2E;">${iLostPct.toFixed(0)}%</div><div class="rp-hfsub" style="color:#7A3D2E;">of the nominal balance</div></div>
+        </div>
+        <div class="rp-hnote" style="color:#7A3D2E;">The account balance itself won't shrink \u2014 what it can buy will.</div>
+      </div>
+      <div class="rp-stat-row">
+        <div class="rp-stat"><div class="rp-slabel">Nominal balance</div><div class="rp-svalue" style="color:#1F4B3F;">${fmt$(iNominal)}</div></div>
+        <div class="rp-stat"><div class="rp-slabel">Real value (today's $)</div><div class="rp-svalue" style="color:#A9793C;">${fmt$(iReal)}</div></div>
+      </div>
+      ${lineChartSVG(axisLabels(iSim.yearly.map(y=>y.year)), [
+        {values: iSim.yearly.map(y=>y.balance), color:'#1F4B3F'},
+        {values: iSim.yearly.map(y=>y.realBalance), color:'#A9793C', dashed:true}
+      ], 320)}
+      <div class="rp-narrative">Cash earning ${iInputs.bankRate}% while inflation runs at ${iInputs.inflation}% loses purchasing power every year it sits still. Left untouched, ${fmt$(iInputs.lumpSum)} today is projected to buy no more than ${fmt$(iReal)} does today by year ${iInputs.years} &mdash; a ${iLostPct.toFixed(0)}% erosion, even though the number on the statement never goes down.</div>
+      `}
+    </div>
+    ${pageFooter(3)}
+  </div>`);
+
+  /* ===== PAGE 4: CASH FLOW ===== */
+  pages.push(`<div class="report-page">
+    ${pageHeader()}
+    <div class="rp-body">
+      <div class="rp-eyebrow-sm">03 &middot; Cash Flow Timeline</div>
+      <h2 class="rp-section-title">If nothing changes from here</h2>
+      <div class="rp-assumptions">${fmt$(cInputs.startBalance)} starting balance. Income: ${incomeStreams.map(s=>`${escapeHtml(s.label)} ${fmt$(s.amount)}/mo (yr ${s.start}\u2013${s.start+s.duration})`).join('; ') || 'none'}. Expenses: ${expenseStreams.map(s=>`${escapeHtml(s.label)} ${fmt$(s.amount)}/mo (yr ${s.start}\u2013${s.start+s.duration})`).join('; ') || 'none'}. ${cInputs.rate}% interest, ${cInputs.years}-year horizon.</div>
+      <div class="rp-headline ${cHeadWash}">
+        <div class="rp-label" style="color:${cHeadColor};">Projected position after ${cInputs.years} years</div>
+        <div class="rp-hfigures">
+          <div><div class="rp-hfvalue" style="color:${cHeadColor};">${fmt$(cSim.finalBalance)}</div><div class="rp-hfsub" style="color:${cHeadColor};">ending balance</div></div>
+          <div class="rp-hfdivider" style="color:${cHeadColor};">&mdash;</div>
+          <div><div class="rp-hfvalue" style="color:${cHeadColor};">${cChangePct>=0?'+':''}${cChangePct.toFixed(0)}%</div><div class="rp-hfsub" style="color:${cHeadColor};">vs. starting balance</div></div>
+        </div>
+        <div class="rp-hnote" style="color:${cHeadColor};">${cNote}</div>
+      </div>
+      <div class="rp-stat-row">
+        <div class="rp-stat"><div class="rp-slabel">Total credited</div><div class="rp-svalue" style="color:#1F4B3F;">${fmt$(cRows.reduce((a,r)=>a+r.credit,0))}</div></div>
+        <div class="rp-stat"><div class="rp-slabel">Total debited</div><div class="rp-svalue" style="color:#9C3B2E;">${fmt$(cRows.reduce((a,r)=>a+r.debit,0))}</div></div>
+      </div>
+      ${ledgerChartSVG(axisLabels(cRows.map(y=>y.year)), cRows.map(y=>y.credit), cRows.map(y=>y.debit), cRows.map(y=>y.balance), 240)}
+      <table class="rp-table">
+        <tr><th>${axisCaption()}</th><th>Credit</th><th>Debit</th><th>Net</th><th>Ending balance</th></tr>
+        ${cfTableRows}
+      </table>
+    </div>
+    ${pageFooter(4)}
+  </div>`);
+
+  /* ===== PAGE 5: COST OF DELAY ===== */
+  pages.push(`<div class="report-page">
+    ${pageHeader()}
+    <div class="rp-body">
+      <div class="rp-eyebrow-sm">04 &middot; Cost of Delay</div>
+      <h2 class="rp-section-title">What a year of hesitation costs</h2>
+      <div class="rp-assumptions">${linkedMode ? 'Linked to Growth tab: ' : ''}${fmt$(dInputs.lumpSum)} initial, ${fmt$(dInputs.monthly)}/month, ${dInputs.rate}% annual return, ${dInputs.years}-year horizon, delayed ${dInputs.delay} ${dInputs.delay===1?'year':'years'}.</div>
+      <div class="rp-headline wash-gold">
+        <div class="rp-label">The cost of waiting ${dInputs.delay} ${dInputs.delay===1?'year':'years'}</div>
+        <div class="rp-hfigures">
+          <div><div class="rp-hfvalue">${fmt$(dGap)}</div><div class="rp-hfsub">smaller ending balance</div></div>
+          <div class="rp-hfdivider">&mdash;</div>
+          <div><div class="rp-hfvalue">${dPct.toFixed(0)}%</div><div class="rp-hfsub">reduction</div></div>
+        </div>
+      </div>
+      <div class="rp-stat-row">
+        <div class="rp-stat"><div class="rp-slabel">Start today, ends with</div><div class="rp-svalue" style="color:#1F4B3F;">${fmt$(dNow.finalBalance)}</div></div>
+        <div class="rp-stat"><div class="rp-slabel">Wait, ends with</div><div class="rp-svalue">${fmt$(dLater.finalBalance)}</div></div>
+      </div>
+      ${lineChartSVG(axisLabels(dYears), [
+        {values: dNow.yearly.map(y=>y.balance), color:'#1F4B3F'},
+        {values: dLaterVals, color:'#9C3B2E', dashed:true}
+      ], 210)}
+      <div style="margin-top:12px;">${delayBarsSVG(dLabels, dVals, 150)}</div>
+      <div class="rp-narrative">Every year of hesitation is a year of compounding that can't be recovered later. Waiting ${dInputs.delay} ${dInputs.delay===1?'year':'years'} to begin costs ${fmt$(dGap)} by the end of the plan &mdash; ${dPct.toFixed(0)}% less than starting today, for the exact same commitment.</div>
+    </div>
+    ${pageFooter(5)}
+  </div>`);
+
+  els('report').innerHTML = pages.join('');
+  window.print();
+}
+
+function saveOnePager(){
+  const client = els('clientName').value.trim();
+  const advisor = els('advisorName').value.trim();
+  const dateStr = new Date().toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
+
+  const gInputs = getGrowthInputs();
+  const gSim = simulateGrowth(gInputs);
+  const gGrowth = gSim.finalBalance - gSim.totalContributed;
+  const gGrowthPct = gSim.totalContributed>0 ? (gGrowth/gSim.totalContributed)*100 : 0;
+
+  const iInputs = getInflationInputs();
+  const iSim = simulateInflation(iInputs);
+  let iCardFigs;
+  if(iInputs.linked){
+    const investedReal = iSim.yearly[iSim.yearly.length-1].realBalance;
+    const idleReal = iSim.yearly[iSim.yearly.length-1].idleRealBalance;
+    const gap = investedReal - idleReal;
+    const gapPct = idleReal>0 ? (gap/idleReal)*100 : 0;
+    iCardFigs = {v1: fmt$(gap), s1:'More real value by investing', v2: gapPct.toFixed(0)+'%', s2:'Advantage over idle cash'};
+  } else {
+    const nominal = iSim.finalBalance;
+    const real = iSim.yearly[iSim.yearly.length-1].realBalance;
+    const lostPct = nominal>0 ? ((nominal-real)/nominal)*100 : 0;
+    iCardFigs = {v1: fmt$(nominal-real), s1:'Purchasing power lost', v2: lostPct.toFixed(0)+'%', s2:'Of the nominal balance'};
+  }
+
+  const cInputs = getCashflowInputs();
+  const cSim = simulateCashflow(cInputs);
+  const cChange = cSim.finalBalance - cInputs.startBalance;
+  const cChangePct = cInputs.startBalance>0 ? (cChange/cInputs.startBalance)*100 : 0;
+  const cGood = !(cChange<0 || cSim.depletedMonth);
+
+  const dInputs = getDelayInputs();
+  const dNow = simulateGrowth({lumpSum:dInputs.lumpSum, monthly:dInputs.monthly, rate:dInputs.rate, years:dInputs.years, contribYears:Math.min(dInputs.contribYears, dInputs.years)});
+  const dLater = runDelayScenario(dInputs, dInputs.delay);
+  const dGap = dNow.finalBalance - dLater.finalBalance;
+  const dPct = dNow.finalBalance>0 ? (dGap/dNow.finalBalance)*100 : 0;
+
+  const clientLine = client ? `Prepared for ${escapeHtml(client)}` : 'Financial Planning Summary';
+
+  els('report').innerHTML = `<div class="report-page">
+    ${pageHeader()}
+    <div class="op-page">
+      <div class="op-title">${clientLine}</div>
+      <div class="op-subtitle">${advisor?escapeHtml(advisor)+' \u00b7 ':''}${dateStr} \u00b7 One-page summary across all four scenarios</div>
+      <div class="op-body">
+        <div class="op-list">
+          <div class="op-card">
+            <div class="op-card-main">
+              <div class="op-eyebrow">01 &middot; Growth Projection</div>
+              <div class="op-heading">Compounding on a disciplined plan</div>
+              <div class="op-figs">
+                <div><div class="op-fig-value" style="color:#1F4B3F;">${fmt$(gSim.finalBalance)}</div><div class="op-fig-sub">Ending balance</div></div>
+                <div><div class="op-fig-value" style="color:#A9793C;">${gGrowthPct.toFixed(0)}%</div><div class="op-fig-sub">Return on contributed</div></div>
+              </div>
+              <div class="op-note">${fmt$(gInputs.lumpSum)} initial, ${fmt$(gInputs.monthly)}/month, ${gInputs.rate}% return over ${gInputs.years} years.</div>
+            </div>
+            <div class="op-chart">${lineChartSVG(axisLabels(gSim.yearly.map(y=>y.year)), [{values: gSim.yearly.map(y=>y.balance), color:'#1F4B3F', fill:true}], 70)}</div>
+          </div>
+          <div class="op-card">
+            <div class="op-card-main">
+              <div class="op-eyebrow">02 &middot; Inflation Impact</div>
+              <div class="op-heading">${iInputs.linked ? 'Investing vs. leaving it idle' : 'What standing still costs'}</div>
+              <div class="op-figs">
+                <div><div class="op-fig-value" style="color:#7A3D2E;">${iCardFigs.v1}</div><div class="op-fig-sub">${iCardFigs.s1}</div></div>
+                <div><div class="op-fig-value" style="color:#7A3D2E;">${iCardFigs.v2}</div><div class="op-fig-sub">${iCardFigs.s2}</div></div>
+              </div>
+              <div class="op-note">${iInputs.inflation}% inflation assumed over ${iInputs.years} years.</div>
+            </div>
+            <div class="op-chart">${lineChartSVG(axisLabels(iSim.yearly.map(y=>y.year)), [
+              {values: iSim.yearly.map(y=>y.balance), color:'#1F4B3F'},
+              {values: iSim.yearly.map(y=>y.realBalance), color:'#A9793C', dashed:true}
+            ], 70)}</div>
+          </div>
+          <div class="op-card">
+            <div class="op-card-main">
+              <div class="op-eyebrow">03 &middot; Cash Flow Timeline</div>
+              <div class="op-heading">If nothing changes from here</div>
+              <div class="op-figs">
+                <div><div class="op-fig-value" style="color:${cGood?'#1F4B3F':'#7A3D2E'};">${fmt$(cSim.finalBalance)}</div><div class="op-fig-sub">Ending balance</div></div>
+                <div><div class="op-fig-value" style="color:${cGood?'#1F4B3F':'#7A3D2E'};">${cChangePct>=0?'+':''}${cChangePct.toFixed(0)}%</div><div class="op-fig-sub">vs. starting balance</div></div>
+              </div>
+              <div class="op-note">${fmt$(cInputs.startBalance)} starting balance over ${cInputs.years} years, ${incomeStreams.length} income stream(s), ${expenseStreams.length} expense stream(s).</div>
+            </div>
+            <div class="op-chart">${lineChartSVG(axisLabels(cSim.yearly.map(y=>y.year)), [{values: cSim.yearly.map(y=>y.balance), color: cGood?'#1F4B3F':'#9C3B2E'}], 70)}</div>
+          </div>
+          <div class="op-card">
+            <div class="op-card-main">
+              <div class="op-eyebrow">04 &middot; Cost of Delay</div>
+              <div class="op-heading">What a year of hesitation costs</div>
+              <div class="op-figs">
+                <div><div class="op-fig-value" style="color:#7A4A1F;">${fmt$(dGap)}</div><div class="op-fig-sub">Smaller ending balance</div></div>
+                <div><div class="op-fig-value" style="color:#7A4A1F;">${dPct.toFixed(0)}%</div><div class="op-fig-sub">Reduction from waiting ${dInputs.delay}y</div></div>
+              </div>
+              <div class="op-note">Same plan, started ${dInputs.delay} ${dInputs.delay===1?'year':'years'} later.</div>
+            </div>
+            <div class="op-chart">${lineChartSVG(axisLabels(dNow.yearly.map(y=>y.year)), [{values: dNow.yearly.map(y=>y.balance), color:'#1F4B3F'}], 70)}</div>
+          </div>
+        </div>
+        <div class="op-notes">
+          <div class="op-notes-label">Notes</div>
+        </div>
+      </div>
+    </div>
+    ${pageFooter(1,1)}
+  </div>`;
+  window.print();
+}
+
+/* ---------------- save / load client file ---------------- */
+function collectAllData(){
+  const data = {};
+  document.querySelectorAll('input[id]').forEach(inp=>{
+    if(inp.type === 'file') return;
+    data[inp.id] = inp.value;
+  });
+  data.__incomeStreams = incomeStreams;
+  data.__expenseStreams = expenseStreams;
+  data.__linkedMode = linkedMode;
+  data.__cpfMode = cpfMode;
+  data.__savedAt = new Date().toISOString();
+  return data;
+}
+function applyAllData(data){
+  if(Array.isArray(data.__incomeStreams)){
+    incomeStreams = data.__incomeStreams;
+    streamIdSeq = Math.max(0, ...incomeStreams.map(s=>s.id||0)) + 1;
+    renderStreamsList();
+  }
+  if(Array.isArray(data.__expenseStreams)){
+    expenseStreams = data.__expenseStreams;
+    expenseIdSeq = Math.max(0, ...expenseStreams.map(s=>s.id||0)) + 1;
+    renderExpenseList();
+  }
+  Object.keys(data).forEach(key=>{
+    if(key.startsWith('__')) return;
+    const el = els(key);
+    if(el) el.value = data[key];
+  });
+  setCpfMode(!!data.__cpfMode);
+  if(typeof data.__linkedMode === 'boolean'){
+    setMode(data.__linkedMode ? 'linked' : 'independent');
+  } else {
+    renderAll();
+  }
+}
+function exportClientData(){
+  const data = collectAllData();
+  const client = els('clientName').value.trim() || 'client';
+  const filename = client.replace(/[^a-z0-9]+/gi,'-').toLowerCase().replace(/^-+|-+$/g,'') + '-financial-plan.json';
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+function importClientData(file){
+  const reader = new FileReader();
+  reader.onload = e => {
+    let data;
+    try{ data = JSON.parse(e.target.result); }
+    catch(err){ alert('Could not read that file \u2014 make sure it is a client file saved from this tool.'); return; }
+    applyAllData(data);
+  };
+  reader.readAsText(file);
+}
+els('loadFileInput').addEventListener('change', function(){
+  if(this.files && this.files[0]) importClientData(this.files[0]);
+  this.value = '';
+});
+
+/* ---------------- auto-save draft (browser-local safety net, not a replacement for Save client file) ---------------- */
+const AUTOSAVE_KEY = 'fp_autosave_draft_v1';
+let autoSaveTimer = null;
+function autoSaveDraft(){
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(()=>{
+    try{
+      const data = collectAllData();
+      localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(data));
+    }catch(err){ /* localStorage unavailable (private mode etc.) \u2014 fail silently, explicit Save/Load still works */ }
+  }, 800);
+}
+function dismissDraftBanner(){
+  els('draft-banner').style.display = 'none';
+}
+function restoreDraft(){
+  try{
+    const raw = localStorage.getItem(AUTOSAVE_KEY);
+    if(raw) applyAllData(JSON.parse(raw));
+  }catch(err){}
+  dismissDraftBanner();
+}
+function discardDraft(){
+  try{ localStorage.removeItem(AUTOSAVE_KEY); }catch(err){}
+  dismissDraftBanner();
+}
+function checkForDraft(){
+  try{
+    const raw = localStorage.getItem(AUTOSAVE_KEY);
+    if(!raw) return;
+    const data = JSON.parse(raw);
+    const when = data.__savedAt ? new Date(data.__savedAt).toLocaleString() : 'earlier';
+    els('draft-banner-text').textContent = `An auto-saved draft from ${when} was found in this browser.`;
+    els('draft-banner').style.display = 'flex';
+  }catch(err){}
+}
+
+renderStreamsList();
+renderExpenseList();
+renderAll();
+checkForDraft();
+</script>
+</body>
+</html>
