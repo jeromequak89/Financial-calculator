@@ -69,6 +69,9 @@
   }
   .save-btn:hover{background:var(--primary);}
   .save-btn svg{width:15px;height:15px;}
+  .action-row{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;}
+  .secondary-btn{background:#fff; color:var(--ink); border:1px solid var(--line);}
+  .secondary-btn:hover{background:var(--primary-wash); color:var(--ink);}
 
   .client-row{
     display:flex; gap:14px; flex-wrap:wrap;
@@ -112,11 +115,62 @@
   .mode-btn.active{background:var(--ink); color:#fff;}
   .mode-btn:not(.active):hover{background:var(--primary-wash);}
   .mode-hint{font-size:11.5px; color:var(--muted); font-style:italic;}
+  .cpf-presets{display:flex; gap:6px; margin-top:8px;}
+  .cpf-btn{
+    border:1px solid var(--gold); background:var(--gold-wash); color:#7A5A2A; border-radius:20px;
+    padding:5px 10px; font-family:var(--sans); font-size:11px; font-weight:600; cursor:pointer;
+  }
+  .cpf-btn:hover{background:#E4D3AE;}
+  .cpf-section-tag{
+    font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+    color:#7A5A2A; border-top:1px dashed var(--gold); padding-top:14px; margin-top:6px; margin-bottom:14px;
+  }
+  .draft-banner{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    background:var(--gold-wash); border:1px solid #E4D3AE; border-radius:2px;
+    padding:11px 16px; margin-bottom:16px; font-size:13px; color:#7A5A2A;
+  }
+  .draft-banner-actions{display:flex; gap:8px; flex-shrink:0;}
+  .draft-banner-actions button{
+    border:none; border-radius:20px; padding:6px 14px; font-family:var(--sans);
+    font-size:12px; font-weight:600; cursor:pointer; background:var(--ink); color:#fff;
+  }
+  .draft-banner-actions button.ghost{background:transparent; color:#7A5A2A; border:1px solid #7A5A2A;}
   .linked-note{
     background:var(--primary-wash); border:1px solid #CBDED3; border-radius:2px;
     padding:12px 14px; font-size:12px; color:#1F4B3F; line-height:1.5; margin-bottom:20px; display:none;
   }
   .linked-note b{font-weight:700;}
+
+  .stream-card{
+    border:1px solid var(--line); border-radius:2px; background:#fff;
+    padding:10px 12px; margin-bottom:10px;
+  }
+  .stream-card-top{display:flex; align-items:center; gap:8px; margin-bottom:8px;}
+  .stream-label-input{
+    flex:1; border:none; border-bottom:1px solid var(--line); background:transparent;
+    font-family:var(--sans); font-size:12.5px; font-weight:600; padding:3px 0; color:var(--ink);
+  }
+  .stream-label-input:focus{outline:none; border-bottom-color:var(--primary);}
+  .stream-remove{
+    border:none; background:transparent; color:var(--danger); font-size:16px; line-height:1;
+    cursor:pointer; padding:2px 4px; font-weight:700;
+  }
+  .stream-fields{display:flex; gap:8px;}
+  .stream-fields .dollar-input{flex:1.3; padding:0 8px;}
+  .stream-fields .dollar-input input{padding:7px 4px; font-size:13px;}
+  .stream-mini{flex:1; display:flex; flex-direction:column; gap:2px;}
+  .stream-mini label{font-size:9px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted);}
+  .stream-mini input{
+    border:1px solid var(--line); border-radius:2px; padding:6px 6px; font-family:var(--mono);
+    font-size:12.5px; width:100%; background:#fff; color:var(--ink);
+  }
+  .add-stream-btn{
+    width:100%; border:1px dashed var(--line); background:transparent; border-radius:2px;
+    padding:9px; font-family:var(--sans); font-size:12.5px; font-weight:600; color:var(--primary);
+    cursor:pointer; margin-top:2px; transition:background .15s ease;
+  }
+  .add-stream-btn:hover{background:var(--primary-wash);}
 
   /* Panels */
   .panel{display:none;}
@@ -186,8 +240,9 @@
   .headline-figures .hf-divider{font-size:22px; opacity:.35; align-self:center;}
 
   .chart-wrap{border:1px solid var(--line); border-radius:var(--radius); padding:18px 18px 8px; background:#fff;}
-  .legend{display:flex; gap:18px; flex-wrap:wrap; margin-bottom:6px;}
+  .legend{display:flex; gap:18px; flex-wrap:wrap; margin-bottom:6px; align-items:center;}
   .legend .item{display:flex; align-items:center; gap:6px; font-size:12px; color:var(--muted);}
+  .axis-note{margin-left:auto; font-size:10.5px; color:var(--muted); font-style:italic;}
   .legend .swatch{width:10px;height:10px;border-radius:2px;}
 
   table.datatable{width:100%; border-collapse:collapse; margin-top:18px; font-family:var(--mono); font-size:12.5px;}
@@ -277,11 +332,40 @@
   .rp-table th:first-child{text-align:left;}
   .rp-table td{padding:5px 6px; text-align:right; border-bottom:1px solid var(--line);}
   .rp-table td:first-child{text-align:left; color:var(--muted);}
+
+  /* One-page leave-behind summary */
+  .op-page{font-family:var(--sans); color:var(--ink); display:flex; flex-direction:column;}
+  .op-title{font-family:var(--serif); font-size:22px; font-weight:600; margin:2px 0 1px;}
+  .op-subtitle{font-size:11px; color:var(--muted); margin-bottom:14px;}
+  .op-body{display:flex; gap:18px; flex:1;}
+  .op-list{flex:1; display:flex; flex-direction:column; gap:10px; min-width:0;}
+  .op-card{border:1px solid var(--line); border-radius:2px; padding:10px 14px; display:flex; align-items:center; gap:14px;}
+  .op-card .op-card-main{flex:1; min-width:0;}
+  .op-card .op-eyebrow{font-family:var(--mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:2px;}
+  .op-card .op-heading{font-family:var(--serif); font-size:13.5px; font-weight:600; margin-bottom:5px;}
+  .op-card .op-figs{display:flex; gap:16px; margin-bottom:5px;}
+  .op-card .op-fig-value{font-family:var(--serif); font-size:19px; font-weight:700; line-height:1.05;}
+  .op-card .op-fig-sub{font-size:8.5px; text-transform:uppercase; letter-spacing:.04em; opacity:.75; margin-top:2px;}
+  .op-card .op-note{font-size:10px; color:var(--muted); line-height:1.4;}
+  .op-card .op-chart{width:190px; flex-shrink:0;}
+  .op-notes{
+    width:200px; flex-shrink:0; border:1px solid var(--line); border-radius:2px;
+    background-image:repeating-linear-gradient(to bottom, transparent, transparent 27px, var(--line) 28px);
+    padding:14px 12px;
+  }
+  .op-notes .op-notes-label{font-family:var(--mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:8px;}
 </style>
 </head>
 <body>
 
 <div class="wrap no-print">
+  <div class="draft-banner" id="draft-banner" style="display:none;">
+    <span id="draft-banner-text"></span>
+    <div class="draft-banner-actions">
+      <button type="button" onclick="restoreDraft()">Restore</button>
+      <button type="button" class="ghost" onclick="discardDraft()">Discard</button>
+    </div>
+  </div>
   <div class="masthead">
     <div>
       <div class="brand-row"><img id="brandLogo" alt="Financial Architects Advisory"><span class="brandname">Financial Architects Advisory</span></div>
@@ -290,13 +374,30 @@
       <div class="sub">Four standalone tools &mdash; growth, inflation, cash flow, and cost of delay each run on their own numbers, so you can open straight to whichever one fits the conversation.</div>
     </div>
     <div class="head-actions">
-      <button class="save-btn" onclick="saveReport()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
-        Save PDF report
-      </button>
+      <div class="action-row">
+        <button class="save-btn" onclick="saveReport()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+          Save PDF report
+        </button>
+        <button class="save-btn secondary-btn" onclick="saveOnePager()" title="A single condensed page covering all four scenarios">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+          One-page summary
+        </button>
+        <button class="save-btn secondary-btn" onclick="exportClientData()" title="Download all current inputs as a file you can reopen later">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+          Save client file
+        </button>
+        <button class="save-btn secondary-btn" onclick="els('loadFileInput').click()" title="Reopen a previously saved client file">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21V9m0 0l-4 4m4-4l4 4M5 3h14"/></svg>
+          Load client file
+        </button>
+        <input type="file" id="loadFileInput" accept=".json" style="display:none">
+      </div>
       <div class="client-row">
         <div class="client-field"><label>Client</label><input id="clientName" placeholder="Client name" value=""></div>
         <div class="client-field"><label>Prepared by</label><input id="advisorName" placeholder="Your name" value=""></div>
+        <div class="client-field client-field-age"><label>Client age</label><input id="clientAge" type="number" placeholder="Optional" min="0" max="110" style="width:70px;"></div>
+        <div class="client-field client-field-age"><label>Retirement age</label><input id="retirementAge" type="number" placeholder="Optional" min="0" max="110" style="width:70px;"></div>
       </div>
     </div>
   </div>
@@ -308,6 +409,18 @@
       <button class="mode-btn" data-mode="linked" onclick="setMode('linked')">Linked</button>
     </div>
     <span class="mode-hint">Cash Flow always runs on its own numbers.</span>
+  </div>
+
+  <div class="mode-row">
+    <span class="mode-label">CPF reference rates:</span>
+    <div class="mode-toggle">
+      <button class="mode-btn active" data-cpf="off" onclick="setCpfMode(false)">Off</button>
+      <button class="mode-btn" data-cpf="on" onclick="setCpfMode(true)">On</button>
+    </div>
+    <span class="mode-hint">Adds CPF OA/SA preset buttons for Singapore clients. Leave off for clients elsewhere.</span>
+  </div>
+  <div class="linked-note" id="cpf-ref-note" style="display:none; background:var(--gold-wash); border-color:#E4D3AE; color:#7A5A2A;">
+    <b>CPF reference (Q3 2026):</b> Ordinary Account 2.5% p.a. &middot; Special/MediSave/Retirement Account 4.0% p.a. (floor, guaranteed through 31 Dec 2026). A CPF OA/SA section appears on the Growth tab so you can enter the client's actual balances and contributions &mdash; this tool does not model contribution caps, bonus interest tiers, or CPF LIFE payouts. Verify current rates and rules at <b>cpf.gov.sg</b> before advising a client.
   </div>
 
   <div class="tabs">
@@ -342,6 +455,36 @@
           <input type="range" id="g_contribYears" min="0" max="40" step="1" value="20">
           <div class="field-note">If less than the time period, contributions stop early and the balance keeps compounding on its own.</div>
         </div>
+        <div class="field">
+          <label>Target amount <span class="val" id="g_goalVal">Off</span></label>
+          <div class="dollar-input"><span>$</span><input type="number" id="g_goal" value="" placeholder="Optional" min="0" step="10000"></div>
+          <div class="field-note">Shows a goal line on the chart and when it's projected to be reached.</div>
+        </div>
+        <div class="field">
+          <label>Optimistic / conservative range <span class="val" id="g_bandVal">Off</span></label>
+          <input type="range" id="g_band" min="0" max="5" step="0.5" value="0">
+          <div class="field-note">Shades a band above/below the return rate \u2014 e.g. &plusmn;2% around 7% shows a 5%\u20139% range.</div>
+        </div>
+        <div id="g_cpfSection" style="display:none;">
+          <div class="cpf-section-tag">CPF accounts (Q3 2026 floor rates)</div>
+          <div class="field">
+            <label>CPF OA balance today <span class="val">2.5% p.a.</span></label>
+            <div class="dollar-input"><span>$</span><input type="number" id="g_cpfOaBalance" value="0" min="0" step="1000"></div>
+          </div>
+          <div class="field">
+            <label>Monthly OA contribution</label>
+            <div class="dollar-input"><span>$</span><input type="number" id="g_cpfOaMonthly" value="0" min="0" step="50"></div>
+          </div>
+          <div class="field">
+            <label>CPF SA balance today <span class="val">4.0% p.a.</span></label>
+            <div class="dollar-input"><span>$</span><input type="number" id="g_cpfSaBalance" value="0" min="0" step="1000"></div>
+          </div>
+          <div class="field">
+            <label>Monthly SA contribution</label>
+            <div class="dollar-input"><span>$</span><input type="number" id="g_cpfSaMonthly" value="0" min="0" step="50"></div>
+            <div class="field-note">Grows separately at CPF's own rates, alongside the plan above, over the same time period. Does not model contribution caps, bonus interest tiers, or CPF LIFE payouts \u2014 verify current rates and rules at cpf.gov.sg.</div>
+          </div>
+        </div>
       </div>
       <div class="results-col">
         <div class="headline wash-green">
@@ -356,10 +499,16 @@
           <div class="stat"><div class="label">Total contributed</div><div class="value" id="g-contributed">$0</div></div>
           <div class="stat"><div class="label">Ending balance</div><div class="value accent" id="g-final">$0</div></div>
         </div>
+        <div class="stat-row" id="g-cpf-stats" style="display:none;">
+          <div class="stat"><div class="label">CPF OA + SA projected</div><div class="value" style="color:#A9793C;" id="g-cpf-total">$0</div></div>
+          <div class="stat"><div class="label">Total retirement wealth (incl. CPF)</div><div class="value accent" id="g-total-incl-cpf">$0</div></div>
+        </div>
+        <div class="linked-note" id="g-goal-note" style="display:none;"></div>
         <div class="chart-wrap">
           <div class="legend">
             <div class="item"><span class="swatch" style="background:var(--primary)"></span>Account balance</div>
             <div class="item"><span class="swatch" style="background:var(--line)"></span>Total contributed</div>
+            <div class="axis-note" id="g-axisnote"></div>
           </div>
           <div id="chart-growth"></div>
         </div>
@@ -380,14 +529,14 @@
             <div class="field-note">A lump sum left untouched &mdash; no further deposits or withdrawals.</div>
           </div>
           <div class="field">
-            <label>Bank / savings rate <span class="val" id="i_bankVal">0.5%</span></label>
-            <input type="range" id="i_bankRate" min="0" max="5" step="0.25" value="0.5">
-            <div class="field-note">What a typical savings or current account pays &mdash; set to 0% to show cash earning nothing at all.</div>
-          </div>
-          <div class="field">
             <label>Time period <span class="val" id="i_yearsVal">20 years</span></label>
             <input type="range" id="i_years" min="1" max="40" step="1" value="20">
           </div>
+        </div>
+        <div class="field">
+          <label>Bank / savings rate <span class="val" id="i_bankVal">0.5%</span></label>
+          <input type="range" id="i_bankRate" min="0" max="5" step="0.25" value="0.5">
+          <div class="field-note" id="i_bankNote">What a typical savings or current account pays &mdash; set to 0% to show cash earning nothing at all.</div>
         </div>
         <div class="field">
           <label>Inflation rate <span class="val" id="i_inflVal">3.0%</span></label>
@@ -396,24 +545,22 @@
         </div>
       </div>
       <div class="results-col">
-        <div class="headline wash-red">
-          <div class="label" style="color:#7A3D2E;">Purchasing power lost by doing nothing</div>
+        <div class="headline wash-red" id="i-headline-box">
+          <div class="label" id="i-headline-label" style="color:#7A3D2E;">Purchasing power lost by doing nothing</div>
           <div class="headline-figures">
-            <div><div class="hf-value" id="i-lost" style="color:#7A3D2E;">$0</div><div class="hf-sub" style="color:#7A3D2E;">in today's dollars</div></div>
-            <div class="hf-divider" style="color:#7A3D2E;">&mdash;</div>
-            <div><div class="hf-value" id="i-lostpct" style="color:#7A3D2E;">0%</div><div class="hf-sub" style="color:#7A3D2E;">of the nominal balance</div></div>
+            <div><div class="hf-value" id="i-hf1-value" style="color:#7A3D2E;">$0</div><div class="hf-sub" id="i-hf1-sub" style="color:#7A3D2E;">in today's dollars</div></div>
+            <div class="hf-divider" id="i-hf-divider" style="color:#7A3D2E;">&mdash;</div>
+            <div><div class="hf-value" id="i-hf2-value" style="color:#7A3D2E;">0%</div><div class="hf-sub" id="i-hf2-sub" style="color:#7A3D2E;">of the nominal balance</div></div>
           </div>
-          <div class="note" style="color:#7A3D2E;">The account balance itself won't shrink &mdash; what it can buy will.</div>
+          <div class="note" id="i-headline-note" style="color:#7A3D2E;">The account balance itself won't shrink &mdash; what it can buy will.</div>
         </div>
         <div class="stat-row">
-          <div class="stat"><div class="label">Nominal balance</div><div class="value accent" id="i-nominal">$0</div></div>
-          <div class="stat"><div class="label">Real value (today's $)</div><div class="value gold" id="i-real">$0</div></div>
+          <div class="stat"><div class="label" id="i-stat1-label">Nominal balance</div><div class="value accent" id="i-stat1-value">$0</div></div>
+          <div class="stat"><div class="label" id="i-stat2-label">Real value (today's $)</div><div class="value gold" id="i-stat2-value">$0</div></div>
+          <div class="stat" id="i-stat3" style="display:none;"><div class="label" id="i-stat3-label">&nbsp;</div><div class="value" id="i-stat3-value">$0</div></div>
         </div>
         <div class="chart-wrap">
-          <div class="legend">
-            <div class="item"><span class="swatch" style="background:var(--primary)"></span>Nominal balance</div>
-            <div class="item"><span class="swatch" style="background:var(--gold)"></span>Real (inflation-adjusted) value</div>
-          </div>
+          <div class="legend" id="i-legend"></div>
           <div id="chart-inflation"></div>
         </div>
       </div>
@@ -430,14 +577,16 @@
           <div class="dollar-input"><span>$</span><input type="number" id="c_start" value="200000" min="0" step="5000"></div>
         </div>
         <div class="field">
-          <label>Monthly credit <span class="val" id="c_creditVal">$2,000</span></label>
-          <div class="dollar-input"><span>$</span><input type="number" id="c_credit" value="2000" min="0" step="100"></div>
-          <div class="field-note">Money coming in &mdash; income, pension, dividends.</div>
+          <label>Income streams (credits)</label>
+          <div id="c_streamsList"></div>
+          <button type="button" class="add-stream-btn" onclick="addIncomeStream()">+ Add income stream</button>
+          <div class="field-note">Each stream can start and stop on its own timeline &mdash; e.g. one endowment paying out for 10 years, another for 15.</div>
         </div>
         <div class="field">
-          <label>Monthly debit <span class="val" id="c_debitVal">$3,000</span></label>
-          <div class="dollar-input"><span>$</span><input type="number" id="c_debit" value="3000" min="0" step="100"></div>
-          <div class="field-note">Money going out &mdash; living expenses, debt payments.</div>
+          <label>Expense streams (debits)</label>
+          <div id="c_expenseList"></div>
+          <button type="button" class="add-stream-btn" onclick="addExpenseStream()">+ Add expense stream</button>
+          <div class="field-note">Same idea for money going out &mdash; e.g. a mortgage ending in year 12 while living expenses run the full period.</div>
         </div>
         <div class="field">
           <label>Interest on idle balance <span class="val" id="c_rateVal">1.0%</span></label>
@@ -468,6 +617,7 @@
             <div class="item"><span class="swatch" style="background:var(--primary-light)"></span>Credit</div>
             <div class="item"><span class="swatch" style="background:var(--danger)"></span>Debit</div>
             <div class="item"><span class="swatch" style="background:var(--gold);width:14px;height:2px;border-radius:0"></span>Balance</div>
+            <div class="axis-note" id="c-axisnote"></div>
           </div>
           <div id="chart-cashflow"></div>
         </div>
@@ -499,6 +649,11 @@
             <label>Time period <span class="val" id="d_yearsVal">20 years</span></label>
             <input type="range" id="d_years" min="1" max="40" step="1" value="20">
           </div>
+          <div class="field">
+            <label>Years of contribution <span class="val" id="d_contribYearsVal">20 years</span></label>
+            <input type="range" id="d_contribYears" min="0" max="40" step="1" value="20">
+            <div class="field-note">If less than the time period, contributions stop early in both scenarios below.</div>
+          </div>
         </div>
         <div class="field">
           <label>Delay before starting <span class="val" id="d_delayVal">5 years</span></label>
@@ -524,11 +679,12 @@
           <div class="legend">
             <div class="item"><span class="swatch" style="background:var(--primary)"></span>Start today</div>
             <div class="item"><span class="swatch" style="background:var(--danger)"></span>Wait, then start</div>
+            <div class="axis-note" id="d-axisnote"></div>
           </div>
           <div id="chart-delay"></div>
         </div>
         <div class="chart-wrap" style="margin-top:16px;">
-          <div class="legend"><div class="item"><span class="swatch" style="background:var(--gold)"></span>Ending balance by years delayed</div></div>
+          <div class="legend"><div class="item"><span class="swatch" style="background:var(--gold)"></span>Ending balance by starting point</div><div class="axis-note" id="d-barsaxisnote"></div></div>
           <div id="chart-delaybars"></div>
         </div>
       </div>
@@ -554,7 +710,42 @@ const LOGO_FULL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAvYAAAJgCAYAAAD
 /* ---------------- shared helpers ---------------- */
 const els = id => document.getElementById(id);
 let linkedMode = false;
+let cpfMode = false;
+function setCpfMode(on){
+  cpfMode = on;
+  document.querySelectorAll('[data-cpf]').forEach(b=>b.classList.toggle('active', (b.dataset.cpf==='on')===on));
+  els('g_cpfSection').style.display = on ? 'block' : 'none';
+  els('cpf-ref-note').style.display = on ? 'block' : 'none';
+}
 const fmt$ = n => (n<0?'-$':'$') + Math.round(Math.abs(n)).toLocaleString('en-US');
+
+/* age-aware labeling: when a client age is set, chart axes / tables / narrative
+   switch from "Year N" to the client's actual age at that point */
+function getClientAge(){
+  const v = parseFloat(els('clientAge').value);
+  return (isFinite(v) && v>0) ? v : null;
+}
+function axisLabels(offsets){
+  const age = getClientAge();
+  return age!=null ? offsets.map(o=>String(Math.round(age+o))) : offsets.map(o=>String(o));
+}
+function axisCaption(){
+  return getClientAge()!=null ? 'Age' : 'Years from now';
+}
+function getRetirementOffset(){
+  const age = getClientAge();
+  const retire = parseFloat(els('retirementAge').value);
+  if(age==null || !isFinite(retire) || retire<=age) return null;
+  return retire - age;
+}
+function yearRowLabel(offset){
+  const age = getClientAge();
+  return age!=null ? `Age ${Math.round(age+offset)}` : `Year ${offset}`;
+}
+function yearPhrase(offset){
+  const age = getClientAge();
+  return age!=null ? `age ${Math.round(age+offset)}` : `year ${offset}`;
+}
 
 function fmtShort(v){
   const sign = v<0?'-':'';
@@ -568,11 +759,14 @@ function escapeHtml(s){
 }
 
 /* ---------------- SVG chart builders ---------------- */
-function lineChartSVG(years, series, H){
+function lineChartSVG(years, series, H, opts){
   H = H || 260;
+  opts = opts || {};
   const W=600,ML=56,MR=14,MT=14,MB=26;
   const plotW=W-ML-MR, plotH=H-MT-MB;
   const allVals = series.flatMap(s=>s.values);
+  if(opts.band) allVals.push(...opts.band.highValues, ...opts.band.lowValues);
+  if(opts.goalValue) allVals.push(opts.goalValue);
   let maxY = Math.max(...allVals, 1);
   maxY = maxY * 1.08;
   const n = years.length;
@@ -591,6 +785,12 @@ function lineChartSVG(years, series, H){
   for(let i=0;i<n;i+=step){
     xLabels += `<text x="${x(i)}" y="${H-6}" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9.5" fill="#8A8F81">${years[i]}</text>`;
   }
+  let bandSvg = '';
+  if(opts.band){
+    const lowPts = opts.band.lowValues.map((v,i)=>`${x(i)},${y(v)}`);
+    const highPts = opts.band.highValues.map((v,i)=>`${x(i)},${y(v)}`).reverse();
+    bandSvg = `<polygon points="${lowPts.concat(highPts).join(' ')}" fill="${opts.band.color||'#A9793C'}" opacity="0.14"/>`;
+  }
   let paths = '';
   series.forEach(s=>{
     const pts = s.values.map((v,i)=>`${x(i)},${y(v)}`).join(' ');
@@ -601,8 +801,27 @@ function lineChartSVG(years, series, H){
     }
     paths += `<polyline points="${pts}" fill="none" stroke="${s.color}" stroke-width="2.25" ${dash} stroke-linejoin="round" stroke-linecap="round"/>`;
   });
+  let goalSvg = '';
+  if(opts.goalValue){
+    const gy2 = y(opts.goalValue);
+    goalSvg = `<line x1="${ML}" y1="${gy2}" x2="${W-MR}" y2="${gy2}" stroke="#A9793C" stroke-width="1.5" stroke-dasharray="3,3"/>
+      <text x="${ML+4}" y="${gy2-5}" text-anchor="start" font-family="ui-monospace,monospace" font-size="9.5" font-weight="600" fill="#A9793C">${opts.goalLabel||'Goal'}</text>`;
+  }
+  let markerSvg = '';
+  if(opts.markerIndex!=null && opts.markerIndex>=0 && opts.markerIndex<=n-1){
+    const mx = x(opts.markerIndex);
+    const nearRightEdge = mx > (ML + plotW*0.72);
+    const anchor = nearRightEdge ? 'end' : (mx < ML+plotW*0.28 ? 'start' : 'middle');
+    const tx = anchor==='end' ? mx-4 : (anchor==='start' ? mx+4 : mx);
+    const label = opts.markerLabel||'Milestone';
+    const labelW = label.length*5.6+8;
+    const boxX = anchor==='end' ? tx-labelW : (anchor==='start' ? tx-4 : tx-labelW/2);
+    markerSvg = `<line x1="${mx}" y1="${MT}" x2="${mx}" y2="${MT+plotH}" stroke="#15231D" stroke-width="1" stroke-dasharray="2,3" opacity="0.55"/>
+      <rect x="${boxX}" y="${MT+2}" width="${labelW}" height="13" fill="#F4F5EF" opacity="0.9"/>
+      <text x="${tx}" y="${MT+12}" text-anchor="${anchor}" font-family="ui-sans-serif,sans-serif" font-size="10" font-weight="600" fill="#15231D">${label}</text>`;
+  }
   return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="overflow:visible;font-family:ui-monospace,monospace">
-    ${gridLines}${xLabels}${paths}
+    ${gridLines}${bandSvg}${xLabels}${paths}${goalSvg}${markerSvg}
     <line x1="${ML}" y1="${MT+plotH}" x2="${W-MR}" y2="${MT+plotH}" stroke="#15231D" stroke-width="1"/>
   </svg>`;
 }
@@ -705,10 +924,26 @@ function getGrowthInputs(){
     contribYears: parseInt(els('g_contribYears').value)||0,
   };
 }
+function computeCpf(years){
+  const oaBalance = parseFloat(els('g_cpfOaBalance').value)||0;
+  const oaMonthly = parseFloat(els('g_cpfOaMonthly').value)||0;
+  const saBalance = parseFloat(els('g_cpfSaBalance').value)||0;
+  const saMonthly = parseFloat(els('g_cpfSaMonthly').value)||0;
+  if(oaBalance<=0 && oaMonthly<=0 && saBalance<=0 && saMonthly<=0) return null;
+  const oa = simulateGrowth({lumpSum:oaBalance, monthly:oaMonthly, rate:2.5, years, contribYears:years});
+  const sa = simulateGrowth({lumpSum:saBalance, monthly:saMonthly, rate:4.0, years, contribYears:years});
+  return {oa, sa, finalBalance: oa.finalBalance + sa.finalBalance};
+}
 function renderGrowth(){
   els('g_returnVal').textContent = parseFloat(els('g_return').value).toFixed(1)+'%';
   els('g_yearsVal').textContent = els('g_years').value + ' years';
   els('g_contribYearsVal').textContent = els('g_contribYears').value + ' years';
+  const goalRaw = parseFloat(els('g_goal').value);
+  const goal = isFinite(goalRaw) && goalRaw>0 ? goalRaw : null;
+  els('g_goalVal').textContent = goal ? fmt$(goal) : 'Off';
+  const bandSpread = parseFloat(els('g_band').value)||0;
+  els('g_bandVal').textContent = bandSpread>0 ? '\u00b1'+bandSpread.toFixed(1)+'%' : 'Off';
+
   const inputs = getGrowthInputs();
   const sim = simulateGrowth(inputs);
   const growth = sim.finalBalance - sim.totalContributed;
@@ -717,20 +952,90 @@ function renderGrowth(){
   els('g-growthpct').textContent = growthPct.toFixed(0)+'%';
   els('g-contributed').textContent = fmt$(sim.totalContributed);
   els('g-final').textContent = fmt$(sim.finalBalance);
-  els('chart-growth').innerHTML = lineChartSVG(sim.yearly.map(y=>y.year), [
+
+  const chartOpts = {};
+  const legendExtra = [];
+
+  if(bandSpread>0){
+    const lowSim = simulateGrowth({...inputs, rate: Math.max(0, inputs.rate-bandSpread)});
+    const highSim = simulateGrowth({...inputs, rate: inputs.rate+bandSpread});
+    chartOpts.band = {lowValues: lowSim.yearly.map(y=>y.balance), highValues: highSim.yearly.map(y=>y.balance), color:'#A9793C'};
+    legendExtra.push(`<div class="item"><span class="swatch" style="background:var(--gold);opacity:.35"></span>${(inputs.rate-bandSpread).toFixed(1)}%\u2013${(inputs.rate+bandSpread).toFixed(1)}% range</div>`);
+  }
+  if(goal){
+    chartOpts.goalValue = goal;
+    chartOpts.goalLabel = 'Goal: ' + fmt$(goal);
+    const hitIndex = sim.yearly.findIndex(y=>y.balance>=goal);
+    const goalNote = els('g-goal-note');
+    goalNote.style.display = 'block';
+    if(hitIndex>=0){
+      goalNote.innerHTML = `<b>On track:</b> the ${fmt$(goal)} goal is projected to be reached by ${yearPhrase(sim.yearly[hitIndex].year)}, with ${inputs.years-sim.yearly[hitIndex].year} years of the horizon still to spare.`;
+    } else {
+      const shortfall = goal - sim.finalBalance;
+      goalNote.innerHTML = `<b>Falls short:</b> at these numbers, the plan is projected to reach ${fmt$(sim.finalBalance)} by the end of the horizon \u2014 ${fmt$(shortfall)} short of the ${fmt$(goal)} goal.`;
+    }
+  } else {
+    els('g-goal-note').style.display = 'none';
+  }
+  const retireOffset = getRetirementOffset();
+  if(retireOffset!=null && retireOffset<=inputs.years){
+    chartOpts.markerIndex = Math.round(retireOffset);
+    chartOpts.markerLabel = 'Retirement';
+    legendExtra.push(`<div class="item"><span class="swatch" style="background:var(--ink);opacity:.55"></span>Retirement marker</div>`);
+  }
+
+  const cpfStatsRow = els('g-cpf-stats');
+  const chartSeries = [
     {values: sim.yearly.map(y=>y.balance), color:'#1F4B3F', fill:true},
     {values: sim.yearly.map(y=>y.totalContributed), color:'#B8B49C', dashed:true}
-  ]);
+  ];
+  const cpf = cpfMode ? computeCpf(inputs.years) : null;
+  if(cpf){
+    cpfStatsRow.style.display = 'flex';
+    els('g-cpf-total').textContent = fmt$(cpf.finalBalance);
+    els('g-total-incl-cpf').textContent = fmt$(sim.finalBalance + cpf.finalBalance);
+    const combined = sim.yearly.map((y,i)=> y.balance + cpf.oa.yearly[i].balance + cpf.sa.yearly[i].balance);
+    chartSeries.push({values: combined, color:'#A9793C', dashed:true});
+    legendExtra.push(`<div class="item"><span class="swatch" style="background:var(--gold)"></span>Total incl. CPF</div>`);
+  } else {
+    cpfStatsRow.style.display = 'none';
+  }
+
+  els('chart-growth').innerHTML = lineChartSVG(axisLabels(sim.yearly.map(y=>y.year)), chartSeries, null, chartOpts);
+  els('g-axisnote').textContent = 'X-axis: ' + axisCaption();
+  document.querySelectorAll('#panel-growth .legend .item.extra').forEach(el=>el.remove());
+  if(legendExtra.length){
+    els('g-axisnote').insertAdjacentHTML('beforebegin', legendExtra.map(h=>h.replace('class="item"','class="item extra"')).join(''));
+  }
   return sim;
 }
 
 /* ================= TAB 2: INFLATION ================= */
+function simulateIdleCash({lumpSum, monthly, contribYears, bankRate, years}){
+  const months = Math.round(years*12);
+  const r = (bankRate/100)/12;
+  let balance = lumpSum;
+  const yearly = [{year:0, balance:lumpSum}];
+  for(let m=1;m<=months;m++){
+    balance += balance*r;
+    if(m <= contribYears*12) balance += monthly;
+    if(m % 12 === 0) yearly.push({year:m/12, balance});
+  }
+  return {yearly, finalBalance:balance};
+}
 function simulateInflation(inputs){
   const infl = (inputs.inflation||0)/100;
   if(inputs.linked){
     const g = simulateGrowth({lumpSum:inputs.lumpSum, monthly:inputs.monthly, rate:inputs.rate, years:inputs.years, contribYears:inputs.contribYears});
-    const yearly = g.yearly.map(y=>({year:y.year, balance:y.balance, realBalance: y.balance/Math.pow(1+infl, y.year)}));
-    return {yearly, finalBalance:g.finalBalance};
+    const idle = simulateIdleCash({lumpSum:inputs.lumpSum, monthly:inputs.monthly, contribYears:inputs.contribYears, bankRate:inputs.bankRate, years:inputs.years});
+    const yearly = g.yearly.map((y,i)=>({
+      year:y.year,
+      balance:y.balance,
+      realBalance: y.balance/Math.pow(1+infl, y.year),
+      idleBalance: idle.yearly[i].balance,
+      idleRealBalance: idle.yearly[i].balance/Math.pow(1+infl, y.year),
+    }));
+    return {yearly, finalBalance:g.finalBalance, idleFinalBalance: idle.finalBalance};
   }
   const months = Math.round(inputs.years*12);
   const r = (inputs.bankRate/100)/12;
@@ -748,7 +1053,7 @@ function simulateInflation(inputs){
 function getInflationInputs(){
   if(linkedMode){
     const g = getGrowthInputs();
-    return {linked:true, lumpSum:g.lumpSum, monthly:g.monthly, rate:g.rate, years:g.years, contribYears:g.contribYears, inflation: parseFloat(els('i_inflation').value)||0};
+    return {linked:true, lumpSum:g.lumpSum, monthly:g.monthly, rate:g.rate, years:g.years, contribYears:g.contribYears, bankRate: parseFloat(els('i_bankRate').value)||0, inflation: parseFloat(els('i_inflation').value)||0};
   }
   return {
     linked:false,
@@ -764,21 +1069,78 @@ function renderInflation(){
   els('i_yearsVal').textContent = els('i_years').value + ' years';
   const inputs = getInflationInputs();
   const sim = simulateInflation(inputs);
-  const nominal = sim.finalBalance;
-  const real = sim.yearly[sim.yearly.length-1].realBalance;
-  const lostPct = nominal>0 ? ((nominal-real)/nominal)*100 : 0;
-  els('i-nominal').textContent = fmt$(nominal);
-  els('i-real').textContent = fmt$(real);
-  els('i-lost').textContent = fmt$(nominal-real);
-  els('i-lostpct').textContent = lostPct.toFixed(0)+'%';
-  els('chart-inflation').innerHTML = lineChartSVG(sim.yearly.map(y=>y.year), [
-    {values: sim.yearly.map(y=>y.balance), color:'#1F4B3F'},
-    {values: sim.yearly.map(y=>y.realBalance), color:'#A9793C', dashed:true}
-  ]);
+  const stat3 = els('i-stat3');
+
+  if(inputs.linked){
+    const investedReal = sim.yearly[sim.yearly.length-1].realBalance;
+    const idleReal = sim.yearly[sim.yearly.length-1].idleRealBalance;
+    const gap = investedReal - idleReal;
+    const gapPct = idleReal>0 ? (gap/idleReal)*100 : 0;
+
+    els('i-headline-box').className = 'headline wash-green';
+    els('i-headline-label').style.color = '#1F4B3F';
+    els('i-headline-label').textContent = 'The real-terms difference: investing vs. leaving it idle';
+    ['i-hf1-value','i-hf2-value','i-hf-divider','i-hf1-sub','i-hf2-sub','i-headline-note'].forEach(id=>els(id).style.color = '#1F4B3F');
+    els('i-hf1-value').textContent = fmt$(gap);
+    els('i-hf1-sub').textContent = 'more purchasing power by investing';
+    els('i-hf2-value').textContent = gapPct.toFixed(0)+'%';
+    els('i-hf2-sub').textContent = 'real-terms advantage over idle cash';
+    els('i-headline-note').textContent = 'Both figures are already adjusted for inflation \u2014 this is the genuine gap in what the money can actually buy.';
+
+    els('i-stat1-label').textContent = 'Invested, real value (today\u2019s $)';
+    els('i-stat1-value').textContent = fmt$(investedReal);
+    els('i-stat2-label').textContent = 'Idle, real value (today\u2019s $)';
+    els('i-stat2-value').textContent = fmt$(idleReal);
+    stat3.style.display = 'block';
+    els('i-stat3-label').textContent = 'Invested, nominal balance';
+    els('i-stat3-value').textContent = fmt$(sim.finalBalance);
+
+    els('i-legend').innerHTML = `
+      <div class="item"><span class="swatch" style="background:var(--primary)"></span>Invested \u2014 nominal</div>
+      <div class="item"><span class="swatch" style="background:var(--gold)"></span>Invested \u2014 real (inflation-adjusted)</div>
+      <div class="item"><span class="swatch" style="background:var(--danger)"></span>Idle in bank \u2014 real (inflation-adjusted)</div>
+      <div class="axis-note">X-axis: ${axisCaption()}</div>
+    `;
+    els('chart-inflation').innerHTML = lineChartSVG(axisLabels(sim.yearly.map(y=>y.year)), [
+      {values: sim.yearly.map(y=>y.balance), color:'#1F4B3F'},
+      {values: sim.yearly.map(y=>y.realBalance), color:'#A9793C', dashed:true},
+      {values: sim.yearly.map(y=>y.idleRealBalance), color:'#9C3B2E', dashed:true}
+    ]);
+  } else {
+    const nominal = sim.finalBalance;
+    const real = sim.yearly[sim.yearly.length-1].realBalance;
+    const lostPct = nominal>0 ? ((nominal-real)/nominal)*100 : 0;
+
+    els('i-headline-box').className = 'headline wash-red';
+    els('i-headline-label').style.color = '#7A3D2E';
+    els('i-headline-label').textContent = 'Purchasing power lost by doing nothing';
+    ['i-hf1-value','i-hf2-value','i-hf-divider','i-hf1-sub','i-hf2-sub','i-headline-note'].forEach(id=>els(id).style.color = '#7A3D2E');
+    els('i-hf1-value').textContent = fmt$(nominal-real);
+    els('i-hf1-sub').textContent = "in today's dollars";
+    els('i-hf2-value').textContent = lostPct.toFixed(0)+'%';
+    els('i-hf2-sub').textContent = 'of the nominal balance';
+    els('i-headline-note').textContent = "The account balance itself won't shrink \u2014 what it can buy will.";
+
+    els('i-stat1-label').textContent = 'Nominal balance';
+    els('i-stat1-value').textContent = fmt$(nominal);
+    els('i-stat2-label').textContent = "Real value (today's $)";
+    els('i-stat2-value').textContent = fmt$(real);
+    stat3.style.display = 'none';
+
+    els('i-legend').innerHTML = `
+      <div class="item"><span class="swatch" style="background:var(--primary)"></span>Nominal balance</div>
+      <div class="item"><span class="swatch" style="background:var(--gold)"></span>Real (inflation-adjusted) value</div>
+      <div class="axis-note">X-axis: ${axisCaption()}</div>
+    `;
+    els('chart-inflation').innerHTML = lineChartSVG(axisLabels(sim.yearly.map(y=>y.year)), [
+      {values: sim.yearly.map(y=>y.balance), color:'#1F4B3F'},
+      {values: sim.yearly.map(y=>y.realBalance), color:'#A9793C', dashed:true}
+    ]);
+  }
 }
 
 /* ================= TAB 3: CASH FLOW (credit/debit depletion) ================= */
-function simulateCashflow({startBalance, monthlyCredit, monthlyDebit, rate, years}){
+function simulateCashflow({startBalance, streams, debitStreams, rate, years}){
   const months = Math.round(years*12);
   const r = (rate/100)/12;
   let balance = startBalance;
@@ -786,6 +1148,15 @@ function simulateCashflow({startBalance, monthlyCredit, monthlyDebit, rate, year
   let creditAcc=0, debitAcc=0;
   const yearly = [{year:0, balance:startBalance, credit:0, debit:0}];
   for(let m=1;m<=months;m++){
+    const yearIndex = Math.floor((m-1)/12); // 0-based year this month falls in
+    let monthlyCredit = 0;
+    streams.forEach(s=>{
+      if(yearIndex >= s.start && yearIndex < s.start + s.duration) monthlyCredit += s.amount;
+    });
+    let monthlyDebit = 0;
+    debitStreams.forEach(s=>{
+      if(yearIndex >= s.start && yearIndex < s.start + s.duration) monthlyDebit += s.amount;
+    });
     const interest = balance>0 ? balance*r : 0;
     balance += interest;
     balance += monthlyCredit;
@@ -805,18 +1176,102 @@ function simulateCashflow({startBalance, monthlyCredit, monthlyDebit, rate, year
   }
   return {yearly, finalBalance:balance, depletedMonth};
 }
+
+/* ---- income & expense streams state (Cash Flow tab) ---- */
+let incomeStreams = [
+  {id:1, label:'Endowment A', amount:500, start:0, duration:10},
+  {id:2, label:'Endowment B', amount:300, start:0, duration:15},
+];
+let expenseStreams = [
+  {id:1, label:'Living expenses', amount:3000, start:0, duration:40},
+];
+let streamIdSeq = 3;
+let expenseIdSeq = 2;
+
+function addIncomeStream(){
+  incomeStreams.push({id:streamIdSeq++, label:'New stream', amount:200, start:0, duration:10});
+  renderStreamsList();
+  renderAll();
+  autoSaveDraft();
+}
+function removeStream(id){
+  incomeStreams = incomeStreams.filter(s=>s.id!==id);
+  renderStreamsList();
+  renderAll();
+  autoSaveDraft();
+}
+function updateStream(id, field, value){
+  const s = incomeStreams.find(s=>s.id===id);
+  if(!s) return;
+  if(field==='label') s.label = value;
+  else s[field] = parseFloat(value)||0;
+  renderAll();
+  autoSaveDraft();
+}
+function renderStreamsList(){
+  const container = els('c_streamsList');
+  container.innerHTML = incomeStreams.map(s => `
+    <div class="stream-card">
+      <div class="stream-card-top">
+        <input class="stream-label-input" value="${escapeHtml(s.label)}" onchange="updateStream(${s.id},'label',this.value)">
+        <button type="button" class="stream-remove" onclick="removeStream(${s.id})" title="Remove">&times;</button>
+      </div>
+      <div class="stream-fields">
+        <div class="dollar-input"><span>$</span><input type="number" value="${s.amount}" min="0" step="50" onchange="updateStream(${s.id},'amount',this.value)"></div>
+        <div class="stream-mini"><label>Starts (yr)</label><input type="number" value="${s.start}" min="0" step="1" onchange="updateStream(${s.id},'start',this.value)"></div>
+        <div class="stream-mini"><label>For (yrs)</label><input type="number" value="${s.duration}" min="1" step="1" onchange="updateStream(${s.id},'duration',this.value)"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function addExpenseStream(){
+  expenseStreams.push({id:expenseIdSeq++, label:'New expense', amount:500, start:0, duration:40});
+  renderExpenseList();
+  renderAll();
+  autoSaveDraft();
+}
+function removeExpenseStream(id){
+  expenseStreams = expenseStreams.filter(s=>s.id!==id);
+  renderExpenseList();
+  renderAll();
+  autoSaveDraft();
+}
+function updateExpenseStream(id, field, value){
+  const s = expenseStreams.find(s=>s.id===id);
+  if(!s) return;
+  if(field==='label') s.label = value;
+  else s[field] = parseFloat(value)||0;
+  renderAll();
+  autoSaveDraft();
+}
+function renderExpenseList(){
+  const container = els('c_expenseList');
+  container.innerHTML = expenseStreams.map(s => `
+    <div class="stream-card">
+      <div class="stream-card-top">
+        <input class="stream-label-input" value="${escapeHtml(s.label)}" onchange="updateExpenseStream(${s.id},'label',this.value)">
+        <button type="button" class="stream-remove" onclick="removeExpenseStream(${s.id})" title="Remove">&times;</button>
+      </div>
+      <div class="stream-fields">
+        <div class="dollar-input"><span>$</span><input type="number" value="${s.amount}" min="0" step="50" onchange="updateExpenseStream(${s.id},'amount',this.value)"></div>
+        <div class="stream-mini"><label>Starts (yr)</label><input type="number" value="${s.start}" min="0" step="1" onchange="updateExpenseStream(${s.id},'start',this.value)"></div>
+        <div class="stream-mini"><label>For (yrs)</label><input type="number" value="${s.duration}" min="1" step="1" onchange="updateExpenseStream(${s.id},'duration',this.value)"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
 function getCashflowInputs(){
   return {
     startBalance: parseFloat(els('c_start').value)||0,
-    monthlyCredit: parseFloat(els('c_credit').value)||0,
-    monthlyDebit: parseFloat(els('c_debit').value)||0,
+    streams: incomeStreams.map(s=>({amount:s.amount, start:s.start, duration:s.duration})),
+    debitStreams: expenseStreams.map(s=>({amount:s.amount, start:s.start, duration:s.duration})),
     rate: parseFloat(els('c_rate').value)||0,
     years: parseInt(els('c_years').value)||1,
   };
 }
 function renderCashflow(){
-  els('c_creditVal').textContent = fmt$(parseFloat(els('c_credit').value)||0);
-  els('c_debitVal').textContent = fmt$(parseFloat(els('c_debit').value)||0);
   els('c_rateVal').textContent = parseFloat(els('c_rate').value).toFixed(2).replace(/\.?0+$/,'').concat('%');
   els('c_yearsVal').textContent = els('c_years').value + ' years';
   els('c-headline-years').textContent = els('c_years').value + ' years';
@@ -845,7 +1300,7 @@ function renderCashflow(){
     els('c-pct-sub').textContent = 'of starting balance used up';
     if(sim.depletedMonth){
       const depYear = Math.ceil(sim.depletedMonth/12);
-      els('c-note').textContent = `At this rate, the balance is projected to reach $0 in year ${depYear} \u2014 well before the ${inputs.years}-year horizon.`;
+      els('c-note').textContent = `At this rate, the balance is projected to reach $0 by ${yearPhrase(depYear)} \u2014 well before the ${inputs.years}-year horizon.`;
     } else {
       els('c-note').textContent = `Spending is outpacing income. The balance shrinks steadily if nothing changes.`;
     }
@@ -856,14 +1311,15 @@ function renderCashflow(){
     els('c-note').textContent = `Income covers expenses with room to spare, so the balance grows instead of depleting.`;
   }
 
-  els('chart-cashflow').innerHTML = ledgerChartSVG(years, credits, debits, balances);
+  els('chart-cashflow').innerHTML = ledgerChartSVG(axisLabels(years), credits, debits, balances);
+  els('c-axisnote').textContent = 'X-axis: ' + axisCaption();
 
-  let rowsHtml = `<tr><th>Year</th><th>Credit</th><th>Debit</th><th>Net</th><th>Ending balance</th></tr>`;
+  let rowsHtml = `<tr><th>${axisCaption()}</th><th>Credit</th><th>Debit</th><th>Net</th><th>Ending balance</th></tr>`;
   const showEvery = Math.max(1, Math.ceil(rows.length/12));
   rows.forEach((r,i)=>{
     if(i % showEvery === 0 || i === rows.length-1){
       const net = r.credit - r.debit;
-      rowsHtml += `<tr><td>Year ${r.year}</td><td style="color:var(--primary-light)">+${fmt$(r.credit)}</td><td style="color:var(--danger)">-${fmt$(r.debit)}</td><td>${net>=0?'+':''}${fmt$(net)}</td><td>${fmt$(r.balance)}</td></tr>`;
+      rowsHtml += `<tr><td>${yearRowLabel(r.year)}</td><td style="color:var(--primary-light)">+${fmt$(r.credit)}</td><td style="color:var(--danger)">-${fmt$(r.debit)}</td><td>${net>=0?'+':''}${fmt$(net)}</td><td>${fmt$(r.balance)}</td></tr>`;
     }
   });
   els('cashflow-table').innerHTML = rowsHtml;
@@ -873,13 +1329,14 @@ function renderCashflow(){
 function getDelayInputs(){
   if(linkedMode){
     const g = getGrowthInputs();
-    return {lumpSum:g.lumpSum, monthly:g.monthly, rate:g.rate, years:g.years, delay: parseInt(els('d_delay').value)||0};
+    return {lumpSum:g.lumpSum, monthly:g.monthly, rate:g.rate, years:g.years, contribYears:g.contribYears, delay: parseInt(els('d_delay').value)||0};
   }
   return {
     lumpSum: parseFloat(els('d_lump').value)||0,
     monthly: parseFloat(els('d_monthly').value)||0,
     rate: parseFloat(els('d_return').value)||0,
     years: parseInt(els('d_years').value)||1,
+    contribYears: parseInt(els('d_contribYears').value)||0,
     delay: parseInt(els('d_delay').value)||0,
   };
 }
@@ -887,7 +1344,7 @@ function runDelayScenario(inputs, delay){
   const investYears = Math.max(0, inputs.years - delay);
   const sim = simulateGrowth({
     lumpSum: inputs.lumpSum, monthly: inputs.monthly, rate: inputs.rate,
-    years: investYears, contribYears: Math.min(investYears, investYears)
+    years: investYears, contribYears: Math.min(inputs.contribYears, investYears)
   });
   const padded = [];
   for(let y=0; y<=delay; y++) padded.push({year:y, balance:0});
@@ -897,12 +1354,13 @@ function runDelayScenario(inputs, delay){
 function renderDelay(){
   els('d_returnVal').textContent = parseFloat(els('d_return').value).toFixed(1)+'%';
   els('d_yearsVal').textContent = els('d_years').value + ' years';
+  els('d_contribYearsVal').textContent = els('d_contribYears').value + ' years';
   const delay = parseInt(els('d_delay').value)||0;
   els('d_delayVal').textContent = delay + (delay===1?' year':' years');
   els('d-delayinline').textContent = 'after ' + delay + (delay===1?' year':' years');
 
   const inputs = getDelayInputs();
-  const now = simulateGrowth({lumpSum:inputs.lumpSum, monthly:inputs.monthly, rate:inputs.rate, years:inputs.years, contribYears:inputs.years});
+  const now = simulateGrowth({lumpSum:inputs.lumpSum, monthly:inputs.monthly, rate:inputs.rate, years:inputs.years, contribYears:Math.min(inputs.contribYears, inputs.years)});
   const later = runDelayScenario(inputs, delay);
   const gap = now.finalBalance - later.finalBalance;
   const pct = now.finalBalance>0 ? (gap/now.finalBalance)*100 : 0;
@@ -920,18 +1378,23 @@ function renderDelay(){
     const m = later.yearly.find(r=>r.year===y);
     return m ? m.balance : 0;
   });
-  els('chart-delay').innerHTML = lineChartSVG(years, [
+  const dRetireOffset = getRetirementOffset();
+  const dMarkerOpts = (dRetireOffset!=null && dRetireOffset<=inputs.years) ? {markerIndex: Math.round(dRetireOffset), markerLabel:'Retirement'} : {};
+  els('chart-delay').innerHTML = lineChartSVG(axisLabels(years), [
     {values: now.yearly.map(y=>y.balance), color:'#1F4B3F'},
     {values: laterVals, color:'#9C3B2E', dashed:true}
-  ]);
+  ], null, dMarkerOpts);
+  els('d-axisnote').textContent = 'X-axis: ' + axisCaption();
 
   const maxDelay = Math.min(inputs.years-1, 15);
+  const ageSet = getClientAge();
   const labels=[], barVals=[];
   for(let d=0; d<=maxDelay; d++){
-    labels.push(d===0?'Now':'+'+d+'y');
+    labels.push(ageSet!=null ? String(Math.round(ageSet+d)) : (d===0?'Now':'+'+d+'y'));
     barVals.push(runDelayScenario(inputs, d).finalBalance);
   }
   els('chart-delaybars').innerHTML = delayBarsSVG(labels, barVals);
+  els('d-barsaxisnote').textContent = ageSet!=null ? 'X-axis: age when starting' : 'X-axis: years delayed before starting';
 }
 
 /* ---------------- render all + tabs ---------------- */
@@ -940,7 +1403,7 @@ function updateLinkedNotes(){
   const summary = `${fmt$(g.lumpSum)} initial, ${fmt$(g.monthly)}/month for ${g.contribYears} years, ${g.rate}% annual return, ${g.years}-year horizon.`;
   els('i_tag').textContent = linkedMode ? 'Linked to Growth tab' : 'Stand-alone \u00b7 own inputs';
   els('d_tag').textContent = linkedMode ? 'Linked to Growth tab' : 'Stand-alone \u00b7 own inputs';
-  els('i_linkedNote').innerHTML = `<b>Linked to Growth tab:</b> ${summary} Adjust those on the Growth tab \u2014 only the inflation rate here is independent.`;
+  els('i_linkedNote').innerHTML = `<b>Linked to Growth tab:</b> ${summary} Adjust those on the Growth tab \u2014 the bank rate and inflation rate here set the "leave it idle" comparison.`;
   els('d_linkedNote').innerHTML = `<b>Linked to Growth tab:</b> ${summary} Adjust those on the Growth tab \u2014 only the delay slider here is independent.`;
   els('i_linkedNote').style.display = linkedMode ? 'block' : 'none';
   els('d_linkedNote').style.display = linkedMode ? 'block' : 'none';
@@ -952,6 +1415,7 @@ function setMode(mode){
   document.querySelectorAll('.mode-btn').forEach(b=>b.classList.toggle('active', b.dataset.mode===mode));
   updateLinkedNotes();
   renderAll();
+  autoSaveDraft();
 }
 function renderAll(){
   updateLinkedNotes();
@@ -972,6 +1436,7 @@ document.querySelectorAll('.tab-btn').forEach(btn=>{
 });
 document.querySelectorAll('input').forEach(inp=>{
   inp.addEventListener('input', renderAll);
+  inp.addEventListener('input', autoSaveDraft);
 });
 
 /* ---------------- PDF report (compiles all four independent tabs) ---------------- */
@@ -981,10 +1446,11 @@ function pageHeader(){
     <span class="rp-tag">Confidential</span>
   </div>`;
 }
-function pageFooter(pageNum){
+function pageFooter(pageNum, total){
+  total = total || 5;
   return `<div class="rp-footer">
     <div class="rp-fbrand"><img src="${LOGO_FULL}"><span class="rp-fname">Financial Architects Advisory</span></div>
-    <span class="rp-fpage">Page ${pageNum} of 5</span>
+    <span class="rp-fpage">Page ${pageNum} of ${total}</span>
   </div>`;
 }
 
@@ -998,11 +1464,40 @@ function saveReport(){
   const gGrowth = gSim.finalBalance - gSim.totalContributed;
   const gGrowthPct = gSim.totalContributed>0 ? (gGrowth/gSim.totalContributed)*100 : 0;
 
+  const gGoalRaw = parseFloat(els('g_goal').value);
+  const gGoal = isFinite(gGoalRaw) && gGoalRaw>0 ? gGoalRaw : null;
+  const gBandSpread = parseFloat(els('g_band').value)||0;
+  const gChartOpts = {};
+  let gGoalNoteHtml = '';
+  if(gBandSpread>0){
+    const lowSim = simulateGrowth({...gInputs, rate: Math.max(0, gInputs.rate-gBandSpread)});
+    const highSim = simulateGrowth({...gInputs, rate: gInputs.rate+gBandSpread});
+    gChartOpts.band = {lowValues: lowSim.yearly.map(y=>y.balance), highValues: highSim.yearly.map(y=>y.balance), color:'#A9793C'};
+  }
+  if(gGoal){
+    gChartOpts.goalValue = gGoal;
+    gChartOpts.goalLabel = 'Goal: ' + fmt$(gGoal);
+    const hitIndex = gSim.yearly.findIndex(y=>y.balance>=gGoal);
+    if(hitIndex>=0){
+      gGoalNoteHtml = `<div class="rp-narrative"><b>On track:</b> the ${fmt$(gGoal)} goal is projected to be reached by ${yearPhrase(gSim.yearly[hitIndex].year)}, with ${gInputs.years-gSim.yearly[hitIndex].year} years of the horizon still to spare.</div>`;
+    } else {
+      gGoalNoteHtml = `<div class="rp-narrative"><b>Falls short:</b> at these numbers, the plan is projected to reach ${fmt$(gSim.finalBalance)} by the end of the horizon \u2014 ${fmt$(gGoal-gSim.finalBalance)} short of the ${fmt$(gGoal)} goal.</div>`;
+    }
+  }
+  const gRetireOffset = getRetirementOffset();
+  if(gRetireOffset!=null && gRetireOffset<=gInputs.years){
+    gChartOpts.markerIndex = Math.round(gRetireOffset);
+    gChartOpts.markerLabel = 'Retirement';
+  }
+
   const iInputs = getInflationInputs();
   const iSim = simulateInflation(iInputs);
   const iNominal = iSim.finalBalance;
   const iReal = iSim.yearly[iSim.yearly.length-1].realBalance;
   const iLostPct = iNominal>0 ? ((iNominal-iReal)/iNominal)*100 : 0;
+  const iIdleReal = iInputs.linked ? iSim.yearly[iSim.yearly.length-1].idleRealBalance : null;
+  const iGap = iInputs.linked ? iReal - iIdleReal : null;
+  const iGapPct = iInputs.linked && iIdleReal>0 ? (iGap/iIdleReal)*100 : null;
 
   const cInputs = getCashflowInputs();
   const cSim = simulateCashflow(cInputs);
@@ -1014,7 +1509,7 @@ function saveReport(){
   cRows.forEach((r,i)=>{
     if(i % showEvery === 0 || i === cRows.length-1){
       const net = r.credit - r.debit;
-      cfTableRows += `<tr><td>Year ${r.year}</td><td style="color:#3F7C68">+${fmt$(r.credit)}</td><td style="color:#9C3B2E">-${fmt$(r.debit)}</td><td>${net>=0?'+':''}${fmt$(net)}</td><td>${fmt$(r.balance)}</td></tr>`;
+      cfTableRows += `<tr><td>${yearRowLabel(r.year)}</td><td style="color:#3F7C68">+${fmt$(r.credit)}</td><td style="color:#9C3B2E">-${fmt$(r.debit)}</td><td>${net>=0?'+':''}${fmt$(net)}</td><td>${fmt$(r.balance)}</td></tr>`;
     }
   });
   const cHeadWash = (cChange<0 || cSim.depletedMonth) ? 'wash-red' : 'wash-green';
@@ -1024,7 +1519,7 @@ function saveReport(){
     : (cChange<0 ? `Spending is outpacing income. Left unaddressed, the balance is projected to shrink steadily rather than provide lasting security.` : `Income covers expenses with room to spare, so the balance is projected to grow rather than deplete.`);
 
   const dInputs = getDelayInputs();
-  const dNow = simulateGrowth({lumpSum:dInputs.lumpSum, monthly:dInputs.monthly, rate:dInputs.rate, years:dInputs.years, contribYears:dInputs.years});
+  const dNow = simulateGrowth({lumpSum:dInputs.lumpSum, monthly:dInputs.monthly, rate:dInputs.rate, years:dInputs.years, contribYears:Math.min(dInputs.contribYears, dInputs.years)});
   const dLater = runDelayScenario(dInputs, dInputs.delay);
   const dGap = dNow.finalBalance - dLater.finalBalance;
   const dPct = dNow.finalBalance>0 ? (dGap/dNow.finalBalance)*100 : 0;
@@ -1034,8 +1529,9 @@ function saveReport(){
     return m ? m.balance : 0;
   });
   const dMaxDelay = Math.min(dInputs.years-1, 15);
+  const dAgeSet = getClientAge();
   const dLabels=[], dVals=[];
-  for(let d=0; d<=dMaxDelay; d++){ dLabels.push(d===0?'Now':'+'+d+'y'); dVals.push(runDelayScenario(dInputs, d).finalBalance); }
+  for(let d=0; d<=dMaxDelay; d++){ dLabels.push(dAgeSet!=null ? String(Math.round(dAgeSet+d)) : (d===0?'Now':'+'+d+'y')); dVals.push(runDelayScenario(dInputs, d).finalBalance); }
 
   const clientRow = client ? `<div class="rp-row"><span class="rp-k">Prepared for</span><span class="rp-v">${escapeHtml(client)}</span></div>` : '';
   const advisorRow = `<div class="rp-row"><span class="rp-k">Prepared by</span><span class="rp-v">${advisor?escapeHtml(advisor):'Financial Architects Advisory'}</span></div>`;
@@ -1084,10 +1580,11 @@ function saveReport(){
         <div class="rp-stat"><div class="rp-slabel">Total contributed</div><div class="rp-svalue">${fmt$(gSim.totalContributed)}</div></div>
         <div class="rp-stat"><div class="rp-slabel">Ending balance</div><div class="rp-svalue" style="color:#1F4B3F;">${fmt$(gSim.finalBalance)}</div></div>
       </div>
-      ${lineChartSVG(gSim.yearly.map(y=>y.year), [
+      ${lineChartSVG(axisLabels(gSim.yearly.map(y=>y.year)), [
         {values: gSim.yearly.map(y=>y.balance), color:'#1F4B3F', fill:true},
         {values: gSim.yearly.map(y=>y.totalContributed), color:'#B8B49C', dashed:true}
-      ], 320)}
+      ], 300, gChartOpts)}
+      ${gGoalNoteHtml}
       <div class="rp-narrative">Over ${gInputs.years} years, consistent contributions compound into meaningful growth. The plan is projected to turn ${fmt$(gSim.totalContributed)} of discipline into ${fmt$(gSim.finalBalance)} &mdash; a ${gGrowthPct.toFixed(0)}% return on everything contributed, purely from staying invested.</div>
     </div>
     ${pageFooter(2)}
@@ -1098,30 +1595,51 @@ function saveReport(){
     ${pageHeader()}
     <div class="rp-body">
       <div class="rp-eyebrow-sm">02 &middot; Inflation Impact</div>
-      <h2 class="rp-section-title">${iInputs.linked ? 'What inflation quietly takes back' : 'What standing still really costs'}</h2>
+      <h2 class="rp-section-title">${iInputs.linked ? 'Investing vs. leaving it idle' : 'What standing still really costs'}</h2>
       <div class="rp-assumptions">${iInputs.linked
-        ? `Linked to Growth tab: ${fmt$(iInputs.lumpSum)} initial, ${fmt$(iInputs.monthly)}/month for ${iInputs.contribYears} years, ${iInputs.rate}% annual return, ${iInputs.years}-year horizon, ${iInputs.inflation}% inflation.`
+        ? `Linked to Growth tab: ${fmt$(iInputs.lumpSum)} initial, ${fmt$(iInputs.monthly)}/month for ${iInputs.contribYears} years, ${iInputs.rate}% invested return vs. ${iInputs.bankRate}% idle bank rate, ${iInputs.inflation}% inflation, ${iInputs.years}-year horizon.`
         : `${fmt$(iInputs.lumpSum)} sitting idle at ${iInputs.bankRate}% bank interest, ${iInputs.inflation}% inflation, ${iInputs.years}-year horizon.`}</div>
+      ${iInputs.linked ? `
+      <div class="rp-headline wash-green">
+        <div class="rp-label" style="color:#1F4B3F;">The real-terms difference: investing vs. leaving it idle</div>
+        <div class="rp-hfigures">
+          <div><div class="rp-hfvalue" style="color:#1F4B3F;">${fmt$(iGap)}</div><div class="rp-hfsub" style="color:#1F4B3F;">more purchasing power by investing</div></div>
+          <div class="rp-hfdivider" style="color:#1F4B3F;">&mdash;</div>
+          <div><div class="rp-hfvalue" style="color:#1F4B3F;">${iGapPct.toFixed(0)}%</div><div class="rp-hfsub" style="color:#1F4B3F;">real-terms advantage</div></div>
+        </div>
+        <div class="rp-hnote" style="color:#1F4B3F;">Both figures are already adjusted for inflation \u2014 this is the genuine gap in what the money can actually buy.</div>
+      </div>
+      <div class="rp-stat-row">
+        <div class="rp-stat"><div class="rp-slabel">Invested, real value</div><div class="rp-svalue" style="color:#1F4B3F;">${fmt$(iReal)}</div></div>
+        <div class="rp-stat"><div class="rp-slabel">Idle, real value</div><div class="rp-svalue" style="color:#9C3B2E;">${fmt$(iIdleReal)}</div></div>
+        <div class="rp-stat"><div class="rp-slabel">Invested, nominal balance</div><div class="rp-svalue" style="color:#A9793C;">${fmt$(iNominal)}</div></div>
+      </div>
+      ${lineChartSVG(axisLabels(iSim.yearly.map(y=>y.year)), [
+        {values: iSim.yearly.map(y=>y.balance), color:'#1F4B3F'},
+        {values: iSim.yearly.map(y=>y.realBalance), color:'#A9793C', dashed:true},
+        {values: iSim.yearly.map(y=>y.idleRealBalance), color:'#9C3B2E', dashed:true}
+      ], 300)}
+      <div class="rp-narrative">Even a well-invested plan isn't immune to inflation \u2014 growing at ${iInputs.rate}% while prices rise ${iInputs.inflation}% a year still leaves the plan's real purchasing power at ${fmt$(iReal)} rather than the full ${fmt$(iNominal)} nominal figure. But compared to leaving the same contributions idle in a bank at ${iInputs.bankRate}%, which is projected to hold only ${fmt$(iIdleReal)} of real purchasing power, investing still comes out ${fmt$(iGap)} ahead in today's terms.</div>
+      ` : `
       <div class="rp-headline wash-red">
-        <div class="rp-label" style="color:#7A3D2E;">Purchasing power lost${iInputs.linked ? ', even while invested' : ' by doing nothing'}</div>
+        <div class="rp-label" style="color:#7A3D2E;">Purchasing power lost by doing nothing</div>
         <div class="rp-hfigures">
           <div><div class="rp-hfvalue" style="color:#7A3D2E;">${fmt$(iNominal-iReal)}</div><div class="rp-hfsub" style="color:#7A3D2E;">in today's dollars</div></div>
           <div class="rp-hfdivider" style="color:#7A3D2E;">&mdash;</div>
           <div><div class="rp-hfvalue" style="color:#7A3D2E;">${iLostPct.toFixed(0)}%</div><div class="rp-hfsub" style="color:#7A3D2E;">of the nominal balance</div></div>
         </div>
-        <div class="rp-hnote" style="color:#7A3D2E;">${iInputs.linked ? 'The invested balance keeps growing on paper \u2014 inflation still erodes what it can buy.' : "The account balance itself won't shrink \u2014 what it can buy will."}</div>
+        <div class="rp-hnote" style="color:#7A3D2E;">The account balance itself won't shrink \u2014 what it can buy will.</div>
       </div>
       <div class="rp-stat-row">
         <div class="rp-stat"><div class="rp-slabel">Nominal balance</div><div class="rp-svalue" style="color:#1F4B3F;">${fmt$(iNominal)}</div></div>
         <div class="rp-stat"><div class="rp-slabel">Real value (today's $)</div><div class="rp-svalue" style="color:#A9793C;">${fmt$(iReal)}</div></div>
       </div>
-      ${lineChartSVG(iSim.yearly.map(y=>y.year), [
+      ${lineChartSVG(axisLabels(iSim.yearly.map(y=>y.year)), [
         {values: iSim.yearly.map(y=>y.balance), color:'#1F4B3F'},
         {values: iSim.yearly.map(y=>y.realBalance), color:'#A9793C', dashed:true}
       ], 320)}
-      <div class="rp-narrative">${iInputs.linked
-        ? `Even a well-invested plan isn't immune to inflation. Growing at ${iInputs.rate}% while prices rise ${iInputs.inflation}% a year, the plan's ${fmt$(iNominal)} balance is projected to hold the purchasing power of just ${fmt$(iReal)} in today's terms by year ${iInputs.years} &mdash; a ${iLostPct.toFixed(0)}% real-terms erosion sitting quietly underneath the headline growth number.`
-        : `Cash earning ${iInputs.bankRate}% while inflation runs at ${iInputs.inflation}% loses purchasing power every year it sits still. Left untouched, ${fmt$(iInputs.lumpSum)} today is projected to buy no more than ${fmt$(iReal)} does today by year ${iInputs.years} &mdash; a ${iLostPct.toFixed(0)}% erosion, even though the number on the statement never goes down.`}</div>
+      <div class="rp-narrative">Cash earning ${iInputs.bankRate}% while inflation runs at ${iInputs.inflation}% loses purchasing power every year it sits still. Left untouched, ${fmt$(iInputs.lumpSum)} today is projected to buy no more than ${fmt$(iReal)} does today by year ${iInputs.years} &mdash; a ${iLostPct.toFixed(0)}% erosion, even though the number on the statement never goes down.</div>
+      `}
     </div>
     ${pageFooter(3)}
   </div>`);
@@ -1132,7 +1650,7 @@ function saveReport(){
     <div class="rp-body">
       <div class="rp-eyebrow-sm">03 &middot; Cash Flow Timeline</div>
       <h2 class="rp-section-title">If nothing changes from here</h2>
-      <div class="rp-assumptions">${fmt$(cInputs.startBalance)} starting balance, ${fmt$(cInputs.monthlyCredit)}/month credit, ${fmt$(cInputs.monthlyDebit)}/month debit, ${cInputs.rate}% interest, ${cInputs.years}-year horizon.</div>
+      <div class="rp-assumptions">${fmt$(cInputs.startBalance)} starting balance. Income: ${incomeStreams.map(s=>`${escapeHtml(s.label)} ${fmt$(s.amount)}/mo (yr ${s.start}\u2013${s.start+s.duration})`).join('; ') || 'none'}. Expenses: ${expenseStreams.map(s=>`${escapeHtml(s.label)} ${fmt$(s.amount)}/mo (yr ${s.start}\u2013${s.start+s.duration})`).join('; ') || 'none'}. ${cInputs.rate}% interest, ${cInputs.years}-year horizon.</div>
       <div class="rp-headline ${cHeadWash}">
         <div class="rp-label" style="color:${cHeadColor};">Projected position after ${cInputs.years} years</div>
         <div class="rp-hfigures">
@@ -1146,9 +1664,9 @@ function saveReport(){
         <div class="rp-stat"><div class="rp-slabel">Total credited</div><div class="rp-svalue" style="color:#1F4B3F;">${fmt$(cRows.reduce((a,r)=>a+r.credit,0))}</div></div>
         <div class="rp-stat"><div class="rp-slabel">Total debited</div><div class="rp-svalue" style="color:#9C3B2E;">${fmt$(cRows.reduce((a,r)=>a+r.debit,0))}</div></div>
       </div>
-      ${ledgerChartSVG(cRows.map(y=>y.year), cRows.map(y=>y.credit), cRows.map(y=>y.debit), cRows.map(y=>y.balance), 240)}
+      ${ledgerChartSVG(axisLabels(cRows.map(y=>y.year)), cRows.map(y=>y.credit), cRows.map(y=>y.debit), cRows.map(y=>y.balance), 240)}
       <table class="rp-table">
-        <tr><th>Year</th><th>Credit</th><th>Debit</th><th>Net</th><th>Ending balance</th></tr>
+        <tr><th>${axisCaption()}</th><th>Credit</th><th>Debit</th><th>Net</th><th>Ending balance</th></tr>
         ${cfTableRows}
       </table>
     </div>
@@ -1174,7 +1692,7 @@ function saveReport(){
         <div class="rp-stat"><div class="rp-slabel">Start today, ends with</div><div class="rp-svalue" style="color:#1F4B3F;">${fmt$(dNow.finalBalance)}</div></div>
         <div class="rp-stat"><div class="rp-slabel">Wait, ends with</div><div class="rp-svalue">${fmt$(dLater.finalBalance)}</div></div>
       </div>
-      ${lineChartSVG(dYears, [
+      ${lineChartSVG(axisLabels(dYears), [
         {values: dNow.yearly.map(y=>y.balance), color:'#1F4B3F'},
         {values: dLaterVals, color:'#9C3B2E', dashed:true}
       ], 210)}
@@ -1188,7 +1706,219 @@ function saveReport(){
   window.print();
 }
 
+function saveOnePager(){
+  const client = els('clientName').value.trim();
+  const advisor = els('advisorName').value.trim();
+  const dateStr = new Date().toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
+
+  const gInputs = getGrowthInputs();
+  const gSim = simulateGrowth(gInputs);
+  const gGrowth = gSim.finalBalance - gSim.totalContributed;
+  const gGrowthPct = gSim.totalContributed>0 ? (gGrowth/gSim.totalContributed)*100 : 0;
+
+  const iInputs = getInflationInputs();
+  const iSim = simulateInflation(iInputs);
+  let iCardFigs;
+  if(iInputs.linked){
+    const investedReal = iSim.yearly[iSim.yearly.length-1].realBalance;
+    const idleReal = iSim.yearly[iSim.yearly.length-1].idleRealBalance;
+    const gap = investedReal - idleReal;
+    const gapPct = idleReal>0 ? (gap/idleReal)*100 : 0;
+    iCardFigs = {v1: fmt$(gap), s1:'More real value by investing', v2: gapPct.toFixed(0)+'%', s2:'Advantage over idle cash'};
+  } else {
+    const nominal = iSim.finalBalance;
+    const real = iSim.yearly[iSim.yearly.length-1].realBalance;
+    const lostPct = nominal>0 ? ((nominal-real)/nominal)*100 : 0;
+    iCardFigs = {v1: fmt$(nominal-real), s1:'Purchasing power lost', v2: lostPct.toFixed(0)+'%', s2:'Of the nominal balance'};
+  }
+
+  const cInputs = getCashflowInputs();
+  const cSim = simulateCashflow(cInputs);
+  const cChange = cSim.finalBalance - cInputs.startBalance;
+  const cChangePct = cInputs.startBalance>0 ? (cChange/cInputs.startBalance)*100 : 0;
+  const cGood = !(cChange<0 || cSim.depletedMonth);
+
+  const dInputs = getDelayInputs();
+  const dNow = simulateGrowth({lumpSum:dInputs.lumpSum, monthly:dInputs.monthly, rate:dInputs.rate, years:dInputs.years, contribYears:Math.min(dInputs.contribYears, dInputs.years)});
+  const dLater = runDelayScenario(dInputs, dInputs.delay);
+  const dGap = dNow.finalBalance - dLater.finalBalance;
+  const dPct = dNow.finalBalance>0 ? (dGap/dNow.finalBalance)*100 : 0;
+
+  const clientLine = client ? `Prepared for ${escapeHtml(client)}` : 'Financial Planning Summary';
+
+  els('report').innerHTML = `<div class="report-page">
+    ${pageHeader()}
+    <div class="op-page">
+      <div class="op-title">${clientLine}</div>
+      <div class="op-subtitle">${advisor?escapeHtml(advisor)+' \u00b7 ':''}${dateStr} \u00b7 One-page summary across all four scenarios</div>
+      <div class="op-body">
+        <div class="op-list">
+          <div class="op-card">
+            <div class="op-card-main">
+              <div class="op-eyebrow">01 &middot; Growth Projection</div>
+              <div class="op-heading">Compounding on a disciplined plan</div>
+              <div class="op-figs">
+                <div><div class="op-fig-value" style="color:#1F4B3F;">${fmt$(gSim.finalBalance)}</div><div class="op-fig-sub">Ending balance</div></div>
+                <div><div class="op-fig-value" style="color:#A9793C;">${gGrowthPct.toFixed(0)}%</div><div class="op-fig-sub">Return on contributed</div></div>
+              </div>
+              <div class="op-note">${fmt$(gInputs.lumpSum)} initial, ${fmt$(gInputs.monthly)}/month, ${gInputs.rate}% return over ${gInputs.years} years.</div>
+            </div>
+            <div class="op-chart">${lineChartSVG(axisLabels(gSim.yearly.map(y=>y.year)), [{values: gSim.yearly.map(y=>y.balance), color:'#1F4B3F', fill:true}], 70)}</div>
+          </div>
+          <div class="op-card">
+            <div class="op-card-main">
+              <div class="op-eyebrow">02 &middot; Inflation Impact</div>
+              <div class="op-heading">${iInputs.linked ? 'Investing vs. leaving it idle' : 'What standing still costs'}</div>
+              <div class="op-figs">
+                <div><div class="op-fig-value" style="color:#7A3D2E;">${iCardFigs.v1}</div><div class="op-fig-sub">${iCardFigs.s1}</div></div>
+                <div><div class="op-fig-value" style="color:#7A3D2E;">${iCardFigs.v2}</div><div class="op-fig-sub">${iCardFigs.s2}</div></div>
+              </div>
+              <div class="op-note">${iInputs.inflation}% inflation assumed over ${iInputs.years} years.</div>
+            </div>
+            <div class="op-chart">${lineChartSVG(axisLabels(iSim.yearly.map(y=>y.year)), [
+              {values: iSim.yearly.map(y=>y.balance), color:'#1F4B3F'},
+              {values: iSim.yearly.map(y=>y.realBalance), color:'#A9793C', dashed:true}
+            ], 70)}</div>
+          </div>
+          <div class="op-card">
+            <div class="op-card-main">
+              <div class="op-eyebrow">03 &middot; Cash Flow Timeline</div>
+              <div class="op-heading">If nothing changes from here</div>
+              <div class="op-figs">
+                <div><div class="op-fig-value" style="color:${cGood?'#1F4B3F':'#7A3D2E'};">${fmt$(cSim.finalBalance)}</div><div class="op-fig-sub">Ending balance</div></div>
+                <div><div class="op-fig-value" style="color:${cGood?'#1F4B3F':'#7A3D2E'};">${cChangePct>=0?'+':''}${cChangePct.toFixed(0)}%</div><div class="op-fig-sub">vs. starting balance</div></div>
+              </div>
+              <div class="op-note">${fmt$(cInputs.startBalance)} starting balance over ${cInputs.years} years, ${incomeStreams.length} income stream(s), ${expenseStreams.length} expense stream(s).</div>
+            </div>
+            <div class="op-chart">${lineChartSVG(axisLabels(cSim.yearly.map(y=>y.year)), [{values: cSim.yearly.map(y=>y.balance), color: cGood?'#1F4B3F':'#9C3B2E'}], 70)}</div>
+          </div>
+          <div class="op-card">
+            <div class="op-card-main">
+              <div class="op-eyebrow">04 &middot; Cost of Delay</div>
+              <div class="op-heading">What a year of hesitation costs</div>
+              <div class="op-figs">
+                <div><div class="op-fig-value" style="color:#7A4A1F;">${fmt$(dGap)}</div><div class="op-fig-sub">Smaller ending balance</div></div>
+                <div><div class="op-fig-value" style="color:#7A4A1F;">${dPct.toFixed(0)}%</div><div class="op-fig-sub">Reduction from waiting ${dInputs.delay}y</div></div>
+              </div>
+              <div class="op-note">Same plan, started ${dInputs.delay} ${dInputs.delay===1?'year':'years'} later.</div>
+            </div>
+            <div class="op-chart">${lineChartSVG(axisLabels(dNow.yearly.map(y=>y.year)), [{values: dNow.yearly.map(y=>y.balance), color:'#1F4B3F'}], 70)}</div>
+          </div>
+        </div>
+        <div class="op-notes">
+          <div class="op-notes-label">Notes</div>
+        </div>
+      </div>
+    </div>
+    ${pageFooter(1,1)}
+  </div>`;
+  window.print();
+}
+
+/* ---------------- save / load client file ---------------- */
+function collectAllData(){
+  const data = {};
+  document.querySelectorAll('input[id]').forEach(inp=>{
+    if(inp.type === 'file') return;
+    data[inp.id] = inp.value;
+  });
+  data.__incomeStreams = incomeStreams;
+  data.__expenseStreams = expenseStreams;
+  data.__linkedMode = linkedMode;
+  data.__cpfMode = cpfMode;
+  data.__savedAt = new Date().toISOString();
+  return data;
+}
+function applyAllData(data){
+  if(Array.isArray(data.__incomeStreams)){
+    incomeStreams = data.__incomeStreams;
+    streamIdSeq = Math.max(0, ...incomeStreams.map(s=>s.id||0)) + 1;
+    renderStreamsList();
+  }
+  if(Array.isArray(data.__expenseStreams)){
+    expenseStreams = data.__expenseStreams;
+    expenseIdSeq = Math.max(0, ...expenseStreams.map(s=>s.id||0)) + 1;
+    renderExpenseList();
+  }
+  Object.keys(data).forEach(key=>{
+    if(key.startsWith('__')) return;
+    const el = els(key);
+    if(el) el.value = data[key];
+  });
+  setCpfMode(!!data.__cpfMode);
+  if(typeof data.__linkedMode === 'boolean'){
+    setMode(data.__linkedMode ? 'linked' : 'independent');
+  } else {
+    renderAll();
+  }
+}
+function exportClientData(){
+  const data = collectAllData();
+  const client = els('clientName').value.trim() || 'client';
+  const filename = client.replace(/[^a-z0-9]+/gi,'-').toLowerCase().replace(/^-+|-+$/g,'') + '-financial-plan.json';
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+function importClientData(file){
+  const reader = new FileReader();
+  reader.onload = e => {
+    let data;
+    try{ data = JSON.parse(e.target.result); }
+    catch(err){ alert('Could not read that file \u2014 make sure it is a client file saved from this tool.'); return; }
+    applyAllData(data);
+  };
+  reader.readAsText(file);
+}
+els('loadFileInput').addEventListener('change', function(){
+  if(this.files && this.files[0]) importClientData(this.files[0]);
+  this.value = '';
+});
+
+/* ---------------- auto-save draft (browser-local safety net, not a replacement for Save client file) ---------------- */
+const AUTOSAVE_KEY = 'fp_autosave_draft_v1';
+let autoSaveTimer = null;
+function autoSaveDraft(){
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(()=>{
+    try{
+      const data = collectAllData();
+      localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(data));
+    }catch(err){ /* localStorage unavailable (private mode etc.) \u2014 fail silently, explicit Save/Load still works */ }
+  }, 800);
+}
+function dismissDraftBanner(){
+  els('draft-banner').style.display = 'none';
+}
+function restoreDraft(){
+  try{
+    const raw = localStorage.getItem(AUTOSAVE_KEY);
+    if(raw) applyAllData(JSON.parse(raw));
+  }catch(err){}
+  dismissDraftBanner();
+}
+function discardDraft(){
+  try{ localStorage.removeItem(AUTOSAVE_KEY); }catch(err){}
+  dismissDraftBanner();
+}
+function checkForDraft(){
+  try{
+    const raw = localStorage.getItem(AUTOSAVE_KEY);
+    if(!raw) return;
+    const data = JSON.parse(raw);
+    const when = data.__savedAt ? new Date(data.__savedAt).toLocaleString() : 'earlier';
+    els('draft-banner-text').textContent = `An auto-saved draft from ${when} was found in this browser.`;
+    els('draft-banner').style.display = 'flex';
+  }catch(err){}
+}
+
+renderStreamsList();
+renderExpenseList();
 renderAll();
+checkForDraft();
 </script>
 </body>
 </html>
