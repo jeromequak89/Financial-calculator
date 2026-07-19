@@ -497,7 +497,17 @@
           <div class="field">
             <label>Monthly SA contribution</label>
             <div class="dollar-input"><span>$</span><input type="number" id="g_cpfSaMonthly" value="0" min="0" step="50"></div>
-            <div class="field-note">Grows separately at CPF's own rates, alongside the plan above, over the same time period. Does not model contribution caps, bonus interest tiers, or CPF LIFE payouts \u2014 verify current rates and rules at cpf.gov.sg.</div>
+          </div>
+          <div class="cpf-section-tag">Retirement Sum at age 55</div>
+          <div class="field">
+            <label>Sum set aside in Retirement Account</label>
+            <div class="mode-toggle" style="margin-bottom:8px;">
+              <button type="button" class="mode-btn" data-cpftier="brs" onclick="setCpfTier('brs')">BRS</button>
+              <button type="button" class="mode-btn active" data-cpftier="frs" onclick="setCpfTier('frs')">FRS</button>
+              <button type="button" class="mode-btn" data-cpftier="ers" onclick="setCpfTier('ers')">ERS</button>
+            </div>
+            <div class="dollar-input"><span>$</span><input type="number" id="g_cpfTierAmount" value="220400" min="0" step="100"></div>
+            <div class="field-note">2026 cohort: BRS $110,200 &middot; FRS $220,400 &middot; ERS $440,800 (2027 cohort: $114,100 / $228,200 / $456,400). These lock in at the year the client turns 55 &mdash; edit the amount if they'll turn 55 in a later cohort. Combined OA+SA above this amount at 55 is treated as withdrawable cash and added to the retirement goal comparison. Does not model CPF LIFE monthly payouts from the retained sum, contribution caps, or bonus interest tiers \u2014 verify current rules at cpf.gov.sg.</div>
           </div>
         </div>
       </div>
@@ -517,8 +527,17 @@
         <div class="stat-row" id="g-cpf-stats" style="display:none;">
           <div class="stat"><div class="label">CPF OA + SA projected</div><div class="value" style="color:#A9793C;" id="g-cpf-total">$0</div></div>
           <div class="stat"><div class="label">Total retirement wealth (incl. CPF)</div><div class="value accent" id="g-total-incl-cpf">$0</div></div>
+          <div class="stat" id="g-cpf-withdraw-stat" style="display:none;"><div class="label" id="g-cpf-withdraw-label">Withdrawable above Retirement Sum at 55</div><div class="value" style="color:#1F4B3F;" id="g-cpf-withdraw">$0</div></div>
         </div>
-        <div class="linked-note" id="g-goal-note" style="display:none;"></div>
+        <div class="headline" id="g-goal-headline" style="display:none;">
+          <div class="label" id="g-goal-label">Falls short of retirement goal</div>
+          <div class="headline-figures">
+            <div><div class="hf-value" id="g-goal-gapvalue">$0</div><div class="hf-sub" id="g-goal-gapsub">short of what's needed</div></div>
+            <div class="hf-divider">&mdash;</div>
+            <div><div class="hf-value" id="g-goal-gappct">0%</div><div class="hf-sub" id="g-goal-pctsub">of the required amount</div></div>
+          </div>
+          <div class="note" id="g-goal-note"></div>
+        </div>
         <div class="chart-wrap">
           <div class="legend">
             <div class="item"><span class="swatch" style="background:var(--primary)"></span>Account balance</div>
@@ -759,6 +778,15 @@ function setCpfMode(on){
   document.querySelectorAll('[data-cpf]').forEach(b=>b.classList.toggle('active', (b.dataset.cpf==='on')===on));
   els('g_cpfSection').style.display = on ? 'block' : 'none';
   els('cpf-ref-note').style.display = on ? 'block' : 'none';
+}
+const CPF_TIERS_2026 = {brs:110200, frs:220400, ers:440800};
+function setCpfTier(tier){
+  document.querySelectorAll('[data-cpftier]').forEach(b=>b.classList.toggle('active', b.dataset.cpftier===tier));
+  if(CPF_TIERS_2026[tier]!=null){
+    els('g_cpfTierAmount').value = CPF_TIERS_2026[tier];
+  }
+  renderAll();
+  autoSaveDraft();
 }
 const fmt$ = n => (n<0?'-$':'$') + Math.round(Math.abs(n)).toLocaleString('en-US');
 
@@ -1006,26 +1034,56 @@ function renderGrowth(){
     chartOpts.band = {lowValues: lowSim.yearly.map(y=>y.balance), highValues: highSim.yearly.map(y=>y.balance), color:'#A9793C'};
     legendExtra.push(`<div class="item"><span class="swatch" style="background:var(--gold);opacity:.35"></span>${(inputs.rate-bandSpread).toFixed(1)}%\u2013${(inputs.rate+bandSpread).toFixed(1)}% range</div>`);
   }
-  const goalNote = els('g-goal-note');
+  // CPF: compute OA/SA growth, and how much (if any) is withdrawable in cash above the
+  // Retirement Sum once the client turns 55 (a fixed CPF rule, independent of chosen retirement age).
+  const clientAgeNow = getClientAge();
+  const age55Offset = clientAgeNow!=null ? Math.max(0, 55 - clientAgeNow) : null;
+  const cpfHorizon = age55Offset!=null ? Math.max(inputs.years, age55Offset) : inputs.years;
+  const cpf = cpfMode ? computeCpf(cpfHorizon) : null;
+  let cpfWithdrawable = 0;
+  let cpfAt55 = null;
+  if(cpf && age55Offset!=null){
+    cpfAt55 = cpf.oa.yearly[age55Offset].balance + cpf.sa.yearly[age55Offset].balance;
+    const tierAmount = parseFloat(els('g_cpfTierAmount').value)||0;
+    cpfWithdrawable = Math.max(0, cpfAt55 - tierAmount);
+  }
+
+  const goalHeadline = els('g-goal-headline');
   if(goalInfo){
     chartOpts.goalValue = goalInfo.value;
     chartOpts.goalLabel = goalInfo.label;
     const compareIndex = usingRetirePoint ? Math.round(retireOffset) : sim.yearly.length-1;
     const compareYear = sim.yearly[compareIndex].year;
-    const projectedAtPoint = sim.yearly[compareIndex].balance;
+    const compareAge = clientAgeNow!=null ? clientAgeNow+compareYear : null;
+    const withdrawableApplies = cpf && age55Offset!=null && compareAge!=null && compareAge>=55;
+    const projectedAtPoint = sim.yearly[compareIndex].balance + (withdrawableApplies ? cpfWithdrawable : 0);
     const gap = projectedAtPoint - goalInfo.value;
+    const gapPct = goalInfo.value>0 ? Math.abs(gap/goalInfo.value)*100 : 0;
     const pointPhrase = usingRetirePoint ? `at retirement (${yearPhrase(compareYear)})` : `by the end of the ${inputs.years}-year horizon`;
-    goalNote.style.display = 'block';
     const basis = goalInfo.type==='income'
       ? `funding ${fmt$(goalInfo.income)}/month for ${goalInfo.years} years at ${goalInfo.rate}% in retirement`
       : `the ${fmt$(goalInfo.value)} goal`;
-    if(gap>=0){
-      goalNote.innerHTML = `<b>On track:</b> ${pointPhrase}, the plan is projected to reach ${fmt$(projectedAtPoint)} \u2014 a surplus of ${fmt$(gap)} over the ${fmt$(goalInfo.value)} needed for ${basis}.`;
-    } else {
-      goalNote.innerHTML = `<b>Falls short:</b> ${pointPhrase}, the plan is projected to reach ${fmt$(projectedAtPoint)} \u2014 ${fmt$(-gap)} short of the ${fmt$(goalInfo.value)} needed for ${basis}.`;
-    }
+    const cpfClause = withdrawableApplies && cpfWithdrawable>0 ? ` (including ${fmt$(cpfWithdrawable)} withdrawable from CPF above the Retirement Sum at 55)` : '';
+    goalHeadline.style.display = 'block';
+    const onTrack = gap>=0;
+    goalHeadline.className = 'headline ' + (onTrack ? 'wash-green' : 'wash-red');
+    const color = onTrack ? '#1F4B3F' : '#7A3D2E';
+    els('g-goal-label').style.color = color;
+    els('g-goal-label').textContent = onTrack ? 'On track for retirement goal' : 'Falls short of retirement goal';
+    els('g-goal-gapvalue').style.color = color;
+    els('g-goal-gapvalue').textContent = fmt$(Math.abs(gap));
+    els('g-goal-gapsub').style.color = color;
+    els('g-goal-gapsub').textContent = onTrack ? "surplus over what's needed" : "short of what's needed";
+    els('g-goal-gappct').style.color = color;
+    els('g-goal-gappct').textContent = gapPct.toFixed(0)+'%';
+    els('g-goal-pctsub').style.color = color;
+    els('g-goal-pctsub').textContent = onTrack ? 'above the required amount' : 'below the required amount';
+    els('g-goal-note').style.color = color;
+    els('g-goal-note').innerHTML = onTrack
+      ? `${pointPhrase}, the plan is projected to reach ${fmt$(projectedAtPoint)}${cpfClause} against the ${fmt$(goalInfo.value)} needed for ${basis}.`
+      : `${pointPhrase}, the plan is projected to reach only ${fmt$(projectedAtPoint)}${cpfClause} against the ${fmt$(goalInfo.value)} needed for ${basis}.`;
   } else {
-    goalNote.style.display = 'none';
+    goalHeadline.style.display = 'none';
   }
   if(usingRetirePoint){
     chartOpts.markerIndex = Math.round(retireOffset);
@@ -1038,11 +1096,19 @@ function renderGrowth(){
     {values: sim.yearly.map(y=>y.balance), color:'#1F4B3F', fill:true},
     {values: sim.yearly.map(y=>y.totalContributed), color:'#B8B49C', dashed:true}
   ];
-  const cpf = cpfMode ? computeCpf(inputs.years) : null;
   if(cpf){
     cpfStatsRow.style.display = 'flex';
     els('g-cpf-total').textContent = fmt$(cpf.finalBalance);
     els('g-total-incl-cpf').textContent = fmt$(sim.finalBalance + cpf.finalBalance);
+    const withdrawStat = els('g-cpf-withdraw-stat');
+    if(age55Offset!=null){
+      withdrawStat.style.display = 'block';
+      const tierName = document.querySelector('[data-cpftier].active')?.textContent || 'Retirement Sum';
+      els('g-cpf-withdraw-label').textContent = `Withdrawable above ${tierName} at 55`;
+      els('g-cpf-withdraw').textContent = fmt$(cpfWithdrawable);
+    } else {
+      withdrawStat.style.display = 'none';
+    }
     const combined = sim.yearly.map((y,i)=> y.balance + cpf.oa.yearly[i].balance + cpf.sa.yearly[i].balance);
     chartSeries.push({values: combined, color:'#A9793C', dashed:true});
     legendExtra.push(`<div class="item"><span class="swatch" style="background:var(--gold)"></span>Total incl. CPF</div>`);
@@ -1519,6 +1585,16 @@ function saveReport(){
   let gGoalNoteHtml = '';
   const gRetireOffset = getRetirementOffset();
   const gUsingRetirePoint = gRetireOffset!=null && gRetireOffset<=gInputs.years;
+  const gClientAgeNow = getClientAge();
+  const gAge55Offset = gClientAgeNow!=null ? Math.max(0, 55 - gClientAgeNow) : null;
+  const gCpfHorizon = gAge55Offset!=null ? Math.max(gInputs.years, gAge55Offset) : gInputs.years;
+  const gCpf = cpfMode ? computeCpf(gCpfHorizon) : null;
+  let gCpfWithdrawable = 0;
+  if(gCpf && gAge55Offset!=null){
+    const gCpfAt55 = gCpf.oa.yearly[gAge55Offset].balance + gCpf.sa.yearly[gAge55Offset].balance;
+    const gTierAmount = parseFloat(els('g_cpfTierAmount').value)||0;
+    gCpfWithdrawable = Math.max(0, gCpfAt55 - gTierAmount);
+  }
   if(gBandSpread>0){
     const lowSim = simulateGrowth({...gInputs, rate: Math.max(0, gInputs.rate-gBandSpread)});
     const highSim = simulateGrowth({...gInputs, rate: gInputs.rate+gBandSpread});
@@ -1529,15 +1605,28 @@ function saveReport(){
     gChartOpts.goalLabel = gGoalInfo.label;
     const compareIndex = gUsingRetirePoint ? Math.round(gRetireOffset) : gSim.yearly.length-1;
     const compareYear = gSim.yearly[compareIndex].year;
-    const projectedAtPoint = gSim.yearly[compareIndex].balance;
+    const compareAge = gClientAgeNow!=null ? gClientAgeNow+compareYear : null;
+    const gWithdrawableApplies = gCpf && gAge55Offset!=null && compareAge!=null && compareAge>=55;
+    const projectedAtPoint = gSim.yearly[compareIndex].balance + (gWithdrawableApplies ? gCpfWithdrawable : 0);
     const gap = projectedAtPoint - gGoalInfo.value;
+    const gapPct = gGoalInfo.value>0 ? Math.abs(gap/gGoalInfo.value)*100 : 0;
     const pointPhrase = gUsingRetirePoint ? `at retirement (${yearPhrase(compareYear)})` : `by the end of the ${gInputs.years}-year horizon`;
     const basis = gGoalInfo.type==='income'
       ? `funding ${fmt$(gGoalInfo.income)}/month for ${gGoalInfo.years} years at ${gGoalInfo.rate}% in retirement`
       : `the ${fmt$(gGoalInfo.value)} goal`;
-    gGoalNoteHtml = gap>=0
-      ? `<div class="rp-narrative"><b>On track:</b> ${pointPhrase}, the plan is projected to reach ${fmt$(projectedAtPoint)} \u2014 a surplus of ${fmt$(gap)} over the ${fmt$(gGoalInfo.value)} needed for ${basis}.</div>`
-      : `<div class="rp-narrative"><b>Falls short:</b> ${pointPhrase}, the plan is projected to reach ${fmt$(projectedAtPoint)} \u2014 ${fmt$(-gap)} short of the ${fmt$(gGoalInfo.value)} needed for ${basis}.</div>`;
+    const gCpfClause = gWithdrawableApplies && gCpfWithdrawable>0 ? ` (including ${fmt$(gCpfWithdrawable)} withdrawable from CPF above the Retirement Sum at 55)` : '';
+    const onTrack = gap>=0;
+    const gc = onTrack ? '#1F4B3F' : '#7A3D2E';
+    const gwash = onTrack ? 'wash-green' : 'wash-red';
+    gGoalNoteHtml = `<div class="rp-headline ${gwash}">
+      <div class="rp-label" style="color:${gc};">${onTrack?'On track for retirement goal':'Falls short of retirement goal'}</div>
+      <div class="rp-hfigures">
+        <div><div class="rp-hfvalue" style="color:${gc};">${fmt$(Math.abs(gap))}</div><div class="rp-hfsub" style="color:${gc};">${onTrack?"surplus over what's needed":"short of what's needed"}</div></div>
+        <div class="rp-hfdivider" style="color:${gc};">&mdash;</div>
+        <div><div class="rp-hfvalue" style="color:${gc};">${gapPct.toFixed(0)}%</div><div class="rp-hfsub" style="color:${gc};">${onTrack?'above':'below'} the required amount</div></div>
+      </div>
+      <div class="rp-hnote" style="color:${gc};">${pointPhrase}, the plan is projected to reach ${onTrack?'':'only '}${fmt$(projectedAtPoint)}${gCpfClause} against the ${fmt$(gGoalInfo.value)} needed for ${basis}.</div>
+    </div>`;
   }
   if(gUsingRetirePoint){
     gChartOpts.markerIndex = Math.round(gRetireOffset);
