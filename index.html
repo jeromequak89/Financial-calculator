@@ -646,6 +646,13 @@
           <div class="stat"><div class="label">Total credited</div><div class="value accent" id="c-totalcredit">$0</div></div>
           <div class="stat"><div class="label">Total debited</div><div class="value danger" id="c-totaldebit">$0</div></div>
         </div>
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+          <span style="font-size:12px; font-weight:600; color:var(--ink);">View:</span>
+          <div class="mode-toggle">
+            <button type="button" class="mode-btn active" data-cfview="yearly" onclick="setCashflowView('yearly')">Yearly</button>
+            <button type="button" class="mode-btn" data-cfview="monthly" onclick="setCashflowView('monthly')">Monthly</button>
+          </div>
+        </div>
         <div class="chart-wrap">
           <div class="legend">
             <div class="item"><span class="swatch" style="background:var(--primary-light)"></span>Credit</div>
@@ -746,6 +753,13 @@ const els = id => document.getElementById(id);
 let linkedMode = false;
 let cpfMode = false;
 let goalType = 'income'; // 'income' (monthly retirement spend) | 'lump' (flat target)
+let cashflowView = 'yearly'; // 'yearly' | 'monthly'
+function setCashflowView(view){
+  cashflowView = view;
+  document.querySelectorAll('[data-cfview]').forEach(b=>b.classList.toggle('active', b.dataset.cfview===view));
+  renderAll();
+  autoSaveDraft();
+}
 function setGoalType(type){
   goalType = type;
   document.querySelectorAll('[data-goaltype]').forEach(b=>b.classList.toggle('active', b.dataset.goaltype===type));
@@ -1262,6 +1276,7 @@ function simulateCashflow({startBalance, streams, debitStreams, rate, years}){
   let depletedMonth = null;
   let creditAcc=0, debitAcc=0;
   const yearly = [{year:0, balance:startBalance, credit:0, debit:0}];
+  const monthly = [{month:0, balance:startBalance, credit:0, debit:0}];
   for(let m=1;m<=months;m++){
     const yearIndex = Math.floor((m-1)/12); // 0-based year this month falls in
     let monthlyCredit = 0;
@@ -1275,7 +1290,8 @@ function simulateCashflow({startBalance, streams, debitStreams, rate, years}){
     const interest = balance>0 ? balance*r : 0;
     balance += interest;
     balance += monthlyCredit;
-    creditAcc += monthlyCredit + interest;
+    const monthCreditTotal = monthlyCredit + interest;
+    creditAcc += monthCreditTotal;
     let debit = monthlyDebit;
     if(balance - debit < 0){
       debit = Math.max(balance,0);
@@ -1284,12 +1300,13 @@ function simulateCashflow({startBalance, streams, debitStreams, rate, years}){
     balance -= debit;
     debitAcc += debit;
     if(balance<0) balance = 0;
+    monthly.push({month:m, balance, credit:monthCreditTotal, debit});
     if(m % 12 === 0){
       yearly.push({year:m/12, balance, credit:creditAcc, debit:debitAcc});
       creditAcc=0; debitAcc=0;
     }
   }
-  return {yearly, finalBalance:balance, depletedMonth};
+  return {yearly, monthly, finalBalance:balance, depletedMonth};
 }
 
 /* ---- income & expense streams state (Cash Flow tab) ---- */
@@ -1426,18 +1443,38 @@ function renderCashflow(){
     els('c-note').textContent = `Income covers expenses with room to spare, so the balance grows instead of depleting.`;
   }
 
-  els('chart-cashflow').innerHTML = ledgerChartSVG(axisLabels(years), credits, debits, balances);
-  els('c-axisnote').textContent = 'X-axis: ' + axisCaption();
+  if(cashflowView==='monthly'){
+    const mRows = sim.monthly.filter(m=>m.month>0);
+    const mLabels = mRows.map(m=>String(m.month));
+    const mCredits = mRows.map(m=>m.credit);
+    const mDebits = mRows.map(m=>m.debit);
+    const mBalances = mRows.map(m=>m.balance);
+    els('chart-cashflow').innerHTML = ledgerChartSVG(mLabels, mCredits, mDebits, mBalances);
+    els('c-axisnote').textContent = 'X-axis: Months from now';
 
-  let rowsHtml = `<tr><th>${axisCaption()}</th><th>Credit</th><th>Debit</th><th>Net</th><th>Ending balance</th></tr>`;
-  const showEvery = Math.max(1, Math.ceil(rows.length/12));
-  rows.forEach((r,i)=>{
-    if(i % showEvery === 0 || i === rows.length-1){
-      const net = r.credit - r.debit;
-      rowsHtml += `<tr><td>${yearRowLabel(r.year)}</td><td style="color:var(--primary-light)">+${fmt$(r.credit)}</td><td style="color:var(--danger)">-${fmt$(r.debit)}</td><td>${net>=0?'+':''}${fmt$(net)}</td><td>${fmt$(r.balance)}</td></tr>`;
-    }
-  });
-  els('cashflow-table').innerHTML = rowsHtml;
+    let mRowsHtml = `<tr><th>Month</th><th>Credit</th><th>Debit</th><th>Net</th><th>Ending balance</th></tr>`;
+    const mShowEvery = Math.max(1, Math.ceil(mRows.length/12));
+    mRows.forEach((m,i)=>{
+      if(i % mShowEvery === 0 || i === mRows.length-1){
+        const net = m.credit - m.debit;
+        mRowsHtml += `<tr><td>Month ${m.month}</td><td style="color:var(--primary-light)">+${fmt$(m.credit)}</td><td style="color:var(--danger)">-${fmt$(m.debit)}</td><td>${net>=0?'+':''}${fmt$(net)}</td><td>${fmt$(m.balance)}</td></tr>`;
+      }
+    });
+    els('cashflow-table').innerHTML = mRowsHtml;
+  } else {
+    els('chart-cashflow').innerHTML = ledgerChartSVG(axisLabels(years), credits, debits, balances);
+    els('c-axisnote').textContent = 'X-axis: ' + axisCaption();
+
+    let rowsHtml = `<tr><th>${axisCaption()}</th><th>Credit</th><th>Debit</th><th>Net</th><th>Ending balance</th></tr>`;
+    const showEvery = Math.max(1, Math.ceil(rows.length/12));
+    rows.forEach((r,i)=>{
+      if(i % showEvery === 0 || i === rows.length-1){
+        const net = r.credit - r.debit;
+        rowsHtml += `<tr><td>${yearRowLabel(r.year)}</td><td style="color:var(--primary-light)">+${fmt$(r.credit)}</td><td style="color:var(--danger)">-${fmt$(r.debit)}</td><td>${net>=0?'+':''}${fmt$(net)}</td><td>${fmt$(r.balance)}</td></tr>`;
+      }
+    });
+    els('cashflow-table').innerHTML = rowsHtml;
+  }
 }
 
 /* ================= TAB 4: COST OF DELAY ================= */
@@ -1970,6 +2007,7 @@ function collectAllData(){
   data.__linkedMode = linkedMode;
   data.__cpfMode = cpfMode;
   data.__goalType = goalType;
+  data.__cashflowView = cashflowView;
   data.__savedAt = new Date().toISOString();
   return data;
 }
@@ -1991,6 +2029,7 @@ function applyAllData(data){
   });
   setCpfMode(!!data.__cpfMode);
   setGoalType(data.__goalType==='lump' ? 'lump' : 'income');
+  setCashflowView(data.__cashflowView==='monthly' ? 'monthly' : 'yearly');
   if(typeof data.__linkedMode === 'boolean'){
     setMode(data.__linkedMode ? 'linked' : 'independent');
   } else {
