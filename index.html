@@ -165,6 +165,13 @@
     border:1px solid var(--line); border-radius:2px; padding:6px 6px; font-family:var(--mono);
     font-size:12.5px; width:100%; background:#fff; color:var(--ink);
   }
+  .stream-typetoggle{display:flex; gap:4px; margin-bottom:8px;}
+  .stype-btn{
+    flex:1; border:1px solid var(--line); background:#fff; border-radius:20px;
+    padding:4px 6px; font-family:var(--sans); font-size:10px; font-weight:600; color:var(--muted);
+    cursor:pointer; transition:background .15s ease;
+  }
+  .stype-btn.active{background:var(--ink); color:#fff; border-color:var(--ink);}
   .add-stream-btn{
     width:100%; border:1px dashed var(--line); background:transparent; border-radius:2px;
     padding:9px; font-family:var(--sans); font-size:12.5px; font-weight:600; color:var(--primary);
@@ -239,7 +246,17 @@
   .headline-figures .hf-sub{font-size:11px; opacity:.75; margin-top:3px; text-transform:uppercase; letter-spacing:.06em;}
   .headline-figures .hf-divider{font-size:22px; opacity:.35; align-self:center;}
 
-  .chart-wrap{border:1px solid var(--line); border-radius:var(--radius); padding:18px 18px 8px; background:#fff;}
+  .chart-wrap{border:1px solid var(--line); border-radius:var(--radius); padding:18px 18px 8px; background:#fff; position:relative;}
+  .chart-tooltip{
+    display:none; position:absolute; z-index:5; pointer-events:none;
+    background:var(--ink); color:#fff; border-radius:3px; padding:8px 11px;
+    font-family:var(--sans); font-size:11.5px; line-height:1.5; min-width:110px;
+    box-shadow:0 4px 14px rgba(0,0,0,0.22); white-space:nowrap;
+  }
+  .chart-tooltip .ct-label{font-family:var(--mono); font-size:10px; letter-spacing:.05em; color:#C8CFC9; margin-bottom:4px; text-transform:uppercase;}
+  .chart-tooltip .ct-row{display:flex; align-items:center; gap:6px;}
+  .chart-tooltip .ct-dot{width:7px; height:7px; border-radius:50%; flex-shrink:0; display:inline-block;}
+  .chart-guideline{position:absolute; top:0; bottom:0; width:1px; background:rgba(21,35,29,0.28); pointer-events:none; display:none;}
   .legend{display:flex; gap:18px; flex-wrap:wrap; margin-bottom:6px; align-items:center;}
   .legend .item{display:flex; align-items:center; gap:6px; font-size:12px; color:var(--muted);}
   .axis-note{margin-left:auto; font-size:10.5px; color:var(--muted); font-style:italic;}
@@ -312,8 +329,8 @@
   /* section pages */
   .rp-eyebrow-sm{font-family:var(--mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); margin-bottom:6px;}
   .rp-section-title{font-family:var(--serif); font-size:23px; font-weight:600; margin:0 0 4px;}
-  .rp-assumptions{font-size:11.5px; color:var(--muted); margin:8px 0 18px; padding-bottom:14px; border-bottom:1px solid var(--line);}
-  .rp-headline{border-radius:2px; padding:18px 22px; margin-bottom:18px; border:1px solid;}
+  .rp-assumptions{font-size:10.5px; color:var(--muted); margin:6px 0 12px; padding-bottom:10px; border-bottom:1px solid var(--line);}
+  .rp-headline{border-radius:2px; padding:13px 20px; margin-bottom:12px; border:1px solid;}
   .rp-headline.wash-green{background:var(--primary-wash); border-color:#CBDED3;}
   .rp-headline.wash-red{background:var(--danger-wash); border-color:#E5C6BC;}
   .rp-headline.wash-gold{background:var(--gold-wash); border-color:#E4D3AE;}
@@ -323,14 +340,28 @@
   .rp-hfigures .rp-hfsub{font-size:10.5px; opacity:.75; margin-top:4px; text-transform:uppercase; letter-spacing:.06em;}
   .rp-hfigures .rp-hfdivider{font-size:22px; opacity:.35;}
   .rp-headline .rp-hnote{font-size:11.5px; margin-top:9px; line-height:1.4;}
-  .rp-stat-row{display:flex; gap:36px; margin:16px 0 18px;}
+  .rp-stat-row{display:flex; gap:36px; margin:10px 0 12px;}
   .rp-stat .rp-slabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin-bottom:5px;}
   .rp-stat .rp-svalue{font-family:var(--serif); font-size:20px; font-weight:600;}
   .rp-narrative{font-family:var(--serif); font-size:13px; line-height:1.7; color:#3A4740; background:#FBFAF6; border-left:2px solid var(--gold); padding:13px 17px; margin-top:16px;}
-  .rp-table{width:100%; border-collapse:collapse; margin-top:12px; font-family:var(--mono); font-size:10.5px;}
+  .actbox{margin-top:18px; border:1px solid var(--line); border-radius:2px; overflow:hidden;}
+  .actbox .actrow{padding:13px 18px; font-size:13px; line-height:1.6;}
+  .actbox .actrow.analysis{background:#FBFAF6;}
+  .actbox .actrow.cta{background:var(--primary-wash); border-top:1px solid var(--line);}
+  .actbox .acttag{font-family:var(--mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; font-weight:700; margin-bottom:5px; display:block;}
+  .actbox .actrow.analysis .acttag{color:var(--muted);}
+  .actbox .actrow.cta .acttag{color:#1F4B3F;}
+  .rp-actbox{margin-top:8px; border:1px solid var(--line); border-radius:2px; overflow:hidden;}
+  .rp-actbox .actrow{padding:7px 15px; font-size:10.5px; line-height:1.42;}
+  .rp-actbox .actrow.analysis{background:#FBFAF6;}
+  .rp-actbox .actrow.cta{background:var(--primary-wash); border-top:1px solid var(--line);}
+  .rp-actbox .acttag{font-family:var(--mono); font-size:8.5px; letter-spacing:.1em; text-transform:uppercase; font-weight:700; margin-bottom:4px; display:block;}
+  .rp-actbox .actrow.analysis .acttag{color:var(--muted);}
+  .rp-actbox .actrow.cta .acttag{color:#1F4B3F;}
+  .rp-table{width:100%; border-collapse:collapse; margin-top:8px; font-family:var(--mono); font-size:9.5px;}
   .rp-table th{text-align:right; font-family:var(--sans); font-size:9px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); padding:6px; border-bottom:1px solid var(--ink); font-weight:600;}
   .rp-table th:first-child{text-align:left;}
-  .rp-table td{padding:5px 6px; text-align:right; border-bottom:1px solid var(--line);}
+  .rp-table td{padding:3px 6px; text-align:right; border-bottom:1px solid var(--line);}
   .rp-table td:first-child{text-align:left; color:var(--muted);}
 
   /* One-page leave-behind summary */
@@ -542,13 +573,17 @@
           </div>
           <div class="note" id="g-goal-note"></div>
         </div>
-        <div class="chart-wrap">
+        <div class="chart-wrap" id="chart-growth-wrap">
           <div class="legend">
             <div class="item"><span class="swatch" style="background:var(--primary)"></span><span data-i18n="leg_acctbalance">Account balance</span></div>
             <div class="item"><span class="swatch" style="background:var(--line)"></span><span data-i18n="stat_totalcontrib">Total contributed</span></div>
             <div class="axis-note" id="g-axisnote"></div>
           </div>
           <div id="chart-growth"></div>
+        </div>
+        <div class="actbox">
+          <div class="actrow analysis"><span class="acttag" data-i18n="act_analysis">Analysis</span><span data-i18n="act_growth_analysis">This highlights the power of compound growth. It's not just your contributions that grow &mdash; your investment returns can also generate additional returns over time.</span></div>
+          <div class="actrow cta"><span class="acttag" data-i18n="act_cta">Call to Action</span><span data-i18n="act_growth_cta">The earlier you start, the more time your money has to work for you. Even a consistent monthly investment can make a significant difference over the long term.</span></div>
         </div>
       </div>
     </div>
@@ -597,9 +632,13 @@
           <div class="stat"><div class="label" id="i-stat2-label">Real value (today's $)</div><div class="value gold" id="i-stat2-value">$0</div></div>
           <div class="stat" id="i-stat3" style="display:none;"><div class="label" id="i-stat3-label">&nbsp;</div><div class="value" id="i-stat3-value">$0</div></div>
         </div>
-        <div class="chart-wrap">
+        <div class="chart-wrap" id="chart-inflation-wrap">
           <div class="legend" id="i-legend"></div>
           <div id="chart-inflation"></div>
+        </div>
+        <div class="actbox">
+          <div class="actrow analysis"><span class="acttag" data-i18n="act_analysis">Analysis</span><span data-i18n="act_infl_analysis">Keeping money in cash may feel safe, but inflation gradually reduces what that money can buy. Over time, the cost of living increases while idle savings lose real value.</span></div>
+          <div class="actrow cta"><span class="acttag" data-i18n="act_cta">Call to Action</span><span data-i18n="act_infl_cta">Rather than simply saving, consider investing your money so it has the opportunity to outpace inflation and preserve your purchasing power.</span></div>
         </div>
       </div>
     </div>
@@ -657,7 +696,7 @@
             <button type="button" class="mode-btn" data-cfview="monthly" onclick="setCashflowView('monthly')" data-i18n="btn_monthly">Monthly</button>
           </div>
         </div>
-        <div class="chart-wrap">
+        <div class="chart-wrap" id="chart-cashflow-wrap">
           <div class="legend">
             <div class="item"><span class="swatch" style="background:var(--primary-light)"></span><span data-i18n="leg_credit">Credit</span></div>
             <div class="item"><span class="swatch" style="background:var(--danger)"></span><span data-i18n="leg_debit">Debit</span></div>
@@ -667,6 +706,10 @@
           <div id="chart-cashflow"></div>
         </div>
         <table class="datatable" id="cashflow-table"></table>
+        <div class="actbox">
+          <div class="actrow analysis"><span class="acttag" data-i18n="act_analysis">Analysis</span><span data-i18n="act_cf_analysis">This shows what happens if income and expenses simply continue on their current path, with no changes made along the way. Being comfortable today doesn't always mean being comfortable tomorrow.</span></div>
+          <div class="actrow cta"><span class="acttag" data-i18n="act_cta">Call to Action</span><span data-i18n="act_cf_cta">Reviewing cash flow regularly helps catch a shortfall while there's still time to act &mdash; whether that means adjusting spending, income, or how savings are structured.</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -705,6 +748,11 @@
           <input type="range" id="d_delay" min="0" max="20" step="1" value="5">
           <div class="field-note"><span data-i18n="note_delaystart">Same lump sum and monthly contribution, invested for less time because of the delay &mdash; end date stays fixed.</span></div>
         </div>
+        <div class="field">
+          <label data-i18n="lbl_agefilter">Highlight specific ages/years (optional)</label>
+          <input type="text" id="d_ageFilter" placeholder="e.g. 55, 60, 65" data-i18n-ph="ph_agefilter" style="width:100%; border:1px solid var(--line); border-radius:2px; padding:9px 10px; font-family:var(--mono); font-size:13px;">
+          <div class="field-note" data-i18n="note_agefilter">Comma-separated. Leave blank to show the full projection spread automatically. If client age is set, enter ages; otherwise enter years delayed.</div>
+        </div>
       </div>
       <div class="results-col">
         <div class="headline wash-gold">
@@ -720,7 +768,7 @@
           <div class="stat"><div class="label" data-i18n="stat_starttoday">Start today, ends with</div><div class="value accent" id="d-now">$0</div></div>
           <div class="stat"><div class="label" data-i18n="stat_waitends">Wait, ends with</div><div class="value" id="d-later">$0</div></div>
         </div>
-        <div class="chart-wrap">
+        <div class="chart-wrap" id="chart-delay-wrap">
           <div class="legend">
             <div class="item"><span class="swatch" style="background:var(--primary)"></span><span data-i18n="leg_starttoday">Start today</span></div>
             <div class="item"><span class="swatch" style="background:var(--danger)"></span><span data-i18n="leg_waitstart">Wait, then start</span></div>
@@ -728,9 +776,13 @@
           </div>
           <div id="chart-delay"></div>
         </div>
-        <div class="chart-wrap" style="margin-top:16px;">
+        <div class="chart-wrap" id="chart-delaybars-wrap" style="margin-top:16px;">
           <div class="legend"><div class="item"><span class="swatch" style="background:var(--gold)"></span><span data-i18n="leg_endbalbystart">Ending balance by starting point</span></div><div class="axis-note" id="d-barsaxisnote"></div></div>
           <div id="chart-delaybars"></div>
+        </div>
+        <div class="actbox">
+          <div class="actrow analysis"><span class="acttag" data-i18n="act_analysis">Analysis</span><span data-i18n="act_delay_analysis">Every year of waiting is a year of lost compounding that can't be recovered later. The gap between starting today and starting later grows faster than most people expect.</span></div>
+          <div class="actrow cta"><span class="acttag" data-i18n="act_cta">Call to Action</span><span data-i18n="act_delay_cta">There's rarely a perfect time to start. Beginning now, even with a smaller amount, is likely to outperform waiting for the ideal moment.</span></div>
         </div>
       </div>
     </div>
@@ -837,6 +889,27 @@ const I18N = {
   tagline: {en:"Mastering Your Blueprint of Wealth", zh:"掌握您的财富蓝图"},
   hl_totalgrowth: {en:"Total growth over the period", zh:"期间总增长"},
   lbl_ifnothingchanges: {en:"If nothing changes, after", zh:"若维持现状，经过"},
+  act_analysis: {en:"Analysis", zh:"分析"},
+  act_cta: {en:"Call to Action", zh:"行动建议"},
+  act_growth_analysis: {en:"This highlights the power of compound growth. It's not just your contributions that grow \u2014 your investment returns can also generate additional returns over time.",
+    zh:"这体现了复利增长的力量。增长的不只是您的供款——您的投资回报本身也能随时间产生额外的回报。"},
+  act_growth_cta: {en:"The earlier you start, the more time your money has to work for you. Even a consistent monthly investment can make a significant difference over the long term.",
+    zh:"越早开始，资金为您增值的时间就越长。即使是稳定的每月投资，长期下来也能带来显著的差异。"},
+  act_infl_analysis: {en:"Keeping money in cash may feel safe, but inflation gradually reduces what that money can buy. Over time, the cost of living increases while idle savings lose real value.",
+    zh:"把钱存放在现金中或许让人感觉安心，但通胀会逐渐削弱这笔钱的购买力。随着时间推移，生活成本上升，而闲置的储蓄则不断贬值。"},
+  act_infl_cta: {en:"Rather than simply saving, consider investing your money so it has the opportunity to outpace inflation and preserve your purchasing power.",
+    zh:"与其单纯储蓄，不如考虑将资金进行投资，让它有机会跑赢通胀，保住购买力。"},
+  act_cf_analysis: {en:"This shows what happens if income and expenses simply continue on their current path, with no changes made along the way. Being comfortable today doesn't always mean being comfortable tomorrow.",
+    zh:"这显示了若收入与支出维持现有轨迹、不做任何调整会发生什么。今天的宽裕，不代表明天依然宽裕。"},
+  act_cf_cta: {en:"Reviewing cash flow regularly helps catch a shortfall while there's still time to act \u2014 whether that means adjusting spending, income, or how savings are structured.",
+    zh:"定期检视现金流，能在还有时间应对之前及早发现缺口——无论是调整支出、增加收入，还是重新规划储蓄结构。"},
+  act_delay_analysis: {en:"Every year of waiting is a year of lost compounding that can't be recovered later. The gap between starting today and starting later grows faster than most people expect.",
+    zh:"每等待一年，就白白错失一年的复利增长，且日后无法弥补。今天开始与日后才开始之间的差距，扩大的速度往往超乎预期。"},
+  act_delay_cta: {en:"There's rarely a perfect time to start. Beginning now, even with a smaller amount, is likely to outperform waiting for the ideal moment.",
+    zh:"完美的开始时机很少见。即使金额较小，现在就开始，通常也会比等待所谓的理想时机更有优势。"},
+  lbl_agefilter: {en:"Highlight specific ages/years (optional)", zh:"标示特定年龄／年份（选填）"},
+  note_agefilter: {en:"Comma-separated. Leave blank to show the full projection spread automatically. If client age is set, enter ages; otherwise enter years delayed.", zh:"以逗号分隔。留空则自动显示完整预测范围。若已设定客户年龄，请输入年龄；否则请输入延迟年数。"},
+  ph_agefilter: {en:"e.g. 55, 60, 65", zh:"例如 55, 60, 65"},
   stat_totalcontrib: {en:"Total contributed", zh:"总供款额"},
   stat_endbal: {en:"Ending balance", zh:"期末余额"},
   stat_cpftotal: {en:"CPF OA + SA projected", zh:"公积金OA+SA预计金额"},
@@ -981,6 +1054,72 @@ function escapeHtml(s){
   return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
+/* ---------------- interactive chart hover: shows the point under the cursor ---------------- */
+function attachChartHover(wrapId, meta){
+  const wrap = els(wrapId);
+  if(!wrap) return;
+  const svg = wrap.querySelector('svg');
+  if(!svg) return;
+  let tooltip = wrap.querySelector('.chart-tooltip');
+  if(!tooltip){ tooltip = document.createElement('div'); tooltip.className='chart-tooltip'; wrap.appendChild(tooltip); }
+  let guide = wrap.querySelector('.chart-guideline');
+  if(!guide){ guide = document.createElement('div'); guide.className='chart-guideline'; wrap.appendChild(guide); }
+
+  const ML=56, MR=14, W=600, plotW=W-ML-MR;
+  const n = meta.labels.length;
+
+  function indexFromLocalX(localX){
+    const relX = (localX - ML) / plotW;
+    if(meta.type==='bar'){
+      return Math.max(0, Math.min(n-1, Math.floor(relX * n)));
+    }
+    return Math.max(0, Math.min(n-1, Math.round(relX * (n-1))));
+  }
+
+  function show(clientX, clientY){
+    const svgRect = svg.getBoundingClientRect();
+    if(clientX < svgRect.left || clientX > svgRect.right){ hide(); return; }
+    const scaleX = W / svgRect.width;
+    const localX = (clientX - svgRect.left) * scaleX;
+    const idx = indexFromLocalX(localX);
+
+    let html = `<div class="ct-label">${T('X-axis','横轴')}: ${escapeHtml(String(meta.labels[idx]))}</div>`;
+    meta.series.forEach(s=>{
+      const v = s.values[idx];
+      html += `<div class="ct-row"><span class="ct-dot" style="background:${s.color}"></span>${escapeHtml(s.name)}: <b>${fmt$(v)}</b></div>`;
+    });
+    tooltip.innerHTML = html;
+    tooltip.style.display = 'block';
+
+    const wrapRect = wrap.getBoundingClientRect();
+    const cursorXInWrap = clientX - wrapRect.left;
+    const cursorYInWrap = clientY - wrapRect.top;
+    let left = cursorXInWrap + 14;
+    const tw = tooltip.offsetWidth || 140;
+    if(left + tw > wrapRect.width - 4) left = cursorXInWrap - tw - 14;
+    tooltip.style.left = Math.max(4,left)+'px';
+    tooltip.style.top = Math.max(4, cursorYInWrap - 44)+'px';
+
+    // guide line snapped to the data point's actual x position
+    const svgTopInWrap = svg.getBoundingClientRect().top - wrapRect.top;
+    const svgLeftInWrap = svg.getBoundingClientRect().left - wrapRect.left;
+    const svgDisplayScale = svgRect.width / W;
+    const pointLocalX = meta.type==='bar'
+      ? ML + (idx/n)*plotW + (plotW/n)*0.5
+      : ML + (n<=1?0:(idx/(n-1))*plotW);
+    guide.style.left = (svgLeftInWrap + pointLocalX*svgDisplayScale)+'px';
+    guide.style.top = svgTopInWrap+'px';
+    guide.style.height = svgRect.height+'px';
+    guide.style.display = 'block';
+  }
+  function hide(){ tooltip.style.display='none'; guide.style.display='none'; }
+
+  svg.onmousemove = e => show(e.clientX, e.clientY);
+  svg.onmouseleave = hide;
+  svg.ontouchmove = e => { const t=e.touches[0]; if(t){ show(t.clientX, t.clientY); e.preventDefault(); } };
+  svg.ontouchend = hide;
+}
+
 /* ---------------- SVG chart builders ---------------- */
 function lineChartSVG(years, series, H, opts){
   H = H || 260;
@@ -1058,6 +1197,13 @@ function delayBarsSVG(labels, values, H){
   const x = i => ML + (i/n)*plotW + (plotW/n)*0.18;
   const bw = (plotW/n)*0.64;
   const yv = v => MT + plotH - (v/maxV)*plotH;
+  let gridLines = '';
+  for(let g=0; g<=4; g++){
+    const gy = MT + (g/4)*plotH;
+    const val = maxV - (g/4)*maxV;
+    gridLines += `<line x1="${ML}" y1="${gy}" x2="${W-MR}" y2="${gy}" stroke="#E3E0D2" stroke-width="1"/>`;
+    gridLines += `<text x="${ML-8}" y="${gy+3}" text-anchor="end" font-family="ui-monospace,monospace" font-size="9.5" fill="#8A8F81">${fmtShort(val)}</text>`;
+  }
   let bars='', xLabels='';
   for(let i=0;i<n;i++){
     const yTop = yv(values[i]);
@@ -1065,7 +1211,7 @@ function delayBarsSVG(labels, values, H){
     xLabels += `<text x="${x(i)+bw/2}" y="${H-6}" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9.5" fill="#8A8F81">${labels[i]}</text>`;
   }
   return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="overflow:visible;font-family:ui-monospace,monospace">
-    ${bars}${xLabels}
+    ${gridLines}${bars}${xLabels}
     <line x1="${ML}" y1="${MT+plotH}" x2="${W-MR}" y2="${MT+plotH}" stroke="#15231D" stroke-width="1"/>
   </svg>`;
 }
@@ -1247,8 +1393,8 @@ function renderGrowth(){
 
   const cpfStatsRow = els('g-cpf-stats');
   const chartSeries = [
-    {values: sim.yearly.map(y=>y.balance), color:'#1F4B3F', fill:true},
-    {values: sim.yearly.map(y=>y.totalContributed), color:'#B8B49C', dashed:true}
+    {values: sim.yearly.map(y=>y.balance), color:'#1F4B3F', fill:true, name:T('Account balance','账户余额')},
+    {values: sim.yearly.map(y=>y.totalContributed), color:'#B8B49C', dashed:true, name:T('Total contributed','总供款额')}
   ];
   if(cpf){
     cpfStatsRow.style.display = 'flex';
@@ -1264,13 +1410,15 @@ function renderGrowth(){
       withdrawStat.style.display = 'none';
     }
     const combined = sim.yearly.map((y,i)=> y.balance + cpf.oa.yearly[i].balance + cpf.sa.yearly[i].balance);
-    chartSeries.push({values: combined, color:'#A9793C', dashed:true});
+    chartSeries.push({values: combined, color:'#A9793C', dashed:true, name:T('Total incl. CPF','含公积金总额')});
     legendExtra.push(`<div class="item"><span class="swatch" style="background:var(--gold)"></span>${T('Total incl. CPF','含公积金总额')}</div>`);
   } else {
     cpfStatsRow.style.display = 'none';
   }
 
-  els('chart-growth').innerHTML = lineChartSVG(axisLabels(sim.yearly.map(y=>y.year)), chartSeries, null, chartOpts);
+  const gAxisLabels = axisLabels(sim.yearly.map(y=>y.year));
+  els('chart-growth').innerHTML = lineChartSVG(gAxisLabels, chartSeries, null, chartOpts);
+  attachChartHover('chart-growth-wrap', {type:'line', labels:gAxisLabels, series:chartSeries});
   els('g-axisnote').textContent = T('X-axis: ','横轴：') + axisCaption();
   document.querySelectorAll('#panel-growth .legend .item.extra').forEach(el=>el.remove());
   if(legendExtra.length){
@@ -1370,11 +1518,14 @@ function renderInflation(){
       <div class="item"><span class="swatch" style="background:var(--danger)"></span>${T('Idle in bank \u2014 real (inflation-adjusted)','闲置于银行 \u2014 实际值（经通胀调整）')}</div>
       <div class="axis-note">${T('X-axis: ','横轴：')}${axisCaption()}</div>
     `;
-    els('chart-inflation').innerHTML = lineChartSVG(axisLabels(sim.yearly.map(y=>y.year)), [
-      {values: sim.yearly.map(y=>y.balance), color:'#1F4B3F'},
-      {values: sim.yearly.map(y=>y.realBalance), color:'#A9793C', dashed:true},
-      {values: sim.yearly.map(y=>y.idleRealBalance), color:'#9C3B2E', dashed:true}
-    ]);
+    const iLabelsL = axisLabels(sim.yearly.map(y=>y.year));
+    const iSeriesL = [
+      {values: sim.yearly.map(y=>y.balance), color:'#1F4B3F', name:T('Invested \u2014 nominal','已投资 \u2014 名义值')},
+      {values: sim.yearly.map(y=>y.realBalance), color:'#A9793C', dashed:true, name:T('Invested \u2014 real','已投资 \u2014 实际值')},
+      {values: sim.yearly.map(y=>y.idleRealBalance), color:'#9C3B2E', dashed:true, name:T('Idle \u2014 real','闲置 \u2014 实际值')}
+    ];
+    els('chart-inflation').innerHTML = lineChartSVG(iLabelsL, iSeriesL);
+    attachChartHover('chart-inflation-wrap', {type:'line', labels:iLabelsL, series:iSeriesL});
   } else {
     const nominal = sim.finalBalance;
     const real = sim.yearly[sim.yearly.length-1].realBalance;
@@ -1401,10 +1552,13 @@ function renderInflation(){
       <div class="item"><span class="swatch" style="background:var(--gold)"></span>${T('Real (inflation-adjusted) value','实际价值（经通胀调整）')}</div>
       <div class="axis-note">${T('X-axis: ','横轴：')}${axisCaption()}</div>
     `;
-    els('chart-inflation').innerHTML = lineChartSVG(axisLabels(sim.yearly.map(y=>y.year)), [
-      {values: sim.yearly.map(y=>y.balance), color:'#1F4B3F'},
-      {values: sim.yearly.map(y=>y.realBalance), color:'#A9793C', dashed:true}
-    ]);
+    const iLabelsS = axisLabels(sim.yearly.map(y=>y.year));
+    const iSeriesS = [
+      {values: sim.yearly.map(y=>y.balance), color:'#1F4B3F', name:T('Nominal balance','名义余额')},
+      {values: sim.yearly.map(y=>y.realBalance), color:'#A9793C', dashed:true, name:T('Real value','实际价值')}
+    ];
+    els('chart-inflation').innerHTML = lineChartSVG(iLabelsS, iSeriesS);
+    attachChartHover('chart-inflation-wrap', {type:'line', labels:iLabelsS, series:iSeriesS});
   }
 }
 
@@ -1419,13 +1573,22 @@ function simulateCashflow({startBalance, streams, debitStreams, rate, years}){
   const monthly = [{month:0, balance:startBalance, credit:0, debit:0}];
   for(let m=1;m<=months;m++){
     const yearIndex = Math.floor((m-1)/12); // 0-based year this month falls in
+    const isFirstMonthOfYear = (m-1) % 12 === 0;
     let monthlyCredit = 0;
     streams.forEach(s=>{
-      if(yearIndex >= s.start && yearIndex < s.start + s.duration) monthlyCredit += s.amount;
+      if(s.type==='onetime'){
+        if(yearIndex === s.start && isFirstMonthOfYear) monthlyCredit += s.amount;
+      } else if(yearIndex >= s.start && yearIndex < s.start + s.duration){
+        monthlyCredit += s.amount;
+      }
     });
     let monthlyDebit = 0;
     debitStreams.forEach(s=>{
-      if(yearIndex >= s.start && yearIndex < s.start + s.duration) monthlyDebit += s.amount;
+      if(s.type==='onetime'){
+        if(yearIndex === s.start && isFirstMonthOfYear) monthlyDebit += s.amount;
+      } else if(yearIndex >= s.start && yearIndex < s.start + s.duration){
+        monthlyDebit += s.amount;
+      }
     });
     const interest = balance>0 ? balance*r : 0;
     balance += interest;
@@ -1451,17 +1614,25 @@ function simulateCashflow({startBalance, streams, debitStreams, rate, years}){
 
 /* ---- income & expense streams state (Cash Flow tab) ---- */
 let incomeStreams = [
-  {id:1, label:'Endowment A', amount:500, start:0, duration:10},
-  {id:2, label:'Endowment B', amount:300, start:0, duration:15},
+  {id:1, label:'Endowment A', amount:500, start:0, duration:10, type:'monthly'},
+  {id:2, label:'Endowment B', amount:300, start:0, duration:15, type:'monthly'},
 ];
 let expenseStreams = [
-  {id:1, label:'Living expenses', amount:3000, start:0, duration:40},
+  {id:1, label:'Living expenses', amount:3000, start:0, duration:40, type:'monthly'},
 ];
 let streamIdSeq = 3;
 let expenseIdSeq = 2;
+const CURRENT_CALENDAR_YEAR = new Date().getFullYear();
+function parseYearInput(raw){
+  const v = parseFloat(raw);
+  if(!isFinite(v)) return 0;
+  // if it looks like a calendar year (e.g. 2030), convert to an offset from today
+  if(v >= 1900) return Math.round(v - CURRENT_CALENDAR_YEAR);
+  return Math.round(v);
+}
 
 function addIncomeStream(){
-  incomeStreams.push({id:streamIdSeq++, label:'New stream', amount:200, start:0, duration:10});
+  incomeStreams.push({id:streamIdSeq++, label:T('New stream','新收入'), amount:200, start:0, duration:10, type:'monthly'});
   renderStreamsList();
   renderAll();
   autoSaveDraft();
@@ -1476,7 +1647,10 @@ function updateStream(id, field, value){
   const s = incomeStreams.find(s=>s.id===id);
   if(!s) return;
   if(field==='label') s.label = value;
+  else if(field==='type') s.type = value;
+  else if(field==='start') s.start = parseYearInput(value);
   else s[field] = parseFloat(value)||0;
+  renderStreamsList();
   renderAll();
   autoSaveDraft();
 }
@@ -1488,17 +1662,21 @@ function renderStreamsList(){
         <input class="stream-label-input" value="${escapeHtml(s.label)}" onchange="updateStream(${s.id},'label',this.value)">
         <button type="button" class="stream-remove" onclick="removeStream(${s.id})" title="${T('Remove','移除')}">&times;</button>
       </div>
+      <div class="stream-typetoggle">
+        <button type="button" class="stype-btn ${s.type!=='onetime'?'active':''}" onclick="updateStream(${s.id},'type','monthly')">${T('Monthly','按月')}</button>
+        <button type="button" class="stype-btn ${s.type==='onetime'?'active':''}" onclick="updateStream(${s.id},'type','onetime')">${T('One-time (maturity)','一次性（到期）')}</button>
+      </div>
       <div class="stream-fields">
         <div class="dollar-input"><span>$</span><input type="number" value="${s.amount}" min="0" step="50" onchange="updateStream(${s.id},'amount',this.value)"></div>
-        <div class="stream-mini"><label>${T('Starts (yr)','开始（年）')}</label><input type="number" value="${s.start}" min="0" step="1" onchange="updateStream(${s.id},'start',this.value)"></div>
-        <div class="stream-mini"><label>${T('For (yrs)','持续（年）')}</label><input type="number" value="${s.duration}" min="1" step="1" onchange="updateStream(${s.id},'duration',this.value)"></div>
+        <div class="stream-mini"><label>${s.type==='onetime'?T('Matures (yr)','到期（年）'):T('Starts (yr)','开始（年）')}</label><input type="number" value="${s.start}" step="1" onchange="updateStream(${s.id},'start',this.value)" title="${T('Enter a year offset from now, or a calendar year like 2030','输入距今的年数，或如2030的日历年份')}"></div>
+        ${s.type==='onetime' ? '' : `<div class="stream-mini"><label>${T('For (yrs)','持续（年）')}</label><input type="number" value="${s.duration}" min="1" step="1" onchange="updateStream(${s.id},'duration',this.value)"></div>`}
       </div>
     </div>
   `).join('');
 }
 
 function addExpenseStream(){
-  expenseStreams.push({id:expenseIdSeq++, label:'New expense', amount:500, start:0, duration:40});
+  expenseStreams.push({id:expenseIdSeq++, label:T('New expense','新支出'), amount:500, start:0, duration:40, type:'monthly'});
   renderExpenseList();
   renderAll();
   autoSaveDraft();
@@ -1513,7 +1691,10 @@ function updateExpenseStream(id, field, value){
   const s = expenseStreams.find(s=>s.id===id);
   if(!s) return;
   if(field==='label') s.label = value;
+  else if(field==='type') s.type = value;
+  else if(field==='start') s.start = parseYearInput(value);
   else s[field] = parseFloat(value)||0;
+  renderExpenseList();
   renderAll();
   autoSaveDraft();
 }
@@ -1525,10 +1706,14 @@ function renderExpenseList(){
         <input class="stream-label-input" value="${escapeHtml(s.label)}" onchange="updateExpenseStream(${s.id},'label',this.value)">
         <button type="button" class="stream-remove" onclick="removeExpenseStream(${s.id})" title="${T('Remove','移除')}">&times;</button>
       </div>
+      <div class="stream-typetoggle">
+        <button type="button" class="stype-btn ${s.type!=='onetime'?'active':''}" onclick="updateExpenseStream(${s.id},'type','monthly')">${T('Monthly','按月')}</button>
+        <button type="button" class="stype-btn ${s.type==='onetime'?'active':''}" onclick="updateExpenseStream(${s.id},'type','onetime')">${T('One-time','一次性')}</button>
+      </div>
       <div class="stream-fields">
         <div class="dollar-input"><span>$</span><input type="number" value="${s.amount}" min="0" step="50" onchange="updateExpenseStream(${s.id},'amount',this.value)"></div>
-        <div class="stream-mini"><label>${T('Starts (yr)','开始（年）')}</label><input type="number" value="${s.start}" min="0" step="1" onchange="updateExpenseStream(${s.id},'start',this.value)"></div>
-        <div class="stream-mini"><label>${T('For (yrs)','持续（年）')}</label><input type="number" value="${s.duration}" min="1" step="1" onchange="updateExpenseStream(${s.id},'duration',this.value)"></div>
+        <div class="stream-mini"><label>${s.type==='onetime'?T('Occurs (yr)','发生（年）'):T('Starts (yr)','开始（年）')}</label><input type="number" value="${s.start}" step="1" onchange="updateExpenseStream(${s.id},'start',this.value)" title="${T('Enter a year offset from now, or a calendar year like 2030','输入距今的年数，或如2030的日历年份')}"></div>
+        ${s.type==='onetime' ? '' : `<div class="stream-mini"><label>${T('For (yrs)','持续（年）')}</label><input type="number" value="${s.duration}" min="1" step="1" onchange="updateExpenseStream(${s.id},'duration',this.value)"></div>`}
       </div>
     </div>
   `).join('');
@@ -1537,8 +1722,8 @@ function renderExpenseList(){
 function getCashflowInputs(){
   return {
     startBalance: parseFloat(els('c_start').value)||0,
-    streams: incomeStreams.map(s=>({amount:s.amount, start:s.start, duration:s.duration})),
-    debitStreams: expenseStreams.map(s=>({amount:s.amount, start:s.start, duration:s.duration})),
+    streams: incomeStreams.map(s=>({amount:s.amount, start:s.start, duration:s.duration, type:s.type||'monthly'})),
+    debitStreams: expenseStreams.map(s=>({amount:s.amount, start:s.start, duration:s.duration, type:s.type||'monthly'})),
     rate: parseFloat(els('c_rate').value)||0,
     years: parseInt(els('c_years').value)||1,
   };
@@ -1591,6 +1776,11 @@ function renderCashflow(){
     const mDebits = mRows.map(m=>m.debit);
     const mBalances = mRows.map(m=>m.balance);
     els('chart-cashflow').innerHTML = ledgerChartSVG(mLabels, mCredits, mDebits, mBalances);
+    attachChartHover('chart-cashflow-wrap', {type:'bar', labels:mLabels, series:[
+      {name:T('Credit','入账'), color:'#3F7C68', values:mCredits},
+      {name:T('Debit','出账'), color:'#9C3B2E', values:mDebits},
+      {name:T('Balance','余额'), color:'#A9793C', values:mBalances}
+    ]});
     els('c-axisnote').textContent = T('X-axis: Months from now','横轴：距今月数');
 
     let mRowsHtml = `<tr><th>${T('Month','月')}</th><th>${T('Credit','入账')}</th><th>${T('Debit','出账')}</th><th>${T('Net','净额')}</th><th>${T('Ending balance','期末余额')}</th></tr>`;
@@ -1603,7 +1793,13 @@ function renderCashflow(){
     });
     els('cashflow-table').innerHTML = mRowsHtml;
   } else {
-    els('chart-cashflow').innerHTML = ledgerChartSVG(axisLabels(years), credits, debits, balances);
+    const cLabelsY = axisLabels(years);
+    els('chart-cashflow').innerHTML = ledgerChartSVG(cLabelsY, credits, debits, balances);
+    attachChartHover('chart-cashflow-wrap', {type:'bar', labels:cLabelsY, series:[
+      {name:T('Credit','入账'), color:'#3F7C68', values:credits},
+      {name:T('Debit','出账'), color:'#9C3B2E', values:debits},
+      {name:T('Balance','余额'), color:'#A9793C', values:balances}
+    ]});
     els('c-axisnote').textContent = T('X-axis: ','横轴：') + axisCaption();
 
     let rowsHtml = `<tr><th>${axisCaption()}</th><th>${T('Credit','入账')}</th><th>${T('Debit','出账')}</th><th>${T('Net','净额')}</th><th>${T('Ending balance','期末余额')}</th></tr>`;
@@ -1675,20 +1871,44 @@ function renderDelay(){
   });
   const dRetireOffset = getRetirementOffset();
   const dMarkerOpts = (dRetireOffset!=null && dRetireOffset<=inputs.years) ? {markerIndex: Math.round(dRetireOffset), markerLabel:T('Retirement','退休')} : {};
-  els('chart-delay').innerHTML = lineChartSVG(axisLabels(years), [
-    {values: now.yearly.map(y=>y.balance), color:'#1F4B3F'},
-    {values: laterVals, color:'#9C3B2E', dashed:true}
-  ], null, dMarkerOpts);
+  const dLabelsMain = axisLabels(years);
+  const dSeriesMain = [
+    {values: now.yearly.map(y=>y.balance), color:'#1F4B3F', name:T('Start today','今天开始')},
+    {values: laterVals, color:'#9C3B2E', dashed:true, name:T('Wait, then start','等待后再开始')}
+  ];
+  els('chart-delay').innerHTML = lineChartSVG(dLabelsMain, dSeriesMain, null, dMarkerOpts);
+  attachChartHover('chart-delay-wrap', {type:'line', labels:dLabelsMain, series:dSeriesMain});
   els('d-axisnote').textContent = T('X-axis: ','横轴：') + axisCaption();
 
-  const maxDelay = Math.min(inputs.years-1, 15);
   const ageSet = getClientAge();
-  const labels=[], barVals=[];
-  for(let d=0; d<=maxDelay; d++){
+  const filterRaw = els('d_ageFilter').value.trim();
+  const labels=[], barVals=[], delayOffsets=[];
+  if(filterRaw){
+    const parsed = filterRaw.split(',').map(s=>parseFloat(s.trim())).filter(v=>isFinite(v));
+    parsed.forEach(v=>{
+      const offset = ageSet!=null ? (v - ageSet) : v;
+      // explicitly requested ages/years are honoured even beyond the current Time period \u2014
+      // runDelayScenario clamps investing time at 0, so it correctly shows "no time left to invest"
+      // rather than silently dropping the point.
+      if(offset>=0 && offset<=80 && !delayOffsets.includes(Math.round(offset))) delayOffsets.push(Math.round(offset));
+    });
+    delayOffsets.sort((a,b)=>a-b);
+  }
+  if(delayOffsets.length===0){
+    // no filter (or nothing valid in it): auto-spread across the FULL horizon, capped at ~16 bars for readability
+    const maxDelay = inputs.years-1;
+    const step = Math.max(1, Math.ceil((maxDelay+1)/16));
+    for(let d=0; d<=maxDelay; d+=step) delayOffsets.push(d);
+    if(delayOffsets[delayOffsets.length-1] !== maxDelay) delayOffsets.push(maxDelay);
+  }
+  delayOffsets.forEach(d=>{
     labels.push(ageSet!=null ? String(Math.round(ageSet+d)) : (d===0?T('Now','现在'):'+'+d+T('y','年')));
     barVals.push(runDelayScenario(inputs, d).finalBalance);
-  }
+  });
   els('chart-delaybars').innerHTML = delayBarsSVG(labels, barVals);
+  attachChartHover('chart-delaybars-wrap', {type:'bar', labels:labels, series:[
+    {name:T('Ending balance','期末余额'), color:'#A9793C', values:barVals}
+  ]});
   els('d-barsaxisnote').textContent = ageSet!=null ? T('X-axis: age when starting','横轴：开始时的年龄') : T('X-axis: years delayed before starting','横轴：开始前延迟的年数');
 }
 
@@ -1832,7 +2052,7 @@ function saveReport(){
   const cRows = cSim.yearly.filter(y=>y.year>0);
   const cChange = cSim.finalBalance - cInputs.startBalance;
   const cChangePct = cInputs.startBalance>0 ? (cChange/cInputs.startBalance)*100 : 0;
-  const showEvery = Math.max(1, Math.ceil(cRows.length/10));
+  const showEvery = Math.max(1, Math.ceil(cRows.length/8));
   let cfTableRows = '';
   cRows.forEach((r,i)=>{
     if(i % showEvery === 0 || i === cRows.length-1){
@@ -1858,10 +2078,24 @@ function saveReport(){
     const m = dLater.yearly.find(r=>r.year===y);
     return m ? m.balance : 0;
   });
-  const dMaxDelay = Math.min(dInputs.years-1, 15);
   const dAgeSet = getClientAge();
-  const dLabels=[], dVals=[];
-  for(let d=0; d<=dMaxDelay; d++){ dLabels.push(dAgeSet!=null ? String(Math.round(dAgeSet+d)) : (d===0?T('Now','现在'):'+'+d+T('y','年'))); dVals.push(runDelayScenario(dInputs, d).finalBalance); }
+  const dFilterRaw = els('d_ageFilter').value.trim();
+  const dLabels=[], dVals=[], dOffsets=[];
+  if(dFilterRaw){
+    const parsed = dFilterRaw.split(',').map(s=>parseFloat(s.trim())).filter(v=>isFinite(v));
+    parsed.forEach(v=>{
+      const offset = dAgeSet!=null ? (v - dAgeSet) : v;
+      if(offset>=0 && offset<=80 && !dOffsets.includes(Math.round(offset))) dOffsets.push(Math.round(offset));
+    });
+    dOffsets.sort((a,b)=>a-b);
+  }
+  if(dOffsets.length===0){
+    const dMaxDelay = dInputs.years-1;
+    const dStep = Math.max(1, Math.ceil((dMaxDelay+1)/16));
+    for(let d=0; d<=dMaxDelay; d+=dStep) dOffsets.push(d);
+    if(dOffsets[dOffsets.length-1] !== dMaxDelay) dOffsets.push(dMaxDelay);
+  }
+  dOffsets.forEach(d=>{ dLabels.push(dAgeSet!=null ? String(Math.round(dAgeSet+d)) : (d===0?T('Now','现在'):'+'+d+T('y','年'))); dVals.push(runDelayScenario(dInputs, d).finalBalance); });
 
   const clientRow = client ? `<div class="rp-row"><span class="rp-k">${T('Prepared for','服务对象')}</span><span class="rp-v">${escapeHtml(client)}</span></div>` : '';
   const advisorRow = `<div class="rp-row"><span class="rp-k">${T('Prepared by','顾问')}</span><span class="rp-v">${advisor?escapeHtml(advisor):'Financial Architects Advisory'}</span></div>`;
@@ -1915,7 +2149,10 @@ function saveReport(){
         {values: gSim.yearly.map(y=>y.totalContributed), color:'#B8B49C', dashed:true}
       ], 300, gChartOpts)}
       ${gGoalNoteHtml}
-      <div class="rp-narrative">${T(`Over ${gInputs.years} years, consistent contributions compound into meaningful growth. The plan is projected to turn ${fmt$(gSim.totalContributed)} of discipline into ${fmt$(gSim.finalBalance)} &mdash; a ${gGrowthPct.toFixed(0)}% return on everything contributed, purely from staying invested.`, `经过${gInputs.years}年，持续的供款将透过复利带来显著增长。此方案预计将${fmt$(gSim.totalContributed)}的纪律性投入转化为${fmt$(gSim.finalBalance)}——仅凭持续投资，即可获得${gGrowthPct.toFixed(0)}%的总供款回报率。`)}</div>
+      <div class="rp-actbox">
+        <div class="actrow analysis"><span class="acttag">${T('Analysis','分析')}</span>${T("This highlights the power of compound growth. It's not just your contributions that grow \u2014 your investment returns can also generate additional returns over time.", '这体现了复利增长的力量。增长的不只是您的供款——您的投资回报本身也能随时间产生额外的回报。')}</div>
+        <div class="actrow cta"><span class="acttag">${T('Call to Action','行动建议')}</span>${T('The earlier you start, the more time your money has to work for you. Even a consistent monthly investment can make a significant difference over the long term.', '越早开始，资金为您增值的时间就越长。即使是稳定的每月投资，长期下来也能带来显著的差异。')}</div>
+      </div>
     </div>
     ${pageFooter(2)}
   </div>`);
@@ -1951,8 +2188,10 @@ function saveReport(){
         {values: iSim.yearly.map(y=>y.realBalance), color:'#A9793C', dashed:true},
         {values: iSim.yearly.map(y=>y.idleRealBalance), color:'#9C3B2E', dashed:true}
       ], 300)}
-      <div class="rp-narrative">${T(`Even a well-invested plan isn't immune to inflation \u2014 growing at ${iInputs.rate}% while prices rise ${iInputs.inflation}% a year still leaves the plan's real purchasing power at ${fmt$(iReal)} rather than the full ${fmt$(iNominal)} nominal figure. But compared to leaving the same contributions idle in a bank at ${iInputs.bankRate}%, which is projected to hold only ${fmt$(iIdleReal)} of real purchasing power, investing still comes out ${fmt$(iGap)} ahead in today's terms.`,
-        `即使是良好的投资方案，也无法完全免受通胀影响——以${iInputs.rate}%的速度增长，同时物价以每年${iInputs.inflation}%上涨，此方案的实际购买力仍只有${fmt$(iReal)}，而非名义上的${fmt$(iNominal)}。但相较于将同样的供款闲置于银行（利率${iInputs.bankRate}%，预计实际购买力仅为${fmt$(iIdleReal)}），投资仍以今日币值计算领先${fmt$(iGap)}。`)}</div>
+      <div class="rp-actbox">
+        <div class="actrow analysis"><span class="acttag">${T('Analysis','分析')}</span>${T('Keeping money in cash may feel safe, but inflation gradually reduces what that money can buy. Over time, the cost of living increases while idle savings lose real value.', '把钱存放在现金中或许让人感觉安心，但通胀会逐渐削弱这笔钱的购买力。随着时间推移，生活成本上升，而闲置的储蓄则不断贬值。')}</div>
+        <div class="actrow cta"><span class="acttag">${T('Call to Action','行动建议')}</span>${T('Rather than simply saving, consider investing your money so it has the opportunity to outpace inflation and preserve your purchasing power.', '与其单纯储蓄，不如考虑将资金进行投资，让它有机会跑赢通胀，保住购买力。')}</div>
+      </div>
       ` : `
       <div class="rp-headline wash-red">
         <div class="rp-label" style="color:#7A3D2E;">${T('Purchasing power lost by doing nothing','无所作为导致的购买力损失')}</div>
@@ -1970,9 +2209,11 @@ function saveReport(){
       ${lineChartSVG(axisLabels(iSim.yearly.map(y=>y.year)), [
         {values: iSim.yearly.map(y=>y.balance), color:'#1F4B3F'},
         {values: iSim.yearly.map(y=>y.realBalance), color:'#A9793C', dashed:true}
-      ], 320)}
-      <div class="rp-narrative">${T(`Cash earning ${iInputs.bankRate}% while inflation runs at ${iInputs.inflation}% loses purchasing power every year it sits still. Left untouched, ${fmt$(iInputs.lumpSum)} today is projected to buy no more than ${fmt$(iReal)} does today by year ${iInputs.years} &mdash; a ${iLostPct.toFixed(0)}% erosion, even though the number on the statement never goes down.`,
-        `现金以${iInputs.bankRate}%的利率增值，而通胀率为${iInputs.inflation}%，每一年不动，购买力都在流失。若维持不动，今日的${fmt$(iInputs.lumpSum)}到第${iInputs.years}年预计只能买到相当于今日${fmt$(iReal)}的东西——侵蚀了${iLostPct.toFixed(0)}%，即使账户上的数字从未减少。`)}</div>
+      ], 300)}
+      <div class="rp-actbox">
+        <div class="actrow analysis"><span class="acttag">${T('Analysis','分析')}</span>${T('Keeping money in cash may feel safe, but inflation gradually reduces what that money can buy. Over time, the cost of living increases while idle savings lose real value.', '把钱存放在现金中或许让人感觉安心，但通胀会逐渐削弱这笔钱的购买力。随着时间推移，生活成本上升，而闲置的储蓄则不断贬值。')}</div>
+        <div class="actrow cta"><span class="acttag">${T('Call to Action','行动建议')}</span>${T('Rather than simply saving, consider investing your money so it has the opportunity to outpace inflation and preserve your purchasing power.', '与其单纯储蓄，不如考虑将资金进行投资，让它有机会跑赢通胀，保住购买力。')}</div>
+      </div>
       `}
     </div>
     ${pageFooter(3)}
@@ -1985,8 +2226,8 @@ function saveReport(){
       <div class="rp-eyebrow-sm">03 &middot; ${T('Cash Flow Timeline','现金流时间轴')}</div>
       <h2 class="rp-section-title">${T('If nothing changes from here','若维持现状')}</h2>
       <div class="rp-assumptions">${T(
-        `${fmt$(cInputs.startBalance)} starting balance. Income: ${incomeStreams.map(s=>`${escapeHtml(s.label)} ${fmt$(s.amount)}/mo (yr ${s.start}\u2013${s.start+s.duration})`).join('; ') || 'none'}. Expenses: ${expenseStreams.map(s=>`${escapeHtml(s.label)} ${fmt$(s.amount)}/mo (yr ${s.start}\u2013${s.start+s.duration})`).join('; ') || 'none'}. ${cInputs.rate}% interest, ${cInputs.years}-year horizon.`,
-        `起始余额${fmt$(cInputs.startBalance)}。收入：${incomeStreams.map(s=>`${escapeHtml(s.label)} ${fmt$(s.amount)}/月（第${s.start}\u2013${s.start+s.duration}年）`).join('；') || '无'}。支出：${expenseStreams.map(s=>`${escapeHtml(s.label)} ${fmt$(s.amount)}/月（第${s.start}\u2013${s.start+s.duration}年）`).join('；') || '无'}。利率${cInputs.rate}%，时间跨度${cInputs.years}年。`
+        `${fmt$(cInputs.startBalance)} starting balance. Income: ${incomeStreams.map(s=>s.type==='onetime' ? `${escapeHtml(s.label)} ${fmt$(s.amount)} lump sum (yr ${s.start})` : `${escapeHtml(s.label)} ${fmt$(s.amount)}/mo (yr ${s.start}\u2013${s.start+s.duration})`).join('; ') || 'none'}. Expenses: ${expenseStreams.map(s=>s.type==='onetime' ? `${escapeHtml(s.label)} ${fmt$(s.amount)} lump sum (yr ${s.start})` : `${escapeHtml(s.label)} ${fmt$(s.amount)}/mo (yr ${s.start}\u2013${s.start+s.duration})`).join('; ') || 'none'}. ${cInputs.rate}% interest, ${cInputs.years}-year horizon.`,
+        `起始余额${fmt$(cInputs.startBalance)}。收入：${incomeStreams.map(s=>s.type==='onetime' ? `${escapeHtml(s.label)} 一次性${fmt$(s.amount)}（第${s.start}年）` : `${escapeHtml(s.label)} ${fmt$(s.amount)}/月（第${s.start}\u2013${s.start+s.duration}年）`).join('；') || '无'}。支出：${expenseStreams.map(s=>s.type==='onetime' ? `${escapeHtml(s.label)} 一次性${fmt$(s.amount)}（第${s.start}年）` : `${escapeHtml(s.label)} ${fmt$(s.amount)}/月（第${s.start}\u2013${s.start+s.duration}年）`).join('；') || '无'}。利率${cInputs.rate}%，时间跨度${cInputs.years}年。`
       )}</div>
       <div class="rp-headline ${cHeadWash}">
         <div class="rp-label" style="color:${cHeadColor};">${T(`Projected position after ${cInputs.years} years`, `${cInputs.years}年后的预计状况`)}</div>
@@ -2001,11 +2242,15 @@ function saveReport(){
         <div class="rp-stat"><div class="rp-slabel">${T('Total credited','总入账')}</div><div class="rp-svalue" style="color:#1F4B3F;">${fmt$(cRows.reduce((a,r)=>a+r.credit,0))}</div></div>
         <div class="rp-stat"><div class="rp-slabel">${T('Total debited','总出账')}</div><div class="rp-svalue" style="color:#9C3B2E;">${fmt$(cRows.reduce((a,r)=>a+r.debit,0))}</div></div>
       </div>
-      ${ledgerChartSVG(axisLabels(cRows.map(y=>y.year)), cRows.map(y=>y.credit), cRows.map(y=>y.debit), cRows.map(y=>y.balance), 240)}
+      ${ledgerChartSVG(axisLabels(cRows.map(y=>y.year)), cRows.map(y=>y.credit), cRows.map(y=>y.debit), cRows.map(y=>y.balance), 190)}
       <table class="rp-table">
         <tr><th>${axisCaption()}</th><th>${T('Credit','入账')}</th><th>${T('Debit','出账')}</th><th>${T('Net','净额')}</th><th>${T('Ending balance','期末余额')}</th></tr>
         ${cfTableRows}
       </table>
+      <div class="rp-actbox">
+        <div class="actrow analysis"><span class="acttag">${T('Analysis','分析')}</span>${T("This shows what happens if income and expenses simply continue on their current path, with no changes made along the way. Being comfortable today doesn't always mean being comfortable tomorrow.", '这显示了若收入与支出维持现有轨迹、不做任何调整会发生什么。今天的宽裕，不代表明天依然宽裕。')}</div>
+        <div class="actrow cta"><span class="acttag">${T('Call to Action','行动建议')}</span>${T("Reviewing cash flow regularly helps catch a shortfall while there's still time to act \u2014 whether that means adjusting spending, income, or how savings are structured.", '定期检视现金流，能在还有时间应对之前及早发现缺口——无论是调整支出、增加收入，还是重新规划储蓄结构。')}</div>
+      </div>
     </div>
     ${pageFooter(4)}
   </div>`);
@@ -2035,9 +2280,12 @@ function saveReport(){
       ${lineChartSVG(axisLabels(dYears), [
         {values: dNow.yearly.map(y=>y.balance), color:'#1F4B3F'},
         {values: dLaterVals, color:'#9C3B2E', dashed:true}
-      ], 210)}
-      <div style="margin-top:12px;">${delayBarsSVG(dLabels, dVals, 150)}</div>
-      <div class="rp-narrative">Every year of hesitation is a year of compounding that can't be recovered later. Waiting ${dInputs.delay} ${dInputs.delay===1?'year':'years'} to begin costs ${fmt$(dGap)} by the end of the plan &mdash; ${dPct.toFixed(0)}% less than starting today, for the exact same commitment.</div>
+      ], 175)}
+      <div style="margin-top:10px;">${delayBarsSVG(dLabels, dVals, 125)}</div>
+      <div class="rp-actbox">
+        <div class="actrow analysis"><span class="acttag">${T('Analysis','分析')}</span>${T("Every year of waiting is a year of lost compounding that can't be recovered later. The gap between starting today and starting later grows faster than most people expect.", '每等待一年，就白白错失一年的复利增长，且日后无法弥补。今天开始与日后才开始之间的差距，扩大的速度往往超乎预期。')}</div>
+        <div class="actrow cta"><span class="acttag">${T('Call to Action','行动建议')}</span>${T('There\u2019s rarely a perfect time to start. Beginning now, even with a smaller amount, is likely to outperform waiting for the ideal moment.', '完美的开始时机很少见。即使金额较小，现在就开始，通常也会比等待所谓的理想时机更有优势。')}</div>
+      </div>
     </div>
     ${pageFooter(5)}
   </div>`);
