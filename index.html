@@ -19,9 +19,9 @@
     --danger:#9C3B2E;
     --danger-wash:#F5E5E1;
     --radius:2px;
-    --serif: ui-serif, Georgia, "Times New Roman", serif;
-    --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
-    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+    --serif: ui-serif, Georgia, "Times New Roman", "PingFang SC", "Songti SC", "Microsoft YaHei", serif;
+    --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "PingFang SC", monospace;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -362,72 +362,76 @@
   <div class="draft-banner" id="draft-banner" style="display:none;">
     <span id="draft-banner-text"></span>
     <div class="draft-banner-actions">
-      <button type="button" onclick="restoreDraft()">Restore</button>
-      <button type="button" class="ghost" onclick="discardDraft()">Discard</button>
+      <button type="button" onclick="restoreDraft()" data-i18n="btn_restore">Restore</button>
+      <button type="button" class="ghost" onclick="discardDraft()" data-i18n="btn_discard">Discard</button>
     </div>
   </div>
   <div class="masthead">
     <div>
       <div class="brand-row"><img id="brandLogo" alt="Financial Architects Advisory"><span class="brandname">Financial Architects Advisory</span></div>
-      <div class="mark"><span class="dot"></span>PREPARED PROJECTION &middot; NOT A GUARANTEE OF FUTURE RESULTS</div>
-      <h1>Financial Planning Report</h1>
-      <div class="sub">Four standalone tools &mdash; growth, inflation, cash flow, and cost of delay each run on their own numbers, so you can open straight to whichever one fits the conversation.</div>
+      <div class="mark"><span class="dot"></span><span data-i18n="mark_text">PREPARED PROJECTION &middot; NOT A GUARANTEE OF FUTURE RESULTS</span></div>
+      <h1 data-i18n="app_title">Financial Planning Report</h1>
+      <div class="sub" data-i18n="app_subtitle">Four standalone tools &mdash; growth, inflation, cash flow, and cost of delay each run on their own numbers, so you can open straight to whichever one fits the conversation.</div>
     </div>
     <div class="head-actions">
+      <div class="mode-toggle" style="margin-bottom:8px; align-self:flex-end;">
+        <button type="button" class="mode-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+        <button type="button" class="mode-btn" data-lang="zh" onclick="setLang('zh')">中文</button>
+      </div>
       <div class="action-row">
         <button class="save-btn" onclick="saveReport()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
-          Save PDF report
+          <span data-i18n="btn_savereport">Save PDF report</span>
         </button>
         <button class="save-btn secondary-btn" onclick="saveOnePager()" title="A single condensed page covering all four scenarios">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
-          One-page summary
+          <span data-i18n="btn_onepager">One-page summary</span>
         </button>
         <button class="save-btn secondary-btn" onclick="exportClientData()" title="Download all current inputs as a file you can reopen later">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
-          Save client file
+          <span data-i18n="btn_saveclient">Save client file</span>
         </button>
         <button class="save-btn secondary-btn" onclick="els('loadFileInput').click()" title="Reopen a previously saved client file">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21V9m0 0l-4 4m4-4l4 4M5 3h14"/></svg>
-          Load client file
+          <span data-i18n="btn_loadclient">Load client file</span>
         </button>
         <input type="file" id="loadFileInput" accept=".json" style="display:none">
       </div>
       <div class="client-row">
-        <div class="client-field"><label>Client</label><input id="clientName" placeholder="Client name" value=""></div>
-        <div class="client-field"><label>Prepared by</label><input id="advisorName" placeholder="Your name" value=""></div>
-        <div class="client-field client-field-age"><label>Client age</label><input id="clientAge" type="number" placeholder="Optional" min="0" max="110" style="width:70px;"></div>
-        <div class="client-field client-field-age"><label>Retirement age</label><input id="retirementAge" type="number" placeholder="Optional" min="0" max="110" style="width:70px;"></div>
+        <div class="client-field"><label data-i18n="lbl_client">Client</label><input id="clientName" placeholder="Client name" data-i18n-ph="ph_clientname" value=""></div>
+        <div class="client-field"><label data-i18n="lbl_preparedby">Prepared by</label><input id="advisorName" placeholder="Your name" data-i18n-ph="ph_yourname" value=""></div>
+        <div class="client-field client-field-age"><label data-i18n="lbl_clientage">Client age</label><input id="clientAge" type="number" placeholder="Optional" data-i18n-ph="ph_optional" min="0" max="110" style="width:70px;"></div>
+        <div class="client-field client-field-age"><label data-i18n="lbl_retirementage">Retirement age</label><input id="retirementAge" type="number" placeholder="Optional" data-i18n-ph="ph_optional" min="0" max="110" style="width:70px;"></div>
       </div>
     </div>
   </div>
 
   <div class="mode-row">
-    <span class="mode-label">Growth, Inflation &amp; Cost of Delay:</span>
+    <span class="mode-label" data-i18n="mode_glabel">Growth, Inflation &amp; Cost of Delay:</span>
     <div class="mode-toggle">
-      <button class="mode-btn active" data-mode="independent" onclick="setMode('independent')">Independent</button>
-      <button class="mode-btn" data-mode="linked" onclick="setMode('linked')">Linked</button>
+      <button class="mode-btn active" data-mode="independent" onclick="setMode('independent')" data-i18n="btn_independent">Independent</button>
+      <button class="mode-btn" data-mode="linked" onclick="setMode('linked')" data-i18n="btn_linked">Linked</button>
     </div>
-    <span class="mode-hint">Cash Flow always runs on its own numbers.</span>
+    <span class="mode-hint" data-i18n="mode_cfhint">Cash Flow always runs on its own numbers.</span>
   </div>
 
   <div class="mode-row">
-    <span class="mode-label">CPF reference rates:</span>
+    <span class="mode-label" data-i18n="mode_cpflabel">CPF reference rates:</span>
     <div class="mode-toggle">
-      <button class="mode-btn active" data-cpf="off" onclick="setCpfMode(false)">Off</button>
-      <button class="mode-btn" data-cpf="on" onclick="setCpfMode(true)">On</button>
+      <button class="mode-btn active" data-cpf="off" onclick="setCpfMode(false)" data-i18n="btn_off">Off</button>
+      <button class="mode-btn" data-cpf="on" onclick="setCpfMode(true)" data-i18n="btn_on">On</button>
     </div>
-    <span class="mode-hint">Adds CPF OA/SA preset buttons for Singapore clients. Leave off for clients elsewhere.</span>
+    <span class="mode-hint" data-i18n="mode_cpfhint">Adds CPF OA/SA preset buttons for Singapore clients. Leave off for clients elsewhere.</span>
   </div>
   <div class="linked-note" id="cpf-ref-note" style="display:none; background:var(--gold-wash); border-color:#E4D3AE; color:#7A5A2A;">
-    <b>CPF reference (Q3 2026):</b> Ordinary Account 2.5% p.a. &middot; Special/MediSave/Retirement Account 4.0% p.a. (floor, guaranteed through 31 Dec 2026). A CPF OA/SA section appears on the Growth tab so you can enter the client's actual balances and contributions &mdash; this tool does not model contribution caps, bonus interest tiers, or CPF LIFE payouts. Verify current rates and rules at <b>cpf.gov.sg</b> before advising a client.
+    <span data-i18n="note_cpfref"><b>CPF reference (Q3 2026):</b> Ordinary Account 2.5% p.a. &middot; Special/MediSave/Retirement Account 4.0% p.a. (floor, guaranteed through 31 Dec 2026). A CPF OA/SA section appears on the Growth tab so you can enter the client's actual balances and contributions &mdash; this tool does not model contribution caps, bonus interest tiers, or CPF LIFE payouts. Verify current rates and rules at <b>cpf.gov.sg</b> before advising a client.</span>
   </div>
 
   <div class="tabs">
-    <button class="tab-btn active" data-tab="growth"><span class="n">01</span>Growth<br>Projection</button>
-    <button class="tab-btn" data-tab="inflation"><span class="n">02</span>Inflation<br>Impact</button>
-    <button class="tab-btn" data-tab="cashflow"><span class="n">03</span>Cash Flow<br>Timeline</button>
-    <button class="tab-btn" data-tab="delay"><span class="n">04</span>Cost of<br>Delay</button>
+    <button class="tab-btn active" data-tab="growth"><span class="n">01</span><span data-i18n="tab_growth1">Growth</span><br><span data-i18n="tab_growth2">Projection</span></button>
+    <button class="tab-btn" data-tab="inflation"><span class="n">02</span><span data-i18n="tab_infl1">Inflation</span><br><span data-i18n="tab_infl2">Impact</span></button>
+    <button class="tab-btn" data-tab="cashflow"><span class="n">03</span><span data-i18n="tab_cf1">Cash Flow</span><br><span data-i18n="tab_cf2">Timeline</span></button>
+    <button class="tab-btn" data-tab="delay"><span class="n">04</span><span data-i18n="tab_delay1">Cost of</span><br><span data-i18n="tab_delay2">Delay</span></button>
   </div>
 
   <!-- GROWTH -->
@@ -435,98 +439,98 @@
     <div class="grid">
       <div class="inputs-col">
         <div class="field">
-          <label>Initial lump sum</label>
+          <label data-i18n="lbl_lumpsum">Initial lump sum</label>
           <div class="dollar-input"><span>$</span><input type="number" id="g_lump" value="100000" min="0" step="1000"></div>
         </div>
         <div class="field">
-          <label>Monthly contribution</label>
+          <label data-i18n="lbl_monthlycontrib">Monthly contribution</label>
           <div class="dollar-input"><span>$</span><input type="number" id="g_monthly" value="1000" min="0" step="50"></div>
         </div>
         <div class="field">
-          <label>Annual return <span class="val" id="g_returnVal">7.0%</span></label>
+          <label><span data-i18n="lbl_annualreturn">Annual return</span> <span class="val" id="g_returnVal">7.0%</span></label>
           <input type="range" id="g_return" min="1" max="14" step="0.5" value="7">
         </div>
         <div class="field">
-          <label>Time period <span class="val" id="g_yearsVal">20 years</span></label>
+          <label><span data-i18n="lbl_timeperiod">Time period</span> <span class="val" id="g_yearsVal">20 years</span></label>
           <input type="range" id="g_years" min="1" max="40" step="1" value="20">
         </div>
         <div class="field">
-          <label>Years of contribution <span class="val" id="g_contribYearsVal">20 years</span></label>
+          <label><span data-i18n="lbl_yearscontrib">Years of contribution</span> <span class="val" id="g_contribYearsVal">20 years</span></label>
           <input type="range" id="g_contribYears" min="0" max="40" step="1" value="20">
-          <div class="field-note">If less than the time period, contributions stop early and the balance keeps compounding on its own.</div>
+          <div class="field-note"><span data-i18n="note_contribstop1">If less than the time period, contributions stop early and the balance keeps compounding on its own.</span></div>
         </div>
         <div class="field">
-          <label>Retirement goal <span class="val" id="g_goalVal">Off</span></label>
+          <label><span data-i18n="lbl_retiregoal">Retirement goal</span> <span class="val" id="g_goalVal">Off</span></label>
           <div class="mode-toggle" style="margin-bottom:10px;">
-            <button type="button" class="mode-btn active" data-goaltype="income" onclick="setGoalType('income')">Monthly income</button>
-            <button type="button" class="mode-btn" data-goaltype="lump" onclick="setGoalType('lump')">Lump sum</button>
+            <button type="button" class="mode-btn active" data-goaltype="income" onclick="setGoalType('income')" data-i18n="btn_monthlyincome">Monthly income</button>
+            <button type="button" class="mode-btn" data-goaltype="lump" onclick="setGoalType('lump')" data-i18n="btn_lumpsum">Lump sum</button>
           </div>
           <div id="g_goalIncomeFields">
-            <div class="field-note" style="margin-top:0; margin-bottom:8px;">How much does the client want to spend per month in retirement?</div>
-            <div class="dollar-input" style="margin-bottom:8px;"><span>$</span><input type="number" id="g_goalIncome" value="" placeholder="e.g. 4000" min="0" step="100"></div>
+            <div class="field-note" style="margin-top:0; margin-bottom:8px;"><span data-i18n="note_goalincome1">How much does the client want to spend per month in retirement?</span></div>
+            <div class="dollar-input" style="margin-bottom:8px;"><span>$</span><input type="number" id="g_goalIncome" value="" placeholder="e.g. 4000" data-i18n-ph="ph_egincome" min="0" step="100"></div>
             <div style="display:flex; gap:10px;">
-              <div class="stream-mini"><label>Years it should last</label><input type="number" id="g_goalYears" value="25" min="1" step="1"></div>
-              <div class="stream-mini"><label>Return during retirement</label><input type="number" id="g_goalRate" value="4" min="0" step="0.25"></div>
+              <div class="stream-mini"><label data-i18n="lbl_yearslast">Years it should last</label><input type="number" id="g_goalYears" value="25" min="1" step="1"></div>
+              <div class="stream-mini"><label data-i18n="lbl_returnretire">Return during retirement</label><input type="number" id="g_goalRate" value="4" min="0" step="0.25"></div>
             </div>
-            <div class="field-note">Calculates the lump sum needed at retirement to pay this monthly income for that many years, then compares it to the projected balance.</div>
+            <div class="field-note"><span data-i18n="note_goalincome2">Calculates the lump sum needed at retirement to pay this monthly income for that many years, then compares it to the projected balance.</span></div>
           </div>
           <div id="g_goalLumpFields" style="display:none;">
-            <div class="dollar-input"><span>$</span><input type="number" id="g_goal" value="" placeholder="Optional" min="0" step="10000"></div>
-            <div class="field-note">Shows a goal line on the chart and when it's projected to be reached.</div>
+            <div class="dollar-input"><span>$</span><input type="number" id="g_goal" value="" placeholder="Optional" data-i18n-ph="ph_optional" min="0" step="10000"></div>
+            <div class="field-note"><span data-i18n="note_goallump">Shows a goal line on the chart and when it's projected to be reached.</span></div>
           </div>
         </div>
         <div class="field">
-          <label>Optimistic / conservative range <span class="val" id="g_bandVal">Off</span></label>
+          <label><span data-i18n="lbl_band">Optimistic / conservative range</span> <span class="val" id="g_bandVal">Off</span></label>
           <input type="range" id="g_band" min="0" max="5" step="0.5" value="0">
-          <div class="field-note">Shades a band above/below the return rate \u2014 e.g. &plusmn;2% around 7% shows a 5%\u20139% range.</div>
+          <div class="field-note"><span data-i18n="note_band">Shades a band above/below the return rate — e.g. &plusmn;2% around 7% shows a 5%–9% range.</span></div>
         </div>
         <div id="g_cpfSection" style="display:none;">
           <div class="cpf-section-tag">CPF accounts (Q3 2026 floor rates)</div>
           <div class="field">
-            <label>CPF OA balance today <span class="val">2.5% p.a.</span></label>
+            <label><span data-i18n="lbl_cpfoa">CPF OA balance today</span> <span class="val">2.5% p.a.</span></label>
             <div class="dollar-input"><span>$</span><input type="number" id="g_cpfOaBalance" value="0" min="0" step="1000"></div>
           </div>
           <div class="field">
-            <label>Monthly OA contribution</label>
+            <label data-i18n="lbl_oamonthly">Monthly OA contribution</label>
             <div class="dollar-input"><span>$</span><input type="number" id="g_cpfOaMonthly" value="0" min="0" step="50"></div>
           </div>
           <div class="field">
-            <label>CPF SA balance today <span class="val">4.0% p.a.</span></label>
+            <label><span data-i18n="lbl_cpfsa">CPF SA balance today</span> <span class="val">4.0% p.a.</span></label>
             <div class="dollar-input"><span>$</span><input type="number" id="g_cpfSaBalance" value="0" min="0" step="1000"></div>
           </div>
           <div class="field">
-            <label>Monthly SA contribution</label>
+            <label data-i18n="lbl_samonthly">Monthly SA contribution</label>
             <div class="dollar-input"><span>$</span><input type="number" id="g_cpfSaMonthly" value="0" min="0" step="50"></div>
           </div>
-          <div class="cpf-section-tag">Retirement Sum at age 55</div>
+          <div class="cpf-section-tag" data-i18n="cpf_tagsum">Retirement Sum at age 55</div>
           <div class="field">
-            <label>Sum set aside in Retirement Account</label>
+            <label data-i18n="lbl_cpfsum">Sum set aside in Retirement Account</label>
             <div class="mode-toggle" style="margin-bottom:8px;">
               <button type="button" class="mode-btn" data-cpftier="brs" onclick="setCpfTier('brs')">BRS</button>
               <button type="button" class="mode-btn active" data-cpftier="frs" onclick="setCpfTier('frs')">FRS</button>
               <button type="button" class="mode-btn" data-cpftier="ers" onclick="setCpfTier('ers')">ERS</button>
             </div>
             <div class="dollar-input"><span>$</span><input type="number" id="g_cpfTierAmount" value="220400" min="0" step="100"></div>
-            <div class="field-note">2026 cohort: BRS $110,200 &middot; FRS $220,400 &middot; ERS $440,800 (2027 cohort: $114,100 / $228,200 / $456,400). These lock in at the year the client turns 55 &mdash; edit the amount if they'll turn 55 in a later cohort. Combined OA+SA above this amount at 55 is treated as withdrawable cash and added to the retirement goal comparison. Does not model CPF LIFE monthly payouts from the retained sum, contribution caps, or bonus interest tiers \u2014 verify current rules at cpf.gov.sg.</div>
+            <div class="field-note"><span data-i18n="note_cpfsum">2026 cohort: BRS $110,200 &middot; FRS $220,400 &middot; ERS $440,800 (2027 cohort: $114,100 / $228,200 / $456,400). These lock in at the year the client turns 55 &mdash; edit the amount if they'll turn 55 in a later cohort. Combined OA+SA above this amount at 55 is treated as withdrawable cash and added to the retirement goal comparison. Does not model CPF LIFE monthly payouts from the retained sum, contribution caps, or bonus interest tiers — verify current rules at cpf.gov.sg.</span></div>
           </div>
         </div>
       </div>
       <div class="results-col">
         <div class="headline wash-green">
-          <div class="label" style="color:#1F4B3F;">Total growth over the period</div>
+          <div class="label" style="color:#1F4B3F;" data-i18n="hl_totalgrowth">Total growth over the period</div>
           <div class="headline-figures">
-            <div><div class="hf-value" id="g-growth" style="color:#1F4B3F;">$0</div><div class="hf-sub" style="color:#1F4B3F;">earned on top of what's put in</div></div>
+            <div><div class="hf-value" id="g-growth" style="color:#1F4B3F;">$0</div><div class="hf-sub" style="color:#1F4B3F;" data-i18n="sub_earnedontop">earned on top of what's put in</div></div>
             <div class="hf-divider" style="color:#1F4B3F;">&mdash;</div>
-            <div><div class="hf-value" id="g-growthpct" style="color:#1F4B3F;">0%</div><div class="hf-sub" style="color:#1F4B3F;">return on total contributed</div></div>
+            <div><div class="hf-value" id="g-growthpct" style="color:#1F4B3F;">0%</div><div class="hf-sub" style="color:#1F4B3F;" data-i18n="sub_returnoncontrib">return on total contributed</div></div>
           </div>
         </div>
         <div class="stat-row">
-          <div class="stat"><div class="label">Total contributed</div><div class="value" id="g-contributed">$0</div></div>
-          <div class="stat"><div class="label">Ending balance</div><div class="value accent" id="g-final">$0</div></div>
+          <div class="stat"><div class="label" data-i18n="stat_totalcontrib">Total contributed</div><div class="value" id="g-contributed">$0</div></div>
+          <div class="stat"><div class="label" data-i18n="stat_endbal">Ending balance</div><div class="value accent" id="g-final">$0</div></div>
         </div>
         <div class="stat-row" id="g-cpf-stats" style="display:none;">
-          <div class="stat"><div class="label">CPF OA + SA projected</div><div class="value" style="color:#A9793C;" id="g-cpf-total">$0</div></div>
-          <div class="stat"><div class="label">Total retirement wealth (incl. CPF)</div><div class="value accent" id="g-total-incl-cpf">$0</div></div>
+          <div class="stat"><div class="label" data-i18n="stat_cpftotal">CPF OA + SA projected</div><div class="value" style="color:#A9793C;" id="g-cpf-total">$0</div></div>
+          <div class="stat"><div class="label" data-i18n="stat_totalinclcpf">Total retirement wealth (incl. CPF)</div><div class="value accent" id="g-total-incl-cpf">$0</div></div>
           <div class="stat" id="g-cpf-withdraw-stat" style="display:none;"><div class="label" id="g-cpf-withdraw-label">Withdrawable above Retirement Sum at 55</div><div class="value" style="color:#1F4B3F;" id="g-cpf-withdraw">$0</div></div>
         </div>
         <div class="headline" id="g-goal-headline" style="display:none;">
@@ -540,8 +544,8 @@
         </div>
         <div class="chart-wrap">
           <div class="legend">
-            <div class="item"><span class="swatch" style="background:var(--primary)"></span>Account balance</div>
-            <div class="item"><span class="swatch" style="background:var(--line)"></span>Total contributed</div>
+            <div class="item"><span class="swatch" style="background:var(--primary)"></span><span data-i18n="leg_acctbalance">Account balance</span></div>
+            <div class="item"><span class="swatch" style="background:var(--line)"></span><span data-i18n="stat_totalcontrib">Total contributed</span></div>
             <div class="axis-note" id="g-axisnote"></div>
           </div>
           <div id="chart-growth"></div>
@@ -554,28 +558,28 @@
   <div class="panel" id="panel-inflation">
     <div class="grid">
       <div class="inputs-col">
-        <span class="tab-tag" id="i_tag">Stand-alone &middot; own inputs</span>
+        <span class="tab-tag" id="i_tag" data-i18n="tag_standalone">Stand-alone &middot; own inputs</span>
         <div class="linked-note" id="i_linkedNote"></div>
         <div id="i_standaloneFields">
           <div class="field">
-            <label>Cash sitting today</label>
+            <label data-i18n="lbl_cashtoday">Cash sitting today</label>
             <div class="dollar-input"><span>$</span><input type="number" id="i_lump" value="100000" min="0" step="1000"></div>
-            <div class="field-note">A lump sum left untouched &mdash; no further deposits or withdrawals.</div>
+            <div class="field-note"><span data-i18n="note_cashtoday">A lump sum left untouched &mdash; no further deposits or withdrawals.</span></div>
           </div>
           <div class="field">
-            <label>Time period <span class="val" id="i_yearsVal">20 years</span></label>
+            <label><span data-i18n="lbl_timeperiod">Time period</span> <span class="val" id="i_yearsVal">20 years</span></label>
             <input type="range" id="i_years" min="1" max="40" step="1" value="20">
           </div>
         </div>
         <div class="field">
-          <label>Bank / savings rate <span class="val" id="i_bankVal">0.5%</span></label>
+          <label><span data-i18n="lbl_bankrate">Bank / savings rate</span> <span class="val" id="i_bankVal">0.5%</span></label>
           <input type="range" id="i_bankRate" min="0" max="5" step="0.25" value="0.5">
-          <div class="field-note" id="i_bankNote">What a typical savings or current account pays &mdash; set to 0% to show cash earning nothing at all.</div>
+          <div class="field-note" id="i_bankNote"><span data-i18n="note_bankrate">What a typical savings or current account pays &mdash; set to 0% to show cash earning nothing at all.</span></div>
         </div>
         <div class="field">
-          <label>Inflation rate <span class="val" id="i_inflVal">3.0%</span></label>
+          <label><span data-i18n="lbl_inflrate">Inflation rate</span> <span class="val" id="i_inflVal">3.0%</span></label>
           <input type="range" id="i_inflation" min="0" max="8" step="0.25" value="3">
-          <div class="field-note">Historical U.S. CPI inflation has averaged roughly 3% a year over the long run.</div>
+          <div class="field-note"><span data-i18n="note_inflrate">Historical U.S. CPI inflation has averaged roughly 3% a year over the long run.</span></div>
         </div>
       </div>
       <div class="results-col">
@@ -607,34 +611,34 @@
       <div class="inputs-col">
         <span class="tab-tag">Stand-alone &middot; own inputs</span>
         <div class="field">
-          <label>Starting balance</label>
+          <label data-i18n="lbl_startbal">Starting balance</label>
           <div class="dollar-input"><span>$</span><input type="number" id="c_start" value="200000" min="0" step="5000"></div>
         </div>
         <div class="field">
-          <label>Income streams (credits)</label>
+          <label data-i18n="lbl_incomestreams">Income streams (credits)</label>
           <div id="c_streamsList"></div>
           <button type="button" class="add-stream-btn" onclick="addIncomeStream()">+ Add income stream</button>
-          <div class="field-note">Each stream can start and stop on its own timeline &mdash; e.g. one endowment paying out for 10 years, another for 15.</div>
+          <div class="field-note"><span data-i18n="note_incomestreams">Each stream can start and stop on its own timeline &mdash; e.g. one endowment paying out for 10 years, another for 15.</span></div>
         </div>
         <div class="field">
-          <label>Expense streams (debits)</label>
+          <label data-i18n="lbl_expensestreams">Expense streams (debits)</label>
           <div id="c_expenseList"></div>
           <button type="button" class="add-stream-btn" onclick="addExpenseStream()">+ Add expense stream</button>
-          <div class="field-note">Same idea for money going out &mdash; e.g. a mortgage ending in year 12 while living expenses run the full period.</div>
+          <div class="field-note"><span data-i18n="note_expensestreams">Same idea for money going out &mdash; e.g. a mortgage ending in year 12 while living expenses run the full period.</span></div>
         </div>
         <div class="field">
-          <label>Interest on idle balance <span class="val" id="c_rateVal">1.0%</span></label>
+          <label><span data-i18n="lbl_idlerate">Interest on idle balance</span> <span class="val" id="c_rateVal">1.0%</span></label>
           <input type="range" id="c_rate" min="0" max="8" step="0.25" value="1">
         </div>
         <div class="field">
-          <label>Time horizon <span class="val" id="c_yearsVal">15 years</span></label>
+          <label><span data-i18n="lbl_timehorizon">Time horizon</span> <span class="val" id="c_yearsVal">15 years</span></label>
           <input type="range" id="c_years" min="1" max="40" step="1" value="15">
         </div>
-        <div class="field-note" style="padding-top:10px; border-top:1px solid var(--line);">Shows what happens if nothing changes &mdash; the balance simply runs on its own credits and debits.</div>
+        <div class="field-note" style="padding-top:10px; border-top:1px solid var(--line);"><span data-i18n="note_cfhorizon">Shows what happens if nothing changes &mdash; the balance simply runs on its own credits and debits.</span></div>
       </div>
       <div class="results-col">
         <div class="headline" id="c-headline-box">
-          <div class="label" id="c-headline-label">If nothing changes, after <span id="c-headline-years">15 years</span></div>
+          <div class="label" id="c-headline-label"><span data-i18n="lbl_ifnothingchanges">If nothing changes, after</span> <span id="c-headline-years">15 years</span></div>
           <div class="headline-figures">
             <div><div class="hf-value" id="c-endbal">$0</div><div class="hf-sub" id="c-endbal-sub">ending balance</div></div>
             <div class="hf-divider">&mdash;</div>
@@ -643,21 +647,21 @@
           <div class="note" id="c-note"></div>
         </div>
         <div class="stat-row">
-          <div class="stat"><div class="label">Total credited</div><div class="value accent" id="c-totalcredit">$0</div></div>
-          <div class="stat"><div class="label">Total debited</div><div class="value danger" id="c-totaldebit">$0</div></div>
+          <div class="stat"><div class="label" data-i18n="stat_totalcredit">Total credited</div><div class="value accent" id="c-totalcredit">$0</div></div>
+          <div class="stat"><div class="label" data-i18n="stat_totaldebit">Total debited</div><div class="value danger" id="c-totaldebit">$0</div></div>
         </div>
         <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
-          <span style="font-size:12px; font-weight:600; color:var(--ink);">View:</span>
+          <span style="font-size:12px; font-weight:600; color:var(--ink);" data-i18n="lbl_view">View:</span>
           <div class="mode-toggle">
-            <button type="button" class="mode-btn active" data-cfview="yearly" onclick="setCashflowView('yearly')">Yearly</button>
-            <button type="button" class="mode-btn" data-cfview="monthly" onclick="setCashflowView('monthly')">Monthly</button>
+            <button type="button" class="mode-btn active" data-cfview="yearly" onclick="setCashflowView('yearly')" data-i18n="btn_yearly">Yearly</button>
+            <button type="button" class="mode-btn" data-cfview="monthly" onclick="setCashflowView('monthly')" data-i18n="btn_monthly">Monthly</button>
           </div>
         </div>
         <div class="chart-wrap">
           <div class="legend">
-            <div class="item"><span class="swatch" style="background:var(--primary-light)"></span>Credit</div>
-            <div class="item"><span class="swatch" style="background:var(--danger)"></span>Debit</div>
-            <div class="item"><span class="swatch" style="background:var(--gold);width:14px;height:2px;border-radius:0"></span>Balance</div>
+            <div class="item"><span class="swatch" style="background:var(--primary-light)"></span><span data-i18n="leg_credit">Credit</span></div>
+            <div class="item"><span class="swatch" style="background:var(--danger)"></span><span data-i18n="leg_debit">Debit</span></div>
+            <div class="item"><span class="swatch" style="background:var(--gold);width:14px;height:2px;border-radius:0"></span><span data-i18n="leg_balance">Balance</span></div>
             <div class="axis-note" id="c-axisnote"></div>
           </div>
           <div id="chart-cashflow"></div>
@@ -671,61 +675,61 @@
   <div class="panel" id="panel-delay">
     <div class="grid">
       <div class="inputs-col">
-        <span class="tab-tag" id="d_tag">Stand-alone &middot; own inputs</span>
+        <span class="tab-tag" id="d_tag" data-i18n="tag_standalone">Stand-alone &middot; own inputs</span>
         <div class="linked-note" id="d_linkedNote"></div>
         <div id="d_standaloneFields">
           <div class="field">
-            <label>Initial lump sum</label>
+            <label data-i18n="lbl_lumpsum">Initial lump sum</label>
             <div class="dollar-input"><span>$</span><input type="number" id="d_lump" value="100000" min="0" step="1000"></div>
           </div>
           <div class="field">
-            <label>Monthly contribution</label>
+            <label data-i18n="lbl_monthlycontrib">Monthly contribution</label>
             <div class="dollar-input"><span>$</span><input type="number" id="d_monthly" value="1000" min="0" step="50"></div>
           </div>
           <div class="field">
-            <label>Annual return <span class="val" id="d_returnVal">7.0%</span></label>
+            <label><span data-i18n="lbl_annualreturn">Annual return</span> <span class="val" id="d_returnVal">7.0%</span></label>
             <input type="range" id="d_return" min="1" max="14" step="0.5" value="7">
           </div>
           <div class="field">
-            <label>Time period <span class="val" id="d_yearsVal">20 years</span></label>
+            <label><span data-i18n="lbl_timeperiod">Time period</span> <span class="val" id="d_yearsVal">20 years</span></label>
             <input type="range" id="d_years" min="1" max="40" step="1" value="20">
           </div>
           <div class="field">
-            <label>Years of contribution <span class="val" id="d_contribYearsVal">20 years</span></label>
+            <label><span data-i18n="lbl_yearscontrib">Years of contribution</span> <span class="val" id="d_contribYearsVal">20 years</span></label>
             <input type="range" id="d_contribYears" min="0" max="40" step="1" value="20">
-            <div class="field-note">If less than the time period, contributions stop early in both scenarios below.</div>
+            <div class="field-note"><span data-i18n="note_contribstop2">If less than the time period, contributions stop early in both scenarios below.</span></div>
           </div>
         </div>
         <div class="field">
-          <label>Delay before starting <span class="val" id="d_delayVal">5 years</span></label>
+          <label><span data-i18n="lbl_delaystart">Delay before starting</span> <span class="val" id="d_delayVal">5 years</span></label>
           <input type="range" id="d_delay" min="0" max="20" step="1" value="5">
-          <div class="field-note">Same lump sum and monthly contribution, invested for less time because of the delay &mdash; end date stays fixed.</div>
+          <div class="field-note"><span data-i18n="note_delaystart">Same lump sum and monthly contribution, invested for less time because of the delay &mdash; end date stays fixed.</span></div>
         </div>
       </div>
       <div class="results-col">
         <div class="headline wash-gold">
-          <div class="label">The cost of waiting <span id="d-delayinline">5 years</span></div>
+          <div class="label"><span id="d-costwaiting-label">The cost of waiting</span> <span id="d-delayinline">5 years</span></div>
           <div class="headline-figures">
-            <div><div class="hf-value" id="d-gap">$0</div><div class="hf-sub">smaller ending balance</div></div>
+            <div><div class="hf-value" id="d-gap">$0</div><div class="hf-sub" data-i18n="sub_smallerending">smaller ending balance</div></div>
             <div class="hf-divider">&mdash;</div>
-            <div><div class="hf-value" id="d-pct">0%</div><div class="hf-sub">reduction</div></div>
+            <div><div class="hf-value" id="d-pct">0%</div><div class="hf-sub" data-i18n="sub_reduction">reduction</div></div>
           </div>
           <div class="note" id="d-note"></div>
         </div>
         <div class="stat-row">
-          <div class="stat"><div class="label">Start today, ends with</div><div class="value accent" id="d-now">$0</div></div>
-          <div class="stat"><div class="label">Wait, ends with</div><div class="value" id="d-later">$0</div></div>
+          <div class="stat"><div class="label" data-i18n="stat_starttoday">Start today, ends with</div><div class="value accent" id="d-now">$0</div></div>
+          <div class="stat"><div class="label" data-i18n="stat_waitends">Wait, ends with</div><div class="value" id="d-later">$0</div></div>
         </div>
         <div class="chart-wrap">
           <div class="legend">
-            <div class="item"><span class="swatch" style="background:var(--primary)"></span>Start today</div>
-            <div class="item"><span class="swatch" style="background:var(--danger)"></span>Wait, then start</div>
+            <div class="item"><span class="swatch" style="background:var(--primary)"></span><span data-i18n="leg_starttoday">Start today</span></div>
+            <div class="item"><span class="swatch" style="background:var(--danger)"></span><span data-i18n="leg_waitstart">Wait, then start</span></div>
             <div class="axis-note" id="d-axisnote"></div>
           </div>
           <div id="chart-delay"></div>
         </div>
         <div class="chart-wrap" style="margin-top:16px;">
-          <div class="legend"><div class="item"><span class="swatch" style="background:var(--gold)"></span>Ending balance by starting point</div><div class="axis-note" id="d-barsaxisnote"></div></div>
+          <div class="legend"><div class="item"><span class="swatch" style="background:var(--gold)"></span><span data-i18n="leg_endbalbystart">Ending balance by starting point</span></div><div class="axis-note" id="d-barsaxisnote"></div></div>
           <div id="chart-delaybars"></div>
         </div>
       </div>
@@ -733,10 +737,10 @@
   </div>
 
   <div class="disclosure">
-    Figures are illustrative projections based on the assumptions entered above, using fixed annual rates of return and inflation. They are not a guarantee or promise of actual investment results, which will vary and could include loss of principal. Consult your financial professional before making decisions based on this report.
+    <span data-i18n="disclosure_main">Figures are illustrative projections based on the assumptions entered above, using fixed annual rates of return and inflation. They are not a guarantee or promise of actual investment results, which will vary and could include loss of principal. Consult your financial professional before making decisions based on this report.</span>
     <div style="margin-top:10px; padding-top:10px; border-top:1px solid var(--line); display:flex; align-items:center; gap:8px;">
       <img id="footerLogo" alt="" style="height:14px; width:auto; opacity:.7;">
-      <span style="font-family:var(--serif); color:var(--muted);">Financial Architects Advisory &middot; Mastering Your Blueprint of Wealth</span>
+      <span style="font-family:var(--serif); color:var(--muted);">Financial Architects Advisory &middot; <span data-i18n="tagline">Mastering Your Blueprint of Wealth</span></span>
     </div>
   </div>
 </div>
@@ -749,6 +753,140 @@
 const LOGO_FULL = "data:image/png;base64,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";
 
 /* ---------------- shared helpers ---------------- */
+/* ================= i18n (English / Simplified Chinese) ================= */
+let currentLang = 'en';
+const I18N = {
+  mark_text: {en:"PREPARED PROJECTION \u00b7 NOT A GUARANTEE OF FUTURE RESULTS", zh:"预测数据 \u00b7 不构成未来业绩保证"},
+  app_title: {en:"Financial Planning Report", zh:"财务规划报告"},
+  app_subtitle: {en:"Four standalone tools \u2014 growth, inflation, cash flow, and cost of delay each run on their own numbers, so you can open straight to whichever one fits the conversation.", zh:"四个独立工具——增长、通胀、现金流和延迟代价，各自独立运作，方便您直接切换到最适合当前对话的工具。"},
+  lbl_client: {en:"Client", zh:"客户"},
+  lbl_preparedby: {en:"Prepared by", zh:"顾问"},
+  lbl_clientage: {en:"Client age", zh:"客户年龄"},
+  lbl_retirementage: {en:"Retirement age", zh:"退休年龄"},
+  btn_savereport: {en:"Save PDF report", zh:"保存PDF报告"},
+  btn_saveclient: {en:"Save client file", zh:"保存客户档案"},
+  btn_loadclient: {en:"Load client file", zh:"载入客户档案"},
+  btn_onepager: {en:"One-page summary", zh:"单页摘要"},
+  mode_glabel: {en:"Growth, Inflation & Cost of Delay:", zh:"增长、通胀与延迟代价："},
+  btn_independent: {en:"Independent", zh:"独立"},
+  btn_linked: {en:"Linked", zh:"关联"},
+  mode_cfhint: {en:"Cash Flow always runs on its own numbers.", zh:"现金流始终使用自身数据独立运作。"},
+  mode_cpflabel: {en:"CPF reference rates:", zh:"公积金参考利率："},
+  btn_off: {en:"Off", zh:"关闭"},
+  btn_on: {en:"On", zh:"开启"},
+  mode_cpfhint: {en:"Adds CPF OA/SA preset buttons for Singapore clients. Leave off for clients elsewhere.", zh:"为新加坡客户添加公积金OA/SA预设按钮。其他地区客户请保持关闭。"},
+  tab_growth1: {en:"Growth", zh:"增长"},
+  tab_growth2: {en:"Projection", zh:"预测"},
+  tab_infl1: {en:"Inflation", zh:"通胀"},
+  tab_infl2: {en:"Impact", zh:"影响"},
+  tab_cf1: {en:"Cash Flow", zh:"现金流"},
+  tab_cf2: {en:"Timeline", zh:"时间轴"},
+  tab_delay1: {en:"Cost of", zh:"延迟"},
+  tab_delay2: {en:"Delay", zh:"代价"},
+  tag_standalone: {en:"Stand-alone \u00b7 own inputs", zh:"独立 \u00b7 使用自身数据"},
+  lbl_lumpsum: {en:"Initial lump sum", zh:"初始金额"},
+  lbl_monthlycontrib: {en:"Monthly contribution", zh:"每月供款"},
+  lbl_annualreturn: {en:"Annual return", zh:"年回报率"},
+  lbl_timeperiod: {en:"Time period", zh:"时间跨度"},
+  lbl_yearscontrib: {en:"Years of contribution", zh:"供款年数"},
+  note_contribstop1: {en:"If less than the time period, contributions stop early and the balance keeps compounding on its own.", zh:"若少于总时间跨度，供款将提前停止，余额将继续自行复利增长。"},
+  lbl_retiregoal: {en:"Retirement goal", zh:"退休目标"},
+  btn_monthlyincome: {en:"Monthly income", zh:"每月收入"},
+  btn_lumpsum: {en:"Lump sum", zh:"一笔款项"},
+  note_goalincome1: {en:"How much does the client want to spend per month in retirement?", zh:"客户希望在退休后每月花费多少？"},
+  lbl_yearslast: {en:"Years it should last", zh:"需维持的年数"},
+  lbl_returnretire: {en:"Return during retirement", zh:"退休期间回报率"},
+  note_goalincome2: {en:"Calculates the lump sum needed at retirement to pay this monthly income for that many years, then compares it to the projected balance.", zh:"计算退休时所需的一笔款项，以支付这笔每月收入达到指定年数，并与预计余额进行比较。"},
+  note_goallump: {en:"Shows a goal line on the chart and when it's projected to be reached.", zh:"在图表上显示目标线，以及预计达成的时间。"},
+  lbl_band: {en:"Optimistic / conservative range", zh:"乐观／保守范围"},
+  note_band: {en:"Shades a band above/below the return rate \u2014 e.g. \u00b12% around 7% shows a 5%\u20139% range.", zh:"在回报率上下绘制阴影范围——例如7%上下浮动\u00b12%，将显示5%至9%的范围。"},
+  lbl_cpfoa: {en:"CPF OA balance today", zh:"公积金普通户头（OA）现有余额"},
+  lbl_oamonthly: {en:"Monthly OA contribution", zh:"每月OA供款"},
+  lbl_cpfsa: {en:"CPF SA balance today", zh:"公积金特别户头（SA）现有余额"},
+  lbl_samonthly: {en:"Monthly SA contribution", zh:"每月SA供款"},
+  cpf_tagsum: {en:"Retirement Sum at age 55", zh:"55岁退休存款额"},
+  lbl_cpfsum: {en:"Sum set aside in Retirement Account", zh:"预留在退休账户（RA）的存款额"},
+  note_cpfsum: {en:"2026 cohort: BRS $110,200 \u00b7 FRS $220,400 \u00b7 ERS $440,800 (2027 cohort: $114,100 / $228,200 / $456,400). These lock in at the year the client turns 55 \u2014 edit the amount if they'll turn 55 in a later cohort. Combined OA+SA above this amount at 55 is treated as withdrawable cash and added to the retirement goal comparison. Does not model CPF LIFE monthly payouts from the retained sum, contribution caps, or bonus interest tiers \u2014 verify current rules at cpf.gov.sg.",
+    zh:"2026年群组：基本存款额(BRS) $110,200 \u00b7 全额存款额(FRS) $220,400 \u00b7 顶额存款额(ERS) $440,800（2027年群组：$114,100 / $228,200 / $456,400）。此金额在客户年满55岁那年锁定——若客户将在未来年份满55岁，请自行修改金额。55岁时OA+SA总额超出此金额的部分将被视为可提取现金，并计入退休目标比较。本工具不模拟CPF LIFE每月派息、供款顶限或额外利息——请到cpf.gov.sg核实最新规则。"},
+  note_cpfref: {en:"<b>CPF reference (Q3 2026):</b> Ordinary Account 2.5% p.a. \u00b7 Special/MediSave/Retirement Account 4.0% p.a. (floor, guaranteed through 31 Dec 2026). A CPF OA/SA section appears on the Growth tab so you can enter the client's actual balances and contributions \u2014 this tool does not model contribution caps, bonus interest tiers, or CPF LIFE payouts. Verify current rates and rules at <b>cpf.gov.sg</b> before advising a client.",
+    zh:"<b>公积金参考利率（2026年第三季）：</b>普通户头（OA）年利率2.5% \u00b7 特别／保健储蓄／退休户头（SA/MA/RA）年利率4.0%（保底利率，保证至2026年12月31日）。增长标签内设有公积金OA/SA区块，可输入客户的实际余额与供款——本工具不模拟供款顶限、额外利息或CPF LIFE派息。在为客户提供建议前，请到<b>cpf.gov.sg</b>核实最新利率与规则。"},
+  lbl_cashtoday: {en:"Cash sitting today", zh:"现有现金"},
+  note_cashtoday: {en:"A lump sum left untouched \u2014 no further deposits or withdrawals.", zh:"一笔保持不动的款项——不再有存入或提取。"},
+  lbl_bankrate: {en:"Bank / savings rate", zh:"银行／储蓄利率"},
+  note_bankrate: {en:"What a typical savings or current account pays \u2014 set to 0% to show cash earning nothing at all.", zh:"一般储蓄户头或往来户头的利率——设为0%可显示现金完全没有增值的情况。"},
+  lbl_inflrate: {en:"Inflation rate", zh:"通货膨胀率"},
+  note_inflrate: {en:"Historical U.S. CPI inflation has averaged roughly 3% a year over the long run.", zh:"美国消费者物价指数（CPI）的长期历史平均通胀率约为每年3%。"},
+  lbl_startbal: {en:"Starting balance", zh:"起始余额"},
+  lbl_incomestreams: {en:"Income streams (credits)", zh:"收入来源（入账）"},
+  note_incomestreams: {en:"Each stream can start and stop on its own timeline \u2014 e.g. one endowment paying out for 10 years, another for 15.", zh:"每笔收入可各自设定开始与结束时间——例如一份储蓄保险派发10年，另一份派发15年。"},
+  lbl_expensestreams: {en:"Expense streams (debits)", zh:"支出项目（出账）"},
+  note_expensestreams: {en:"Same idea for money going out \u2014 e.g. a mortgage ending in year 12 while living expenses run the full period.", zh:"支出项目同理——例如房贷在第12年还清，而生活开销则持续整个期间。"},
+  lbl_idlerate: {en:"Interest on idle balance", zh:"闲置余额利息"},
+  lbl_timehorizon: {en:"Time horizon", zh:"时间跨度"},
+  note_cfhorizon: {en:"Shows what happens if nothing changes \u2014 the balance simply runs on its own credits and debits.", zh:"显示若维持现状会发生什么——余额将依据入账与出账自行变化。"},
+  lbl_view: {en:"View:", zh:"检视："},
+  btn_yearly: {en:"Yearly", zh:"按年"},
+  btn_monthly: {en:"Monthly", zh:"按月"},
+  lbl_delaystart: {en:"Delay before starting", zh:"延迟开始时间"},
+  note_delaystart: {en:"Same lump sum and monthly contribution, invested for less time because of the delay \u2014 end date stays fixed.", zh:"相同的初始金额与每月供款，因延迟而投资时间缩短——结束日期保持不变。"},
+  note_contribstop2: {en:"If less than the time period, contributions stop early in both scenarios below.", zh:"若少于总时间跨度，以下两种情况的供款都将提前停止。"},
+  btn_restore: {en:"Restore", zh:"恢复"},
+  btn_discard: {en:"Discard", zh:"丢弃"},
+  disclosure_main: {en:"Figures are illustrative projections based on the assumptions entered above, using fixed annual rates of return and inflation. They are not a guarantee or promise of actual investment results, which will vary and could include loss of principal. Consult your financial professional before making decisions based on this report.",
+    zh:"以上数字为根据上述假设条件得出的示意性预测，采用固定年回报率与通胀率计算。这些数字并非对实际投资结果的保证或承诺，实际结果可能有所不同，并可能包含本金损失。在根据本报告做出决定前，请咨询您的财务顾问。"},
+  tagline: {en:"Mastering Your Blueprint of Wealth", zh:"掌握您的财富蓝图"},
+  hl_totalgrowth: {en:"Total growth over the period", zh:"期间总增长"},
+  lbl_ifnothingchanges: {en:"If nothing changes, after", zh:"若维持现状，经过"},
+  stat_totalcontrib: {en:"Total contributed", zh:"总供款额"},
+  stat_endbal: {en:"Ending balance", zh:"期末余额"},
+  stat_cpftotal: {en:"CPF OA + SA projected", zh:"公积金OA+SA预计金额"},
+  stat_totalinclcpf: {en:"Total retirement wealth (incl. CPF)", zh:"退休总财富（含公积金）"},
+  stat_totalcredit: {en:"Total credited", zh:"总入账"},
+  stat_totaldebit: {en:"Total debited", zh:"总出账"},
+  stat_starttoday: {en:"Start today, ends with", zh:"今天开始，最终金额为"},
+  stat_waitends: {en:"Wait, ends with", zh:"等待后，最终金额为"},
+  sub_earnedontop: {en:"earned on top of what's put in", zh:"在供款之上额外赚取的部分"},
+  sub_returnoncontrib: {en:"return on total contributed", zh:"总供款的回报率"},
+  sub_smallerending: {en:"smaller ending balance", zh:"较少的期末余额"},
+  sub_reduction: {en:"reduction", zh:"减幅"},
+  leg_acctbalance: {en:"Account balance", zh:"账户余额"},
+  leg_credit: {en:"Credit", zh:"入账"},
+  leg_debit: {en:"Debit", zh:"出账"},
+  leg_balance: {en:"Balance", zh:"余额"},
+  leg_starttoday: {en:"Start today", zh:"今天开始"},
+  leg_waitstart: {en:"Wait, then start", zh:"等待后再开始"},
+  leg_endbalbystart: {en:"Ending balance by starting point", zh:"按开始时间划分的期末余额"},
+  ph_clientname: {en:"Client name", zh:"客户姓名"},
+  ph_yourname: {en:"Your name", zh:"您的姓名"},
+  ph_optional: {en:"Optional", zh:"选填"},
+  ph_egincome: {en:"e.g. 4000", zh:"例如 4000"},
+};
+function t(key){
+  const e = I18N[key];
+  if(!e) return key;
+  return currentLang==='zh' ? e.zh : e.en;
+}
+function T(en, zh){ return currentLang==='zh' ? zh : en; }
+function applyLanguage(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.dataset.i18n;
+    if(I18N[key]) el.innerHTML = t(key);
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    const key = el.dataset.i18nPh;
+    if(I18N[key]) el.placeholder = t(key);
+  });
+  document.title = t('app_title');
+  document.documentElement.lang = currentLang==='zh' ? 'zh-CN' : 'en';
+}
+function setLang(lang){
+  currentLang = lang;
+  document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('active', b.dataset.lang===lang));
+  applyLanguage();
+  renderAll();
+  autoSaveDraft();
+}
+
 const els = id => document.getElementById(id);
 let linkedMode = false;
 let cpfMode = false;
@@ -815,7 +953,7 @@ function axisLabels(offsets){
   return age!=null ? offsets.map(o=>String(Math.round(age+o))) : offsets.map(o=>String(o));
 }
 function axisCaption(){
-  return getClientAge()!=null ? 'Age' : 'Years from now';
+  return getClientAge()!=null ? T('Age','年龄') : T('Years from now','距今年数');
 }
 function getRetirementOffset(){
   const age = getClientAge();
@@ -825,11 +963,11 @@ function getRetirementOffset(){
 }
 function yearRowLabel(offset){
   const age = getClientAge();
-  return age!=null ? `Age ${Math.round(age+offset)}` : `Year ${offset}`;
+  return age!=null ? T(`Age ${Math.round(age+offset)}`, `${Math.round(age+offset)}岁`) : T(`Year ${offset}`, `第${offset}年`);
 }
 function yearPhrase(offset){
   const age = getClientAge();
-  return age!=null ? `age ${Math.round(age+offset)}` : `year ${offset}`;
+  return age!=null ? T(`age ${Math.round(age+offset)}`, `${Math.round(age+offset)}岁`) : T(`year ${offset}`, `第${offset}年`);
 }
 
 function fmtShort(v){
@@ -1021,12 +1159,12 @@ function computeCpf(years){
 }
 function renderGrowth(){
   els('g_returnVal').textContent = parseFloat(els('g_return').value).toFixed(1)+'%';
-  els('g_yearsVal').textContent = els('g_years').value + ' years';
-  els('g_contribYearsVal').textContent = els('g_contribYears').value + ' years';
+  els('g_yearsVal').textContent = els('g_years').value + T(' years',' 年');
+  els('g_contribYearsVal').textContent = els('g_contribYears').value + T(' years',' 年');
   const goalInfo = getGoalInfo();
-  els('g_goalVal').textContent = goalInfo ? fmt$(goalInfo.value) : 'Off';
+  els('g_goalVal').textContent = goalInfo ? fmt$(goalInfo.value) : T('Off','关闭');
   const bandSpread = parseFloat(els('g_band').value)||0;
-  els('g_bandVal').textContent = bandSpread>0 ? '\u00b1'+bandSpread.toFixed(1)+'%' : 'Off';
+  els('g_bandVal').textContent = bandSpread>0 ? '\u00b1'+bandSpread.toFixed(1)+'%' : T('Off','关闭');
 
   const inputs = getGrowthInputs();
   const sim = simulateGrowth(inputs);
@@ -1046,7 +1184,7 @@ function renderGrowth(){
     const lowSim = simulateGrowth({...inputs, rate: Math.max(0, inputs.rate-bandSpread)});
     const highSim = simulateGrowth({...inputs, rate: inputs.rate+bandSpread});
     chartOpts.band = {lowValues: lowSim.yearly.map(y=>y.balance), highValues: highSim.yearly.map(y=>y.balance), color:'#A9793C'};
-    legendExtra.push(`<div class="item"><span class="swatch" style="background:var(--gold);opacity:.35"></span>${(inputs.rate-bandSpread).toFixed(1)}%\u2013${(inputs.rate+bandSpread).toFixed(1)}% range</div>`);
+    legendExtra.push(`<div class="item"><span class="swatch" style="background:var(--gold);opacity:.35"></span>${(inputs.rate-bandSpread).toFixed(1)}%\u2013${(inputs.rate+bandSpread).toFixed(1)}% ${T('range','范围')}</div>`);
   }
   // CPF: compute OA/SA growth, and how much (if any) is withdrawable in cash above the
   // Retirement Sum once the client turns 55 (a fixed CPF rule, independent of chosen retirement age).
@@ -1073,36 +1211,38 @@ function renderGrowth(){
     const projectedAtPoint = sim.yearly[compareIndex].balance + (withdrawableApplies ? cpfWithdrawable : 0);
     const gap = projectedAtPoint - goalInfo.value;
     const gapPct = goalInfo.value>0 ? Math.abs(gap/goalInfo.value)*100 : 0;
-    const pointPhrase = usingRetirePoint ? `at retirement (${yearPhrase(compareYear)})` : `by the end of the ${inputs.years}-year horizon`;
+    const pointPhrase = usingRetirePoint ? T(`at retirement (${yearPhrase(compareYear)})`, `退休时（${yearPhrase(compareYear)}）`) : T(`by the end of the ${inputs.years}-year horizon`, `到${inputs.years}年期结束时`);
     const basis = goalInfo.type==='income'
-      ? `funding ${fmt$(goalInfo.income)}/month for ${goalInfo.years} years at ${goalInfo.rate}% in retirement`
-      : `the ${fmt$(goalInfo.value)} goal`;
-    const cpfClause = withdrawableApplies && cpfWithdrawable>0 ? ` (including ${fmt$(cpfWithdrawable)} withdrawable from CPF above the Retirement Sum at 55)` : '';
+      ? T(`funding ${fmt$(goalInfo.income)}/month for ${goalInfo.years} years at ${goalInfo.rate}% in retirement`, `以退休期间${goalInfo.rate}%回报率支付每月${fmt$(goalInfo.income)}、维持${goalInfo.years}年`)
+      : T(`the ${fmt$(goalInfo.value)} goal`, `${fmt$(goalInfo.value)}的目标`);
+    const cpfClause = withdrawableApplies && cpfWithdrawable>0 ? T(` (including ${fmt$(cpfWithdrawable)} withdrawable from CPF above the Retirement Sum at 55)`, `（含55岁时可从公积金超出退休存款额提取的${fmt$(cpfWithdrawable)}）`) : '';
     goalHeadline.style.display = 'block';
     const onTrack = gap>=0;
     goalHeadline.className = 'headline ' + (onTrack ? 'wash-green' : 'wash-red');
     const color = onTrack ? '#1F4B3F' : '#7A3D2E';
     els('g-goal-label').style.color = color;
-    els('g-goal-label').textContent = onTrack ? 'On track for retirement goal' : 'Falls short of retirement goal';
+    els('g-goal-label').textContent = onTrack ? T('On track for retirement goal','退休目标进展顺利') : T('Falls short of retirement goal','未达到退休目标');
     els('g-goal-gapvalue').style.color = color;
     els('g-goal-gapvalue').textContent = fmt$(Math.abs(gap));
     els('g-goal-gapsub').style.color = color;
-    els('g-goal-gapsub').textContent = onTrack ? "surplus over what's needed" : "short of what's needed";
+    els('g-goal-gapsub').textContent = onTrack ? T("surplus over what's needed","超出所需金额") : T("short of what's needed","低于所需金额");
     els('g-goal-gappct').style.color = color;
     els('g-goal-gappct').textContent = gapPct.toFixed(0)+'%';
     els('g-goal-pctsub').style.color = color;
-    els('g-goal-pctsub').textContent = onTrack ? 'above the required amount' : 'below the required amount';
+    els('g-goal-pctsub').textContent = onTrack ? T('above the required amount','高于所需金额') : T('below the required amount','低于所需金额');
     els('g-goal-note').style.color = color;
     els('g-goal-note').innerHTML = onTrack
-      ? `${pointPhrase}, the plan is projected to reach ${fmt$(projectedAtPoint)}${cpfClause} against the ${fmt$(goalInfo.value)} needed for ${basis}.`
-      : `${pointPhrase}, the plan is projected to reach only ${fmt$(projectedAtPoint)}${cpfClause} against the ${fmt$(goalInfo.value)} needed for ${basis}.`;
+      ? T(`${pointPhrase}, the plan is projected to reach ${fmt$(projectedAtPoint)}${cpfClause} against the ${fmt$(goalInfo.value)} needed for ${basis}.`,
+          `${pointPhrase}，此方案预计可达到${fmt$(projectedAtPoint)}${cpfClause}，而${basis}所需金额为${fmt$(goalInfo.value)}。`)
+      : T(`${pointPhrase}, the plan is projected to reach only ${fmt$(projectedAtPoint)}${cpfClause} against the ${fmt$(goalInfo.value)} needed for ${basis}.`,
+          `${pointPhrase}，此方案预计只能达到${fmt$(projectedAtPoint)}${cpfClause}，而${basis}所需金额为${fmt$(goalInfo.value)}。`);
   } else {
     goalHeadline.style.display = 'none';
   }
   if(usingRetirePoint){
     chartOpts.markerIndex = Math.round(retireOffset);
-    chartOpts.markerLabel = 'Retirement';
-    legendExtra.push(`<div class="item"><span class="swatch" style="background:var(--ink);opacity:.55"></span>Retirement marker</div>`);
+    chartOpts.markerLabel = T('Retirement','退休');
+    legendExtra.push(`<div class="item"><span class="swatch" style="background:var(--ink);opacity:.55"></span>${T('Retirement marker','退休标记')}</div>`);
   }
 
   const cpfStatsRow = els('g-cpf-stats');
@@ -1117,21 +1257,21 @@ function renderGrowth(){
     const withdrawStat = els('g-cpf-withdraw-stat');
     if(age55Offset!=null){
       withdrawStat.style.display = 'block';
-      const tierName = document.querySelector('[data-cpftier].active')?.textContent || 'Retirement Sum';
-      els('g-cpf-withdraw-label').textContent = `Withdrawable above ${tierName} at 55`;
+      const tierName = document.querySelector('[data-cpftier].active')?.textContent || T('Retirement Sum','退休存款额');
+      els('g-cpf-withdraw-label').textContent = T(`Withdrawable above ${tierName} at 55`, `55岁时超出${tierName}可提取的部分`);
       els('g-cpf-withdraw').textContent = fmt$(cpfWithdrawable);
     } else {
       withdrawStat.style.display = 'none';
     }
     const combined = sim.yearly.map((y,i)=> y.balance + cpf.oa.yearly[i].balance + cpf.sa.yearly[i].balance);
     chartSeries.push({values: combined, color:'#A9793C', dashed:true});
-    legendExtra.push(`<div class="item"><span class="swatch" style="background:var(--gold)"></span>Total incl. CPF</div>`);
+    legendExtra.push(`<div class="item"><span class="swatch" style="background:var(--gold)"></span>${T('Total incl. CPF','含公积金总额')}</div>`);
   } else {
     cpfStatsRow.style.display = 'none';
   }
 
   els('chart-growth').innerHTML = lineChartSVG(axisLabels(sim.yearly.map(y=>y.year)), chartSeries, null, chartOpts);
-  els('g-axisnote').textContent = 'X-axis: ' + axisCaption();
+  els('g-axisnote').textContent = T('X-axis: ','横轴：') + axisCaption();
   document.querySelectorAll('#panel-growth .legend .item.extra').forEach(el=>el.remove());
   if(legendExtra.length){
     els('g-axisnote').insertAdjacentHTML('beforebegin', legendExtra.map(h=>h.replace('class="item"','class="item extra"')).join(''));
@@ -1195,7 +1335,7 @@ function getInflationInputs(){
 function renderInflation(){
   els('i_bankVal').textContent = parseFloat(els('i_bankRate').value).toFixed(2).replace(/\.?0+$/,'').concat('%');
   els('i_inflVal').textContent = parseFloat(els('i_inflation').value).toFixed(1)+'%';
-  els('i_yearsVal').textContent = els('i_years').value + ' years';
+  els('i_yearsVal').textContent = els('i_years').value + T(' years',' 年');
   const inputs = getInflationInputs();
   const sim = simulateInflation(inputs);
   const stat3 = els('i-stat3');
@@ -1208,27 +1348,27 @@ function renderInflation(){
 
     els('i-headline-box').className = 'headline wash-green';
     els('i-headline-label').style.color = '#1F4B3F';
-    els('i-headline-label').textContent = 'The real-terms difference: investing vs. leaving it idle';
+    els('i-headline-label').textContent = T('The real-terms difference: investing vs. leaving it idle', '实际差异：投资 vs. 闲置不动');
     ['i-hf1-value','i-hf2-value','i-hf-divider','i-hf1-sub','i-hf2-sub','i-headline-note'].forEach(id=>els(id).style.color = '#1F4B3F');
     els('i-hf1-value').textContent = fmt$(gap);
-    els('i-hf1-sub').textContent = 'more purchasing power by investing';
+    els('i-hf1-sub').textContent = T('more purchasing power by investing','投资带来的额外购买力');
     els('i-hf2-value').textContent = gapPct.toFixed(0)+'%';
-    els('i-hf2-sub').textContent = 'real-terms advantage over idle cash';
-    els('i-headline-note').textContent = 'Both figures are already adjusted for inflation \u2014 this is the genuine gap in what the money can actually buy.';
+    els('i-hf2-sub').textContent = T('real-terms advantage over idle cash','相对闲置现金的实际优势');
+    els('i-headline-note').textContent = T('Both figures are already adjusted for inflation \u2014 this is the genuine gap in what the money can actually buy.', '以上两个数字均已经过通胀调整——这是资金实际购买力之间的真实差距。');
 
-    els('i-stat1-label').textContent = 'Invested, real value (today\u2019s $)';
+    els('i-stat1-label').textContent = T('Invested, real value (today\u2019s $)','已投资，实际价值（今日币值）');
     els('i-stat1-value').textContent = fmt$(investedReal);
-    els('i-stat2-label').textContent = 'Idle, real value (today\u2019s $)';
+    els('i-stat2-label').textContent = T('Idle, real value (today\u2019s $)','闲置，实际价值（今日币值）');
     els('i-stat2-value').textContent = fmt$(idleReal);
     stat3.style.display = 'block';
-    els('i-stat3-label').textContent = 'Invested, nominal balance';
+    els('i-stat3-label').textContent = T('Invested, nominal balance','已投资，名义余额');
     els('i-stat3-value').textContent = fmt$(sim.finalBalance);
 
     els('i-legend').innerHTML = `
-      <div class="item"><span class="swatch" style="background:var(--primary)"></span>Invested \u2014 nominal</div>
-      <div class="item"><span class="swatch" style="background:var(--gold)"></span>Invested \u2014 real (inflation-adjusted)</div>
-      <div class="item"><span class="swatch" style="background:var(--danger)"></span>Idle in bank \u2014 real (inflation-adjusted)</div>
-      <div class="axis-note">X-axis: ${axisCaption()}</div>
+      <div class="item"><span class="swatch" style="background:var(--primary)"></span>${T('Invested \u2014 nominal','已投资 \u2014 名义值')}</div>
+      <div class="item"><span class="swatch" style="background:var(--gold)"></span>${T('Invested \u2014 real (inflation-adjusted)','已投资 \u2014 实际值（经通胀调整）')}</div>
+      <div class="item"><span class="swatch" style="background:var(--danger)"></span>${T('Idle in bank \u2014 real (inflation-adjusted)','闲置于银行 \u2014 实际值（经通胀调整）')}</div>
+      <div class="axis-note">${T('X-axis: ','横轴：')}${axisCaption()}</div>
     `;
     els('chart-inflation').innerHTML = lineChartSVG(axisLabels(sim.yearly.map(y=>y.year)), [
       {values: sim.yearly.map(y=>y.balance), color:'#1F4B3F'},
@@ -1242,24 +1382,24 @@ function renderInflation(){
 
     els('i-headline-box').className = 'headline wash-red';
     els('i-headline-label').style.color = '#7A3D2E';
-    els('i-headline-label').textContent = 'Purchasing power lost by doing nothing';
+    els('i-headline-label').textContent = T('Purchasing power lost by doing nothing','无所作为导致的购买力损失');
     ['i-hf1-value','i-hf2-value','i-hf-divider','i-hf1-sub','i-hf2-sub','i-headline-note'].forEach(id=>els(id).style.color = '#7A3D2E');
     els('i-hf1-value').textContent = fmt$(nominal-real);
-    els('i-hf1-sub').textContent = "in today's dollars";
+    els('i-hf1-sub').textContent = T("in today's dollars","以今日币值计算");
     els('i-hf2-value').textContent = lostPct.toFixed(0)+'%';
-    els('i-hf2-sub').textContent = 'of the nominal balance';
-    els('i-headline-note').textContent = "The account balance itself won't shrink \u2014 what it can buy will.";
+    els('i-hf2-sub').textContent = T('of the nominal balance','占名义余额的比例');
+    els('i-headline-note').textContent = T("The account balance itself won't shrink \u2014 what it can buy will.", '账户余额本身不会减少——但它能买到的东西会减少。');
 
-    els('i-stat1-label').textContent = 'Nominal balance';
+    els('i-stat1-label').textContent = T('Nominal balance','名义余额');
     els('i-stat1-value').textContent = fmt$(nominal);
-    els('i-stat2-label').textContent = "Real value (today's $)";
+    els('i-stat2-label').textContent = T("Real value (today's $)","实际价值（今日币值）");
     els('i-stat2-value').textContent = fmt$(real);
     stat3.style.display = 'none';
 
     els('i-legend').innerHTML = `
-      <div class="item"><span class="swatch" style="background:var(--primary)"></span>Nominal balance</div>
-      <div class="item"><span class="swatch" style="background:var(--gold)"></span>Real (inflation-adjusted) value</div>
-      <div class="axis-note">X-axis: ${axisCaption()}</div>
+      <div class="item"><span class="swatch" style="background:var(--primary)"></span>${T('Nominal balance','名义余额')}</div>
+      <div class="item"><span class="swatch" style="background:var(--gold)"></span>${T('Real (inflation-adjusted) value','实际价值（经通胀调整）')}</div>
+      <div class="axis-note">${T('X-axis: ','横轴：')}${axisCaption()}</div>
     `;
     els('chart-inflation').innerHTML = lineChartSVG(axisLabels(sim.yearly.map(y=>y.year)), [
       {values: sim.yearly.map(y=>y.balance), color:'#1F4B3F'},
@@ -1346,12 +1486,12 @@ function renderStreamsList(){
     <div class="stream-card">
       <div class="stream-card-top">
         <input class="stream-label-input" value="${escapeHtml(s.label)}" onchange="updateStream(${s.id},'label',this.value)">
-        <button type="button" class="stream-remove" onclick="removeStream(${s.id})" title="Remove">&times;</button>
+        <button type="button" class="stream-remove" onclick="removeStream(${s.id})" title="${T('Remove','移除')}">&times;</button>
       </div>
       <div class="stream-fields">
         <div class="dollar-input"><span>$</span><input type="number" value="${s.amount}" min="0" step="50" onchange="updateStream(${s.id},'amount',this.value)"></div>
-        <div class="stream-mini"><label>Starts (yr)</label><input type="number" value="${s.start}" min="0" step="1" onchange="updateStream(${s.id},'start',this.value)"></div>
-        <div class="stream-mini"><label>For (yrs)</label><input type="number" value="${s.duration}" min="1" step="1" onchange="updateStream(${s.id},'duration',this.value)"></div>
+        <div class="stream-mini"><label>${T('Starts (yr)','开始（年）')}</label><input type="number" value="${s.start}" min="0" step="1" onchange="updateStream(${s.id},'start',this.value)"></div>
+        <div class="stream-mini"><label>${T('For (yrs)','持续（年）')}</label><input type="number" value="${s.duration}" min="1" step="1" onchange="updateStream(${s.id},'duration',this.value)"></div>
       </div>
     </div>
   `).join('');
@@ -1383,12 +1523,12 @@ function renderExpenseList(){
     <div class="stream-card">
       <div class="stream-card-top">
         <input class="stream-label-input" value="${escapeHtml(s.label)}" onchange="updateExpenseStream(${s.id},'label',this.value)">
-        <button type="button" class="stream-remove" onclick="removeExpenseStream(${s.id})" title="Remove">&times;</button>
+        <button type="button" class="stream-remove" onclick="removeExpenseStream(${s.id})" title="${T('Remove','移除')}">&times;</button>
       </div>
       <div class="stream-fields">
         <div class="dollar-input"><span>$</span><input type="number" value="${s.amount}" min="0" step="50" onchange="updateExpenseStream(${s.id},'amount',this.value)"></div>
-        <div class="stream-mini"><label>Starts (yr)</label><input type="number" value="${s.start}" min="0" step="1" onchange="updateExpenseStream(${s.id},'start',this.value)"></div>
-        <div class="stream-mini"><label>For (yrs)</label><input type="number" value="${s.duration}" min="1" step="1" onchange="updateExpenseStream(${s.id},'duration',this.value)"></div>
+        <div class="stream-mini"><label>${T('Starts (yr)','开始（年）')}</label><input type="number" value="${s.start}" min="0" step="1" onchange="updateExpenseStream(${s.id},'start',this.value)"></div>
+        <div class="stream-mini"><label>${T('For (yrs)','持续（年）')}</label><input type="number" value="${s.duration}" min="1" step="1" onchange="updateExpenseStream(${s.id},'duration',this.value)"></div>
       </div>
     </div>
   `).join('');
@@ -1405,8 +1545,8 @@ function getCashflowInputs(){
 }
 function renderCashflow(){
   els('c_rateVal').textContent = parseFloat(els('c_rate').value).toFixed(2).replace(/\.?0+$/,'').concat('%');
-  els('c_yearsVal').textContent = els('c_years').value + ' years';
-  els('c-headline-years').textContent = els('c_years').value + ' years';
+  els('c_yearsVal').textContent = els('c_years').value + T(' years',' 年');
+  els('c-headline-years').textContent = els('c_years').value + T(' years',' 年');
 
   const inputs = getCashflowInputs();
   const sim = simulateCashflow(inputs);
@@ -1428,19 +1568,20 @@ function renderCashflow(){
   els('c-pct').textContent = Math.abs(changePct).toFixed(0)+'%';
   if(change < 0 || sim.depletedMonth){
     box.className = 'headline wash-red';
-    els('c-endbal-sub').textContent = 'projected ending balance';
-    els('c-pct-sub').textContent = 'of starting balance used up';
+    els('c-endbal-sub').textContent = T('projected ending balance','预计期末余额');
+    els('c-pct-sub').textContent = T('of starting balance used up','已耗用起始余额的比例');
     if(sim.depletedMonth){
       const depYear = Math.ceil(sim.depletedMonth/12);
-      els('c-note').textContent = `At this rate, the balance is projected to reach $0 by ${yearPhrase(depYear)} \u2014 well before the ${inputs.years}-year horizon.`;
+      els('c-note').textContent = T(`At this rate, the balance is projected to reach $0 by ${yearPhrase(depYear)} \u2014 well before the ${inputs.years}-year horizon.`,
+        `按此速度，余额预计将在${yearPhrase(depYear)}耗尽\u2014\u2014远早于${inputs.years}年期结束。`);
     } else {
-      els('c-note').textContent = `Spending is outpacing income. The balance shrinks steadily if nothing changes.`;
+      els('c-note').textContent = T(`Spending is outpacing income. The balance shrinks steadily if nothing changes.`, `支出超过收入。若维持现状，余额将持续减少。`);
     }
   } else {
     box.className = 'headline wash-green';
-    els('c-endbal-sub').textContent = 'projected ending balance';
-    els('c-pct-sub').textContent = 'growth on starting balance';
-    els('c-note').textContent = `Income covers expenses with room to spare, so the balance grows instead of depleting.`;
+    els('c-endbal-sub').textContent = T('projected ending balance','预计期末余额');
+    els('c-pct-sub').textContent = T('growth on starting balance','较起始余额的增长');
+    els('c-note').textContent = T(`Income covers expenses with room to spare, so the balance grows instead of depleting.`, `收入足以支付支出并有余裕，因此余额将持续增长而非减少。`);
   }
 
   if(cashflowView==='monthly'){
@@ -1450,22 +1591,22 @@ function renderCashflow(){
     const mDebits = mRows.map(m=>m.debit);
     const mBalances = mRows.map(m=>m.balance);
     els('chart-cashflow').innerHTML = ledgerChartSVG(mLabels, mCredits, mDebits, mBalances);
-    els('c-axisnote').textContent = 'X-axis: Months from now';
+    els('c-axisnote').textContent = T('X-axis: Months from now','横轴：距今月数');
 
-    let mRowsHtml = `<tr><th>Month</th><th>Credit</th><th>Debit</th><th>Net</th><th>Ending balance</th></tr>`;
+    let mRowsHtml = `<tr><th>${T('Month','月')}</th><th>${T('Credit','入账')}</th><th>${T('Debit','出账')}</th><th>${T('Net','净额')}</th><th>${T('Ending balance','期末余额')}</th></tr>`;
     const mShowEvery = Math.max(1, Math.ceil(mRows.length/12));
     mRows.forEach((m,i)=>{
       if(i % mShowEvery === 0 || i === mRows.length-1){
         const net = m.credit - m.debit;
-        mRowsHtml += `<tr><td>Month ${m.month}</td><td style="color:var(--primary-light)">+${fmt$(m.credit)}</td><td style="color:var(--danger)">-${fmt$(m.debit)}</td><td>${net>=0?'+':''}${fmt$(net)}</td><td>${fmt$(m.balance)}</td></tr>`;
+        mRowsHtml += `<tr><td>${T('Month '+m.month, '第'+m.month+'月')}</td><td style="color:var(--primary-light)">+${fmt$(m.credit)}</td><td style="color:var(--danger)">-${fmt$(m.debit)}</td><td>${net>=0?'+':''}${fmt$(net)}</td><td>${fmt$(m.balance)}</td></tr>`;
       }
     });
     els('cashflow-table').innerHTML = mRowsHtml;
   } else {
     els('chart-cashflow').innerHTML = ledgerChartSVG(axisLabels(years), credits, debits, balances);
-    els('c-axisnote').textContent = 'X-axis: ' + axisCaption();
+    els('c-axisnote').textContent = T('X-axis: ','横轴：') + axisCaption();
 
-    let rowsHtml = `<tr><th>${axisCaption()}</th><th>Credit</th><th>Debit</th><th>Net</th><th>Ending balance</th></tr>`;
+    let rowsHtml = `<tr><th>${axisCaption()}</th><th>${T('Credit','入账')}</th><th>${T('Debit','出账')}</th><th>${T('Net','净额')}</th><th>${T('Ending balance','期末余额')}</th></tr>`;
     const showEvery = Math.max(1, Math.ceil(rows.length/12));
     rows.forEach((r,i)=>{
       if(i % showEvery === 0 || i === rows.length-1){
@@ -1505,11 +1646,12 @@ function runDelayScenario(inputs, delay){
 }
 function renderDelay(){
   els('d_returnVal').textContent = parseFloat(els('d_return').value).toFixed(1)+'%';
-  els('d_yearsVal').textContent = els('d_years').value + ' years';
-  els('d_contribYearsVal').textContent = els('d_contribYears').value + ' years';
+  els('d_yearsVal').textContent = els('d_years').value + T(' years',' 年');
+  els('d_contribYearsVal').textContent = els('d_contribYears').value + T(' years',' 年');
   const delay = parseInt(els('d_delay').value)||0;
-  els('d_delayVal').textContent = delay + (delay===1?' year':' years');
-  els('d-delayinline').textContent = 'after ' + delay + (delay===1?' year':' years');
+  els('d_delayVal').textContent = delay + T(delay===1?' year':' years', ' 年');
+  els('d-costwaiting-label').textContent = T('The cost of waiting','等待的代价');
+  els('d-delayinline').textContent = T('after ' + delay + (delay===1?' year':' years'), delay+'年后');
 
   const inputs = getDelayInputs();
   const now = simulateGrowth({lumpSum:inputs.lumpSum, monthly:inputs.monthly, rate:inputs.rate, years:inputs.years, contribYears:Math.min(inputs.contribYears, inputs.years)});
@@ -1522,8 +1664,9 @@ function renderDelay(){
   els('d-gap').textContent = fmt$(gap);
   els('d-pct').textContent = pct.toFixed(0)+'%';
   els('d-note').textContent = delay===0
-    ? 'No delay entered \u2014 move the slider to see what waiting costs.'
-    : `Waiting ${delay} ${delay===1?'year':'years'} to start costs ${fmt$(gap)} by the end of the plan, even though every other input stays identical.`;
+    ? T('No delay entered \u2014 move the slider to see what waiting costs.', '尚未输入延迟时间\u2014\u2014拖动滑块可查看等待的代价。')
+    : T(`Waiting ${delay} ${delay===1?'year':'years'} to start costs ${fmt$(gap)} by the end of the plan, even though every other input stays identical.`,
+        `等待${delay}年才开始，即使其他所有输入条件保持不变，到方案结束时也将损失${fmt$(gap)}。`);
 
   const years = now.yearly.map(y=>y.year);
   const laterVals = years.map(y=>{
@@ -1531,32 +1674,35 @@ function renderDelay(){
     return m ? m.balance : 0;
   });
   const dRetireOffset = getRetirementOffset();
-  const dMarkerOpts = (dRetireOffset!=null && dRetireOffset<=inputs.years) ? {markerIndex: Math.round(dRetireOffset), markerLabel:'Retirement'} : {};
+  const dMarkerOpts = (dRetireOffset!=null && dRetireOffset<=inputs.years) ? {markerIndex: Math.round(dRetireOffset), markerLabel:T('Retirement','退休')} : {};
   els('chart-delay').innerHTML = lineChartSVG(axisLabels(years), [
     {values: now.yearly.map(y=>y.balance), color:'#1F4B3F'},
     {values: laterVals, color:'#9C3B2E', dashed:true}
   ], null, dMarkerOpts);
-  els('d-axisnote').textContent = 'X-axis: ' + axisCaption();
+  els('d-axisnote').textContent = T('X-axis: ','横轴：') + axisCaption();
 
   const maxDelay = Math.min(inputs.years-1, 15);
   const ageSet = getClientAge();
   const labels=[], barVals=[];
   for(let d=0; d<=maxDelay; d++){
-    labels.push(ageSet!=null ? String(Math.round(ageSet+d)) : (d===0?'Now':'+'+d+'y'));
+    labels.push(ageSet!=null ? String(Math.round(ageSet+d)) : (d===0?T('Now','现在'):'+'+d+T('y','年')));
     barVals.push(runDelayScenario(inputs, d).finalBalance);
   }
   els('chart-delaybars').innerHTML = delayBarsSVG(labels, barVals);
-  els('d-barsaxisnote').textContent = ageSet!=null ? 'X-axis: age when starting' : 'X-axis: years delayed before starting';
+  els('d-barsaxisnote').textContent = ageSet!=null ? T('X-axis: age when starting','横轴：开始时的年龄') : T('X-axis: years delayed before starting','横轴：开始前延迟的年数');
 }
 
 /* ---------------- render all + tabs ---------------- */
 function updateLinkedNotes(){
   const g = getGrowthInputs();
-  const summary = `${fmt$(g.lumpSum)} initial, ${fmt$(g.monthly)}/month for ${g.contribYears} years, ${g.rate}% annual return, ${g.years}-year horizon.`;
-  els('i_tag').textContent = linkedMode ? 'Linked to Growth tab' : 'Stand-alone \u00b7 own inputs';
-  els('d_tag').textContent = linkedMode ? 'Linked to Growth tab' : 'Stand-alone \u00b7 own inputs';
-  els('i_linkedNote').innerHTML = `<b>Linked to Growth tab:</b> ${summary} Adjust those on the Growth tab \u2014 the bank rate and inflation rate here set the "leave it idle" comparison.`;
-  els('d_linkedNote').innerHTML = `<b>Linked to Growth tab:</b> ${summary} Adjust those on the Growth tab \u2014 only the delay slider here is independent.`;
+  const summary = T(`${fmt$(g.lumpSum)} initial, ${fmt$(g.monthly)}/month for ${g.contribYears} years, ${g.rate}% annual return, ${g.years}-year horizon.`,
+    `初始${fmt$(g.lumpSum)}，每月供款${fmt$(g.monthly)}，供款${g.contribYears}年，年回报率${g.rate}%，时间跨度${g.years}年。`);
+  els('i_tag').textContent = linkedMode ? T('Linked to Growth tab','已关联至增长标签') : t('tag_standalone');
+  els('d_tag').textContent = linkedMode ? T('Linked to Growth tab','已关联至增长标签') : t('tag_standalone');
+  els('i_linkedNote').innerHTML = T(`<b>Linked to Growth tab:</b> ${summary} Adjust those on the Growth tab \u2014 the bank rate and inflation rate here set the "leave it idle" comparison.`,
+    `<b>已关联至增长标签：</b>${summary}请到增长标签调整这些数值\u2014\u2014此处的银行利率与通胀率用于设定"闲置不动"的比较基准。`);
+  els('d_linkedNote').innerHTML = T(`<b>Linked to Growth tab:</b> ${summary} Adjust those on the Growth tab \u2014 only the delay slider here is independent.`,
+    `<b>已关联至增长标签：</b>${summary}请到增长标签调整这些数值\u2014\u2014此处只有延迟滑块可独立设定。`);
   els('i_linkedNote').style.display = linkedMode ? 'block' : 'none';
   els('d_linkedNote').style.display = linkedMode ? 'block' : 'none';
   els('i_standaloneFields').style.display = linkedMode ? 'none' : 'block';
@@ -1595,21 +1741,21 @@ document.querySelectorAll('input').forEach(inp=>{
 function pageHeader(){
   return `<div class="rp-header">
     <div class="rp-brand"><img src="${LOGO_FULL}"><span class="rp-brandname">Financial Architects Advisory</span></div>
-    <span class="rp-tag">Confidential</span>
+    <span class="rp-tag">${T('Confidential','机密文件')}</span>
   </div>`;
 }
 function pageFooter(pageNum, total){
   total = total || 5;
   return `<div class="rp-footer">
     <div class="rp-fbrand"><img src="${LOGO_FULL}"><span class="rp-fname">Financial Architects Advisory</span></div>
-    <span class="rp-fpage">Page ${pageNum} of ${total}</span>
+    <span class="rp-fpage">${T(`Page ${pageNum} of ${total}`, `第${pageNum}页，共${total}页`)}</span>
   </div>`;
 }
 
 function saveReport(){
   const client = els('clientName').value.trim();
   const advisor = els('advisorName').value.trim();
-  const dateStr = new Date().toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
+  const dateStr = new Date().toLocaleDateString(currentLang==='zh' ? 'zh-CN' : 'en-US', {year:'numeric', month:'long', day:'numeric'});
 
   const gInputs = getGrowthInputs();
   const gSim = simulateGrowth(gInputs);
@@ -1647,27 +1793,29 @@ function saveReport(){
     const projectedAtPoint = gSim.yearly[compareIndex].balance + (gWithdrawableApplies ? gCpfWithdrawable : 0);
     const gap = projectedAtPoint - gGoalInfo.value;
     const gapPct = gGoalInfo.value>0 ? Math.abs(gap/gGoalInfo.value)*100 : 0;
-    const pointPhrase = gUsingRetirePoint ? `at retirement (${yearPhrase(compareYear)})` : `by the end of the ${gInputs.years}-year horizon`;
+    const pointPhrase = gUsingRetirePoint ? T(`at retirement (${yearPhrase(compareYear)})`, `退休时（${yearPhrase(compareYear)}）`) : T(`by the end of the ${gInputs.years}-year horizon`, `到${gInputs.years}年期结束时`);
     const basis = gGoalInfo.type==='income'
-      ? `funding ${fmt$(gGoalInfo.income)}/month for ${gGoalInfo.years} years at ${gGoalInfo.rate}% in retirement`
-      : `the ${fmt$(gGoalInfo.value)} goal`;
-    const gCpfClause = gWithdrawableApplies && gCpfWithdrawable>0 ? ` (including ${fmt$(gCpfWithdrawable)} withdrawable from CPF above the Retirement Sum at 55)` : '';
+      ? T(`funding ${fmt$(gGoalInfo.income)}/month for ${gGoalInfo.years} years at ${gGoalInfo.rate}% in retirement`, `以退休期间${gGoalInfo.rate}%回报率支付每月${fmt$(gGoalInfo.income)}、维持${gGoalInfo.years}年`)
+      : T(`the ${fmt$(gGoalInfo.value)} goal`, `${fmt$(gGoalInfo.value)}的目标`);
+    const gCpfClause = gWithdrawableApplies && gCpfWithdrawable>0 ? T(` (including ${fmt$(gCpfWithdrawable)} withdrawable from CPF above the Retirement Sum at 55)`, `（含55岁时可从公积金超出退休存款额提取的${fmt$(gCpfWithdrawable)}）`) : '';
     const onTrack = gap>=0;
     const gc = onTrack ? '#1F4B3F' : '#7A3D2E';
     const gwash = onTrack ? 'wash-green' : 'wash-red';
     gGoalNoteHtml = `<div class="rp-headline ${gwash}">
-      <div class="rp-label" style="color:${gc};">${onTrack?'On track for retirement goal':'Falls short of retirement goal'}</div>
+      <div class="rp-label" style="color:${gc};">${onTrack?T('On track for retirement goal','退休目标进展顺利'):T('Falls short of retirement goal','未达到退休目标')}</div>
       <div class="rp-hfigures">
-        <div><div class="rp-hfvalue" style="color:${gc};">${fmt$(Math.abs(gap))}</div><div class="rp-hfsub" style="color:${gc};">${onTrack?"surplus over what's needed":"short of what's needed"}</div></div>
+        <div><div class="rp-hfvalue" style="color:${gc};">${fmt$(Math.abs(gap))}</div><div class="rp-hfsub" style="color:${gc};">${onTrack?T("surplus over what's needed","超出所需金额"):T("short of what's needed","低于所需金额")}</div></div>
         <div class="rp-hfdivider" style="color:${gc};">&mdash;</div>
-        <div><div class="rp-hfvalue" style="color:${gc};">${gapPct.toFixed(0)}%</div><div class="rp-hfsub" style="color:${gc};">${onTrack?'above':'below'} the required amount</div></div>
+        <div><div class="rp-hfvalue" style="color:${gc};">${gapPct.toFixed(0)}%</div><div class="rp-hfsub" style="color:${gc};">${onTrack?T('above','高于'):T('below','低于')} ${T('the required amount','所需金额')}</div></div>
       </div>
-      <div class="rp-hnote" style="color:${gc};">${pointPhrase}, the plan is projected to reach ${onTrack?'':'only '}${fmt$(projectedAtPoint)}${gCpfClause} against the ${fmt$(gGoalInfo.value)} needed for ${basis}.</div>
+      <div class="rp-hnote" style="color:${gc};">${onTrack
+        ? T(`${pointPhrase}, the plan is projected to reach ${fmt$(projectedAtPoint)}${gCpfClause} against the ${fmt$(gGoalInfo.value)} needed for ${basis}.`, `${pointPhrase}，此方案预计可达到${fmt$(projectedAtPoint)}${gCpfClause}，而${basis}所需金额为${fmt$(gGoalInfo.value)}。`)
+        : T(`${pointPhrase}, the plan is projected to reach only ${fmt$(projectedAtPoint)}${gCpfClause} against the ${fmt$(gGoalInfo.value)} needed for ${basis}.`, `${pointPhrase}，此方案预计只能达到${fmt$(projectedAtPoint)}${gCpfClause}，而${basis}所需金额为${fmt$(gGoalInfo.value)}。`)}</div>
     </div>`;
   }
   if(gUsingRetirePoint){
     gChartOpts.markerIndex = Math.round(gRetireOffset);
-    gChartOpts.markerLabel = 'Retirement';
+    gChartOpts.markerLabel = T('Retirement','退休');
   }
 
   const iInputs = getInflationInputs();
@@ -1695,8 +1843,10 @@ function saveReport(){
   const cHeadWash = (cChange<0 || cSim.depletedMonth) ? 'wash-red' : 'wash-green';
   const cHeadColor = (cChange<0 || cSim.depletedMonth) ? '#7A3D2E' : '#1F4B3F';
   const cNote = cSim.depletedMonth
-    ? `At this rate, the balance is projected to reach $0 in year ${Math.ceil(cSim.depletedMonth/12)}, before the ${cInputs.years}-year horizon ends. Without a change in course, the runway is shorter than the plan requires.`
-    : (cChange<0 ? `Spending is outpacing income. Left unaddressed, the balance is projected to shrink steadily rather than provide lasting security.` : `Income covers expenses with room to spare, so the balance is projected to grow rather than deplete.`);
+    ? T(`At this rate, the balance is projected to reach $0 in year ${Math.ceil(cSim.depletedMonth/12)}, before the ${cInputs.years}-year horizon ends. Without a change in course, the runway is shorter than the plan requires.`,
+        `按此速度，余额预计将在第${Math.ceil(cSim.depletedMonth/12)}年耗尽，早于${cInputs.years}年期结束。若不改变现状，可持续时间将短于方案所需。`)
+    : (cChange<0 ? T(`Spending is outpacing income. Left unaddressed, the balance is projected to shrink steadily rather than provide lasting security.`, `支出超过收入。若不处理，余额预计将持续减少，无法提供长期保障。`)
+                 : T(`Income covers expenses with room to spare, so the balance is projected to grow rather than deplete.`, `收入足以支付支出并有余裕，因此余额预计将持续增长而非减少。`));
 
   const dInputs = getDelayInputs();
   const dNow = simulateGrowth({lumpSum:dInputs.lumpSum, monthly:dInputs.monthly, rate:dInputs.rate, years:dInputs.years, contribYears:Math.min(dInputs.contribYears, dInputs.years)});
@@ -1711,10 +1861,10 @@ function saveReport(){
   const dMaxDelay = Math.min(dInputs.years-1, 15);
   const dAgeSet = getClientAge();
   const dLabels=[], dVals=[];
-  for(let d=0; d<=dMaxDelay; d++){ dLabels.push(dAgeSet!=null ? String(Math.round(dAgeSet+d)) : (d===0?'Now':'+'+d+'y')); dVals.push(runDelayScenario(dInputs, d).finalBalance); }
+  for(let d=0; d<=dMaxDelay; d++){ dLabels.push(dAgeSet!=null ? String(Math.round(dAgeSet+d)) : (d===0?T('Now','现在'):'+'+d+T('y','年'))); dVals.push(runDelayScenario(dInputs, d).finalBalance); }
 
-  const clientRow = client ? `<div class="rp-row"><span class="rp-k">Prepared for</span><span class="rp-v">${escapeHtml(client)}</span></div>` : '';
-  const advisorRow = `<div class="rp-row"><span class="rp-k">Prepared by</span><span class="rp-v">${advisor?escapeHtml(advisor):'Financial Architects Advisory'}</span></div>`;
+  const clientRow = client ? `<div class="rp-row"><span class="rp-k">${T('Prepared for','服务对象')}</span><span class="rp-v">${escapeHtml(client)}</span></div>` : '';
+  const advisorRow = `<div class="rp-row"><span class="rp-k">${T('Prepared by','顾问')}</span><span class="rp-v">${advisor?escapeHtml(advisor):'Financial Architects Advisory'}</span></div>`;
 
   const pages = [];
 
@@ -1724,19 +1874,19 @@ function saveReport(){
     <div class="rp-cover">
       <img class="rp-coverlogo" src="${LOGO_FULL}">
       <div class="rp-rule"></div>
-      <div class="rp-subtitle">A four-part projection covering growth, inflation, cash flow, and the cost of waiting &mdash; prepared to guide today's decisions.</div>
+      <div class="rp-subtitle">${T("A four-part projection covering growth, inflation, cash flow, and the cost of waiting &mdash; prepared to guide today's decisions.", "涵盖增长、通胀、现金流与延迟代价的四部分预测——协助您做出今日的决策。")}</div>
       <div class="rp-prepared">
         ${clientRow}
         ${advisorRow}
-        <div class="rp-row"><span class="rp-k">Date</span><span class="rp-v">${dateStr}</span></div>
+        <div class="rp-row"><span class="rp-k">${T('Date','日期')}</span><span class="rp-v">${dateStr}</span></div>
       </div>
       <div class="rp-toc">
-        <div class="rp-item"><div class="rp-num">01</div><div class="rp-lbl">Growth Projection</div></div>
-        <div class="rp-item"><div class="rp-num">02</div><div class="rp-lbl">Inflation Impact</div></div>
-        <div class="rp-item"><div class="rp-num">03</div><div class="rp-lbl">Cash Flow Timeline</div></div>
-        <div class="rp-item"><div class="rp-num">04</div><div class="rp-lbl">Cost of Delay</div></div>
+        <div class="rp-item"><div class="rp-num">01</div><div class="rp-lbl">${T('Growth Projection','增长预测')}</div></div>
+        <div class="rp-item"><div class="rp-num">02</div><div class="rp-lbl">${T('Inflation Impact','通胀影响')}</div></div>
+        <div class="rp-item"><div class="rp-num">03</div><div class="rp-lbl">${T('Cash Flow Timeline','现金流时间轴')}</div></div>
+        <div class="rp-item"><div class="rp-num">04</div><div class="rp-lbl">${T('Cost of Delay','延迟代价')}</div></div>
       </div>
-      <div style="font-size:9.5px; color:#9a9a90; max-width:440px; line-height:1.6; margin-top:34px;">Figures throughout this report are illustrative projections based on the assumptions stated on each page, using fixed annual rates of return and inflation. They are not a guarantee or promise of actual results, which will vary and could include loss of principal. Please consult your financial professional before making decisions based on this report.</div>
+      <div style="font-size:9.5px; color:#9a9a90; max-width:440px; line-height:1.6; margin-top:34px;">${T('Figures throughout this report are illustrative projections based on the assumptions stated on each page, using fixed annual rates of return and inflation. They are not a guarantee or promise of actual results, which will vary and could include loss of principal. Please consult your financial professional before making decisions based on this report.', '本报告中的数字均为根据每页所列假设条件得出的示意性预测，采用固定年回报率与通胀率计算。这些数字并非对实际结果的保证或承诺，实际结果可能有所不同，并可能包含本金损失。在根据本报告做出决定前，请咨询您的财务顾问。')}</div>
     </div>
     ${pageFooter(1)}
   </div>`);
@@ -1745,27 +1895,27 @@ function saveReport(){
   pages.push(`<div class="report-page">
     ${pageHeader()}
     <div class="rp-body">
-      <div class="rp-eyebrow-sm">01 &middot; Growth Projection</div>
-      <h2 class="rp-section-title">Compounding on a disciplined plan</h2>
-      <div class="rp-assumptions">${fmt$(gInputs.lumpSum)} initial, ${fmt$(gInputs.monthly)}/month for ${gInputs.contribYears} years, ${gInputs.rate}% annual return, ${gInputs.years}-year horizon.</div>
+      <div class="rp-eyebrow-sm">01 &middot; ${T('Growth Projection','增长预测')}</div>
+      <h2 class="rp-section-title">${T('Compounding on a disciplined plan','严守纪律带来的复利增长')}</h2>
+      <div class="rp-assumptions">${T(`${fmt$(gInputs.lumpSum)} initial, ${fmt$(gInputs.monthly)}/month for ${gInputs.contribYears} years, ${gInputs.rate}% annual return, ${gInputs.years}-year horizon.`, `初始${fmt$(gInputs.lumpSum)}，每月供款${fmt$(gInputs.monthly)}，供款${gInputs.contribYears}年，年回报率${gInputs.rate}%，时间跨度${gInputs.years}年。`)}</div>
       <div class="rp-headline wash-green">
-        <div class="rp-label" style="color:#1F4B3F;">Total growth over the period</div>
+        <div class="rp-label" style="color:#1F4B3F;">${T('Total growth over the period','期间总增长')}</div>
         <div class="rp-hfigures">
-          <div><div class="rp-hfvalue" style="color:#1F4B3F;">${fmt$(gGrowth)}</div><div class="rp-hfsub" style="color:#1F4B3F;">earned on top of what's put in</div></div>
+          <div><div class="rp-hfvalue" style="color:#1F4B3F;">${fmt$(gGrowth)}</div><div class="rp-hfsub" style="color:#1F4B3F;">${T("earned on top of what's put in","在供款之上额外赚取的部分")}</div></div>
           <div class="rp-hfdivider" style="color:#1F4B3F;">&mdash;</div>
-          <div><div class="rp-hfvalue" style="color:#1F4B3F;">${gGrowthPct.toFixed(0)}%</div><div class="rp-hfsub" style="color:#1F4B3F;">return on total contributed</div></div>
+          <div><div class="rp-hfvalue" style="color:#1F4B3F;">${gGrowthPct.toFixed(0)}%</div><div class="rp-hfsub" style="color:#1F4B3F;">${T('return on total contributed','总供款的回报率')}</div></div>
         </div>
       </div>
       <div class="rp-stat-row">
-        <div class="rp-stat"><div class="rp-slabel">Total contributed</div><div class="rp-svalue">${fmt$(gSim.totalContributed)}</div></div>
-        <div class="rp-stat"><div class="rp-slabel">Ending balance</div><div class="rp-svalue" style="color:#1F4B3F;">${fmt$(gSim.finalBalance)}</div></div>
+        <div class="rp-stat"><div class="rp-slabel">${T('Total contributed','总供款额')}</div><div class="rp-svalue">${fmt$(gSim.totalContributed)}</div></div>
+        <div class="rp-stat"><div class="rp-slabel">${T('Ending balance','期末余额')}</div><div class="rp-svalue" style="color:#1F4B3F;">${fmt$(gSim.finalBalance)}</div></div>
       </div>
       ${lineChartSVG(axisLabels(gSim.yearly.map(y=>y.year)), [
         {values: gSim.yearly.map(y=>y.balance), color:'#1F4B3F', fill:true},
         {values: gSim.yearly.map(y=>y.totalContributed), color:'#B8B49C', dashed:true}
       ], 300, gChartOpts)}
       ${gGoalNoteHtml}
-      <div class="rp-narrative">Over ${gInputs.years} years, consistent contributions compound into meaningful growth. The plan is projected to turn ${fmt$(gSim.totalContributed)} of discipline into ${fmt$(gSim.finalBalance)} &mdash; a ${gGrowthPct.toFixed(0)}% return on everything contributed, purely from staying invested.</div>
+      <div class="rp-narrative">${T(`Over ${gInputs.years} years, consistent contributions compound into meaningful growth. The plan is projected to turn ${fmt$(gSim.totalContributed)} of discipline into ${fmt$(gSim.finalBalance)} &mdash; a ${gGrowthPct.toFixed(0)}% return on everything contributed, purely from staying invested.`, `经过${gInputs.years}年，持续的供款将透过复利带来显著增长。此方案预计将${fmt$(gSim.totalContributed)}的纪律性投入转化为${fmt$(gSim.finalBalance)}——仅凭持续投资，即可获得${gGrowthPct.toFixed(0)}%的总供款回报率。`)}</div>
     </div>
     ${pageFooter(2)}
   </div>`);
@@ -1774,51 +1924,55 @@ function saveReport(){
   pages.push(`<div class="report-page">
     ${pageHeader()}
     <div class="rp-body">
-      <div class="rp-eyebrow-sm">02 &middot; Inflation Impact</div>
-      <h2 class="rp-section-title">${iInputs.linked ? 'Investing vs. leaving it idle' : 'What standing still really costs'}</h2>
+      <div class="rp-eyebrow-sm">02 &middot; ${T('Inflation Impact','通胀影响')}</div>
+      <h2 class="rp-section-title">${iInputs.linked ? T('Investing vs. leaving it idle','投资 vs. 闲置不动') : T('What standing still really costs','原地踏步的真实代价')}</h2>
       <div class="rp-assumptions">${iInputs.linked
-        ? `Linked to Growth tab: ${fmt$(iInputs.lumpSum)} initial, ${fmt$(iInputs.monthly)}/month for ${iInputs.contribYears} years, ${iInputs.rate}% invested return vs. ${iInputs.bankRate}% idle bank rate, ${iInputs.inflation}% inflation, ${iInputs.years}-year horizon.`
-        : `${fmt$(iInputs.lumpSum)} sitting idle at ${iInputs.bankRate}% bank interest, ${iInputs.inflation}% inflation, ${iInputs.years}-year horizon.`}</div>
+        ? T(`Linked to Growth tab: ${fmt$(iInputs.lumpSum)} initial, ${fmt$(iInputs.monthly)}/month for ${iInputs.contribYears} years, ${iInputs.rate}% invested return vs. ${iInputs.bankRate}% idle bank rate, ${iInputs.inflation}% inflation, ${iInputs.years}-year horizon.`,
+            `已关联至增长标签：初始${fmt$(iInputs.lumpSum)}，每月供款${fmt$(iInputs.monthly)}，供款${iInputs.contribYears}年，投资回报率${iInputs.rate}% vs. 闲置银行利率${iInputs.bankRate}%，通胀率${iInputs.inflation}%，时间跨度${iInputs.years}年。`)
+        : T(`${fmt$(iInputs.lumpSum)} sitting idle at ${iInputs.bankRate}% bank interest, ${iInputs.inflation}% inflation, ${iInputs.years}-year horizon.`,
+            `${fmt$(iInputs.lumpSum)}闲置于银行，利率${iInputs.bankRate}%，通胀率${iInputs.inflation}%，时间跨度${iInputs.years}年。`)}</div>
       ${iInputs.linked ? `
       <div class="rp-headline wash-green">
-        <div class="rp-label" style="color:#1F4B3F;">The real-terms difference: investing vs. leaving it idle</div>
+        <div class="rp-label" style="color:#1F4B3F;">${T('The real-terms difference: investing vs. leaving it idle','实际差异：投资 vs. 闲置不动')}</div>
         <div class="rp-hfigures">
-          <div><div class="rp-hfvalue" style="color:#1F4B3F;">${fmt$(iGap)}</div><div class="rp-hfsub" style="color:#1F4B3F;">more purchasing power by investing</div></div>
+          <div><div class="rp-hfvalue" style="color:#1F4B3F;">${fmt$(iGap)}</div><div class="rp-hfsub" style="color:#1F4B3F;">${T('more purchasing power by investing','投资带来的额外购买力')}</div></div>
           <div class="rp-hfdivider" style="color:#1F4B3F;">&mdash;</div>
-          <div><div class="rp-hfvalue" style="color:#1F4B3F;">${iGapPct.toFixed(0)}%</div><div class="rp-hfsub" style="color:#1F4B3F;">real-terms advantage</div></div>
+          <div><div class="rp-hfvalue" style="color:#1F4B3F;">${iGapPct.toFixed(0)}%</div><div class="rp-hfsub" style="color:#1F4B3F;">${T('real-terms advantage','实际优势')}</div></div>
         </div>
-        <div class="rp-hnote" style="color:#1F4B3F;">Both figures are already adjusted for inflation \u2014 this is the genuine gap in what the money can actually buy.</div>
+        <div class="rp-hnote" style="color:#1F4B3F;">${T('Both figures are already adjusted for inflation \u2014 this is the genuine gap in what the money can actually buy.', '以上两个数字均已经过通胀调整——这是资金实际购买力之间的真实差距。')}</div>
       </div>
       <div class="rp-stat-row">
-        <div class="rp-stat"><div class="rp-slabel">Invested, real value</div><div class="rp-svalue" style="color:#1F4B3F;">${fmt$(iReal)}</div></div>
-        <div class="rp-stat"><div class="rp-slabel">Idle, real value</div><div class="rp-svalue" style="color:#9C3B2E;">${fmt$(iIdleReal)}</div></div>
-        <div class="rp-stat"><div class="rp-slabel">Invested, nominal balance</div><div class="rp-svalue" style="color:#A9793C;">${fmt$(iNominal)}</div></div>
+        <div class="rp-stat"><div class="rp-slabel">${T('Invested, real value','已投资，实际价值')}</div><div class="rp-svalue" style="color:#1F4B3F;">${fmt$(iReal)}</div></div>
+        <div class="rp-stat"><div class="rp-slabel">${T('Idle, real value','闲置，实际价值')}</div><div class="rp-svalue" style="color:#9C3B2E;">${fmt$(iIdleReal)}</div></div>
+        <div class="rp-stat"><div class="rp-slabel">${T('Invested, nominal balance','已投资，名义余额')}</div><div class="rp-svalue" style="color:#A9793C;">${fmt$(iNominal)}</div></div>
       </div>
       ${lineChartSVG(axisLabels(iSim.yearly.map(y=>y.year)), [
         {values: iSim.yearly.map(y=>y.balance), color:'#1F4B3F'},
         {values: iSim.yearly.map(y=>y.realBalance), color:'#A9793C', dashed:true},
         {values: iSim.yearly.map(y=>y.idleRealBalance), color:'#9C3B2E', dashed:true}
       ], 300)}
-      <div class="rp-narrative">Even a well-invested plan isn't immune to inflation \u2014 growing at ${iInputs.rate}% while prices rise ${iInputs.inflation}% a year still leaves the plan's real purchasing power at ${fmt$(iReal)} rather than the full ${fmt$(iNominal)} nominal figure. But compared to leaving the same contributions idle in a bank at ${iInputs.bankRate}%, which is projected to hold only ${fmt$(iIdleReal)} of real purchasing power, investing still comes out ${fmt$(iGap)} ahead in today's terms.</div>
+      <div class="rp-narrative">${T(`Even a well-invested plan isn't immune to inflation \u2014 growing at ${iInputs.rate}% while prices rise ${iInputs.inflation}% a year still leaves the plan's real purchasing power at ${fmt$(iReal)} rather than the full ${fmt$(iNominal)} nominal figure. But compared to leaving the same contributions idle in a bank at ${iInputs.bankRate}%, which is projected to hold only ${fmt$(iIdleReal)} of real purchasing power, investing still comes out ${fmt$(iGap)} ahead in today's terms.`,
+        `即使是良好的投资方案，也无法完全免受通胀影响——以${iInputs.rate}%的速度增长，同时物价以每年${iInputs.inflation}%上涨，此方案的实际购买力仍只有${fmt$(iReal)}，而非名义上的${fmt$(iNominal)}。但相较于将同样的供款闲置于银行（利率${iInputs.bankRate}%，预计实际购买力仅为${fmt$(iIdleReal)}），投资仍以今日币值计算领先${fmt$(iGap)}。`)}</div>
       ` : `
       <div class="rp-headline wash-red">
-        <div class="rp-label" style="color:#7A3D2E;">Purchasing power lost by doing nothing</div>
+        <div class="rp-label" style="color:#7A3D2E;">${T('Purchasing power lost by doing nothing','无所作为导致的购买力损失')}</div>
         <div class="rp-hfigures">
-          <div><div class="rp-hfvalue" style="color:#7A3D2E;">${fmt$(iNominal-iReal)}</div><div class="rp-hfsub" style="color:#7A3D2E;">in today's dollars</div></div>
+          <div><div class="rp-hfvalue" style="color:#7A3D2E;">${fmt$(iNominal-iReal)}</div><div class="rp-hfsub" style="color:#7A3D2E;">${T("in today's dollars","以今日币值计算")}</div></div>
           <div class="rp-hfdivider" style="color:#7A3D2E;">&mdash;</div>
-          <div><div class="rp-hfvalue" style="color:#7A3D2E;">${iLostPct.toFixed(0)}%</div><div class="rp-hfsub" style="color:#7A3D2E;">of the nominal balance</div></div>
+          <div><div class="rp-hfvalue" style="color:#7A3D2E;">${iLostPct.toFixed(0)}%</div><div class="rp-hfsub" style="color:#7A3D2E;">${T('of the nominal balance','占名义余额的比例')}</div></div>
         </div>
-        <div class="rp-hnote" style="color:#7A3D2E;">The account balance itself won't shrink \u2014 what it can buy will.</div>
+        <div class="rp-hnote" style="color:#7A3D2E;">${T("The account balance itself won't shrink \u2014 what it can buy will.", '账户余额本身不会减少——但它能买到的东西会减少。')}</div>
       </div>
       <div class="rp-stat-row">
-        <div class="rp-stat"><div class="rp-slabel">Nominal balance</div><div class="rp-svalue" style="color:#1F4B3F;">${fmt$(iNominal)}</div></div>
-        <div class="rp-stat"><div class="rp-slabel">Real value (today's $)</div><div class="rp-svalue" style="color:#A9793C;">${fmt$(iReal)}</div></div>
+        <div class="rp-stat"><div class="rp-slabel">${T('Nominal balance','名义余额')}</div><div class="rp-svalue" style="color:#1F4B3F;">${fmt$(iNominal)}</div></div>
+        <div class="rp-stat"><div class="rp-slabel">${T("Real value (today's $)","实际价值（今日币值）")}</div><div class="rp-svalue" style="color:#A9793C;">${fmt$(iReal)}</div></div>
       </div>
       ${lineChartSVG(axisLabels(iSim.yearly.map(y=>y.year)), [
         {values: iSim.yearly.map(y=>y.balance), color:'#1F4B3F'},
         {values: iSim.yearly.map(y=>y.realBalance), color:'#A9793C', dashed:true}
       ], 320)}
-      <div class="rp-narrative">Cash earning ${iInputs.bankRate}% while inflation runs at ${iInputs.inflation}% loses purchasing power every year it sits still. Left untouched, ${fmt$(iInputs.lumpSum)} today is projected to buy no more than ${fmt$(iReal)} does today by year ${iInputs.years} &mdash; a ${iLostPct.toFixed(0)}% erosion, even though the number on the statement never goes down.</div>
+      <div class="rp-narrative">${T(`Cash earning ${iInputs.bankRate}% while inflation runs at ${iInputs.inflation}% loses purchasing power every year it sits still. Left untouched, ${fmt$(iInputs.lumpSum)} today is projected to buy no more than ${fmt$(iReal)} does today by year ${iInputs.years} &mdash; a ${iLostPct.toFixed(0)}% erosion, even though the number on the statement never goes down.`,
+        `现金以${iInputs.bankRate}%的利率增值，而通胀率为${iInputs.inflation}%，每一年不动，购买力都在流失。若维持不动，今日的${fmt$(iInputs.lumpSum)}到第${iInputs.years}年预计只能买到相当于今日${fmt$(iReal)}的东西——侵蚀了${iLostPct.toFixed(0)}%，即使账户上的数字从未减少。`)}</div>
       `}
     </div>
     ${pageFooter(3)}
@@ -1828,25 +1982,28 @@ function saveReport(){
   pages.push(`<div class="report-page">
     ${pageHeader()}
     <div class="rp-body">
-      <div class="rp-eyebrow-sm">03 &middot; Cash Flow Timeline</div>
-      <h2 class="rp-section-title">If nothing changes from here</h2>
-      <div class="rp-assumptions">${fmt$(cInputs.startBalance)} starting balance. Income: ${incomeStreams.map(s=>`${escapeHtml(s.label)} ${fmt$(s.amount)}/mo (yr ${s.start}\u2013${s.start+s.duration})`).join('; ') || 'none'}. Expenses: ${expenseStreams.map(s=>`${escapeHtml(s.label)} ${fmt$(s.amount)}/mo (yr ${s.start}\u2013${s.start+s.duration})`).join('; ') || 'none'}. ${cInputs.rate}% interest, ${cInputs.years}-year horizon.</div>
+      <div class="rp-eyebrow-sm">03 &middot; ${T('Cash Flow Timeline','现金流时间轴')}</div>
+      <h2 class="rp-section-title">${T('If nothing changes from here','若维持现状')}</h2>
+      <div class="rp-assumptions">${T(
+        `${fmt$(cInputs.startBalance)} starting balance. Income: ${incomeStreams.map(s=>`${escapeHtml(s.label)} ${fmt$(s.amount)}/mo (yr ${s.start}\u2013${s.start+s.duration})`).join('; ') || 'none'}. Expenses: ${expenseStreams.map(s=>`${escapeHtml(s.label)} ${fmt$(s.amount)}/mo (yr ${s.start}\u2013${s.start+s.duration})`).join('; ') || 'none'}. ${cInputs.rate}% interest, ${cInputs.years}-year horizon.`,
+        `起始余额${fmt$(cInputs.startBalance)}。收入：${incomeStreams.map(s=>`${escapeHtml(s.label)} ${fmt$(s.amount)}/月（第${s.start}\u2013${s.start+s.duration}年）`).join('；') || '无'}。支出：${expenseStreams.map(s=>`${escapeHtml(s.label)} ${fmt$(s.amount)}/月（第${s.start}\u2013${s.start+s.duration}年）`).join('；') || '无'}。利率${cInputs.rate}%，时间跨度${cInputs.years}年。`
+      )}</div>
       <div class="rp-headline ${cHeadWash}">
-        <div class="rp-label" style="color:${cHeadColor};">Projected position after ${cInputs.years} years</div>
+        <div class="rp-label" style="color:${cHeadColor};">${T(`Projected position after ${cInputs.years} years`, `${cInputs.years}年后的预计状况`)}</div>
         <div class="rp-hfigures">
-          <div><div class="rp-hfvalue" style="color:${cHeadColor};">${fmt$(cSim.finalBalance)}</div><div class="rp-hfsub" style="color:${cHeadColor};">ending balance</div></div>
+          <div><div class="rp-hfvalue" style="color:${cHeadColor};">${fmt$(cSim.finalBalance)}</div><div class="rp-hfsub" style="color:${cHeadColor};">${T('ending balance','期末余额')}</div></div>
           <div class="rp-hfdivider" style="color:${cHeadColor};">&mdash;</div>
-          <div><div class="rp-hfvalue" style="color:${cHeadColor};">${cChangePct>=0?'+':''}${cChangePct.toFixed(0)}%</div><div class="rp-hfsub" style="color:${cHeadColor};">vs. starting balance</div></div>
+          <div><div class="rp-hfvalue" style="color:${cHeadColor};">${cChangePct>=0?'+':''}${cChangePct.toFixed(0)}%</div><div class="rp-hfsub" style="color:${cHeadColor};">${T('vs. starting balance','相对起始余额')}</div></div>
         </div>
         <div class="rp-hnote" style="color:${cHeadColor};">${cNote}</div>
       </div>
       <div class="rp-stat-row">
-        <div class="rp-stat"><div class="rp-slabel">Total credited</div><div class="rp-svalue" style="color:#1F4B3F;">${fmt$(cRows.reduce((a,r)=>a+r.credit,0))}</div></div>
-        <div class="rp-stat"><div class="rp-slabel">Total debited</div><div class="rp-svalue" style="color:#9C3B2E;">${fmt$(cRows.reduce((a,r)=>a+r.debit,0))}</div></div>
+        <div class="rp-stat"><div class="rp-slabel">${T('Total credited','总入账')}</div><div class="rp-svalue" style="color:#1F4B3F;">${fmt$(cRows.reduce((a,r)=>a+r.credit,0))}</div></div>
+        <div class="rp-stat"><div class="rp-slabel">${T('Total debited','总出账')}</div><div class="rp-svalue" style="color:#9C3B2E;">${fmt$(cRows.reduce((a,r)=>a+r.debit,0))}</div></div>
       </div>
       ${ledgerChartSVG(axisLabels(cRows.map(y=>y.year)), cRows.map(y=>y.credit), cRows.map(y=>y.debit), cRows.map(y=>y.balance), 240)}
       <table class="rp-table">
-        <tr><th>${axisCaption()}</th><th>Credit</th><th>Debit</th><th>Net</th><th>Ending balance</th></tr>
+        <tr><th>${axisCaption()}</th><th>${T('Credit','入账')}</th><th>${T('Debit','出账')}</th><th>${T('Net','净额')}</th><th>${T('Ending balance','期末余额')}</th></tr>
         ${cfTableRows}
       </table>
     </div>
@@ -1857,20 +2014,23 @@ function saveReport(){
   pages.push(`<div class="report-page">
     ${pageHeader()}
     <div class="rp-body">
-      <div class="rp-eyebrow-sm">04 &middot; Cost of Delay</div>
-      <h2 class="rp-section-title">What a year of hesitation costs</h2>
-      <div class="rp-assumptions">${linkedMode ? 'Linked to Growth tab: ' : ''}${fmt$(dInputs.lumpSum)} initial, ${fmt$(dInputs.monthly)}/month, ${dInputs.rate}% annual return, ${dInputs.years}-year horizon, delayed ${dInputs.delay} ${dInputs.delay===1?'year':'years'}.</div>
+      <div class="rp-eyebrow-sm">04 &middot; ${T('Cost of Delay','延迟代价')}</div>
+      <h2 class="rp-section-title">${T('What a year of hesitation costs','犹豫一年的代价')}</h2>
+      <div class="rp-assumptions">${T(
+        `${linkedMode ? 'Linked to Growth tab: ' : ''}${fmt$(dInputs.lumpSum)} initial, ${fmt$(dInputs.monthly)}/month, ${dInputs.rate}% annual return, ${dInputs.years}-year horizon, delayed ${dInputs.delay} ${dInputs.delay===1?'year':'years'}.`,
+        `${linkedMode ? '已关联至增长标签：' : ''}初始${fmt$(dInputs.lumpSum)}，每月供款${fmt$(dInputs.monthly)}，年回报率${dInputs.rate}%，时间跨度${dInputs.years}年，延迟${dInputs.delay}年。`
+      )}</div>
       <div class="rp-headline wash-gold">
-        <div class="rp-label">The cost of waiting ${dInputs.delay} ${dInputs.delay===1?'year':'years'}</div>
+        <div class="rp-label">${T(`The cost of waiting ${dInputs.delay} ${dInputs.delay===1?'year':'years'}`, `等待${dInputs.delay}年的代价`)}</div>
         <div class="rp-hfigures">
-          <div><div class="rp-hfvalue">${fmt$(dGap)}</div><div class="rp-hfsub">smaller ending balance</div></div>
+          <div><div class="rp-hfvalue">${fmt$(dGap)}</div><div class="rp-hfsub">${T('smaller ending balance','较少的期末余额')}</div></div>
           <div class="rp-hfdivider">&mdash;</div>
-          <div><div class="rp-hfvalue">${dPct.toFixed(0)}%</div><div class="rp-hfsub">reduction</div></div>
+          <div><div class="rp-hfvalue">${dPct.toFixed(0)}%</div><div class="rp-hfsub">${T('reduction','减幅')}</div></div>
         </div>
       </div>
       <div class="rp-stat-row">
-        <div class="rp-stat"><div class="rp-slabel">Start today, ends with</div><div class="rp-svalue" style="color:#1F4B3F;">${fmt$(dNow.finalBalance)}</div></div>
-        <div class="rp-stat"><div class="rp-slabel">Wait, ends with</div><div class="rp-svalue">${fmt$(dLater.finalBalance)}</div></div>
+        <div class="rp-stat"><div class="rp-slabel">${T('Start today, ends with','今天开始，最终金额为')}</div><div class="rp-svalue" style="color:#1F4B3F;">${fmt$(dNow.finalBalance)}</div></div>
+        <div class="rp-stat"><div class="rp-slabel">${T('Wait, ends with','等待后，最终金额为')}</div><div class="rp-svalue">${fmt$(dLater.finalBalance)}</div></div>
       </div>
       ${lineChartSVG(axisLabels(dYears), [
         {values: dNow.yearly.map(y=>y.balance), color:'#1F4B3F'},
@@ -1889,7 +2049,7 @@ function saveReport(){
 function saveOnePager(){
   const client = els('clientName').value.trim();
   const advisor = els('advisorName').value.trim();
-  const dateStr = new Date().toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
+  const dateStr = new Date().toLocaleDateString(currentLang==='zh' ? 'zh-CN' : 'en-US', {year:'numeric', month:'long', day:'numeric'});
 
   const gInputs = getGrowthInputs();
   const gSim = simulateGrowth(gInputs);
@@ -1904,12 +2064,12 @@ function saveOnePager(){
     const idleReal = iSim.yearly[iSim.yearly.length-1].idleRealBalance;
     const gap = investedReal - idleReal;
     const gapPct = idleReal>0 ? (gap/idleReal)*100 : 0;
-    iCardFigs = {v1: fmt$(gap), s1:'More real value by investing', v2: gapPct.toFixed(0)+'%', s2:'Advantage over idle cash'};
+    iCardFigs = {v1: fmt$(gap), s1:T('More real value by investing','投资带来的额外实际价值'), v2: gapPct.toFixed(0)+'%', s2:T('Advantage over idle cash','相对闲置现金的优势')};
   } else {
     const nominal = iSim.finalBalance;
     const real = iSim.yearly[iSim.yearly.length-1].realBalance;
     const lostPct = nominal>0 ? ((nominal-real)/nominal)*100 : 0;
-    iCardFigs = {v1: fmt$(nominal-real), s1:'Purchasing power lost', v2: lostPct.toFixed(0)+'%', s2:'Of the nominal balance'};
+    iCardFigs = {v1: fmt$(nominal-real), s1:T('Purchasing power lost','购买力损失'), v2: lostPct.toFixed(0)+'%', s2:T('Of the nominal balance','占名义余额比例')};
   }
 
   const cInputs = getCashflowInputs();
@@ -1924,36 +2084,36 @@ function saveOnePager(){
   const dGap = dNow.finalBalance - dLater.finalBalance;
   const dPct = dNow.finalBalance>0 ? (dGap/dNow.finalBalance)*100 : 0;
 
-  const clientLine = client ? `Prepared for ${escapeHtml(client)}` : 'Financial Planning Summary';
+  const clientLine = client ? T(`Prepared for ${escapeHtml(client)}`, `为${escapeHtml(client)}准备`) : T('Financial Planning Summary','财务规划摘要');
 
   els('report').innerHTML = `<div class="report-page">
     ${pageHeader()}
     <div class="op-page">
       <div class="op-title">${clientLine}</div>
-      <div class="op-subtitle">${advisor?escapeHtml(advisor)+' \u00b7 ':''}${dateStr} \u00b7 One-page summary across all four scenarios</div>
+      <div class="op-subtitle">${advisor?escapeHtml(advisor)+' \u00b7 ':''}${dateStr} \u00b7 ${T('One-page summary across all four scenarios','四个方案的单页摘要')}</div>
       <div class="op-body">
         <div class="op-list">
           <div class="op-card">
             <div class="op-card-main">
-              <div class="op-eyebrow">01 &middot; Growth Projection</div>
-              <div class="op-heading">Compounding on a disciplined plan</div>
+              <div class="op-eyebrow">01 &middot; ${T('Growth Projection','增长预测')}</div>
+              <div class="op-heading">${T('Compounding on a disciplined plan','按计划持续复利增长')}</div>
               <div class="op-figs">
-                <div><div class="op-fig-value" style="color:#1F4B3F;">${fmt$(gSim.finalBalance)}</div><div class="op-fig-sub">Ending balance</div></div>
-                <div><div class="op-fig-value" style="color:#A9793C;">${gGrowthPct.toFixed(0)}%</div><div class="op-fig-sub">Return on contributed</div></div>
+                <div><div class="op-fig-value" style="color:#1F4B3F;">${fmt$(gSim.finalBalance)}</div><div class="op-fig-sub">${T('Ending balance','期末余额')}</div></div>
+                <div><div class="op-fig-value" style="color:#A9793C;">${gGrowthPct.toFixed(0)}%</div><div class="op-fig-sub">${T('Return on contributed','供款回报率')}</div></div>
               </div>
-              <div class="op-note">${fmt$(gInputs.lumpSum)} initial, ${fmt$(gInputs.monthly)}/month, ${gInputs.rate}% return over ${gInputs.years} years.</div>
+              <div class="op-note">${T(`${fmt$(gInputs.lumpSum)} initial, ${fmt$(gInputs.monthly)}/month, ${gInputs.rate}% return over ${gInputs.years} years.`, `初始${fmt$(gInputs.lumpSum)}，每月${fmt$(gInputs.monthly)}，${gInputs.rate}%回报率，为期${gInputs.years}年。`)}</div>
             </div>
             <div class="op-chart">${lineChartSVG(axisLabels(gSim.yearly.map(y=>y.year)), [{values: gSim.yearly.map(y=>y.balance), color:'#1F4B3F', fill:true}], 70)}</div>
           </div>
           <div class="op-card">
             <div class="op-card-main">
-              <div class="op-eyebrow">02 &middot; Inflation Impact</div>
-              <div class="op-heading">${iInputs.linked ? 'Investing vs. leaving it idle' : 'What standing still costs'}</div>
+              <div class="op-eyebrow">02 &middot; ${T('Inflation Impact','通胀影响')}</div>
+              <div class="op-heading">${iInputs.linked ? T('Investing vs. leaving it idle','投资 vs. 闲置不动') : T('What standing still costs','原地不动的代价')}</div>
               <div class="op-figs">
                 <div><div class="op-fig-value" style="color:#7A3D2E;">${iCardFigs.v1}</div><div class="op-fig-sub">${iCardFigs.s1}</div></div>
                 <div><div class="op-fig-value" style="color:#7A3D2E;">${iCardFigs.v2}</div><div class="op-fig-sub">${iCardFigs.s2}</div></div>
               </div>
-              <div class="op-note">${iInputs.inflation}% inflation assumed over ${iInputs.years} years.</div>
+              <div class="op-note">${T(`${iInputs.inflation}% inflation assumed over ${iInputs.years} years.`, `假设通胀率${iInputs.inflation}%，为期${iInputs.years}年。`)}</div>
             </div>
             <div class="op-chart">${lineChartSVG(axisLabels(iSim.yearly.map(y=>y.year)), [
               {values: iSim.yearly.map(y=>y.balance), color:'#1F4B3F'},
@@ -1962,31 +2122,31 @@ function saveOnePager(){
           </div>
           <div class="op-card">
             <div class="op-card-main">
-              <div class="op-eyebrow">03 &middot; Cash Flow Timeline</div>
-              <div class="op-heading">If nothing changes from here</div>
+              <div class="op-eyebrow">03 &middot; ${T('Cash Flow Timeline','现金流时间轴')}</div>
+              <div class="op-heading">${T('If nothing changes from here','若维持现状')}</div>
               <div class="op-figs">
-                <div><div class="op-fig-value" style="color:${cGood?'#1F4B3F':'#7A3D2E'};">${fmt$(cSim.finalBalance)}</div><div class="op-fig-sub">Ending balance</div></div>
-                <div><div class="op-fig-value" style="color:${cGood?'#1F4B3F':'#7A3D2E'};">${cChangePct>=0?'+':''}${cChangePct.toFixed(0)}%</div><div class="op-fig-sub">vs. starting balance</div></div>
+                <div><div class="op-fig-value" style="color:${cGood?'#1F4B3F':'#7A3D2E'};">${fmt$(cSim.finalBalance)}</div><div class="op-fig-sub">${T('Ending balance','期末余额')}</div></div>
+                <div><div class="op-fig-value" style="color:${cGood?'#1F4B3F':'#7A3D2E'};">${cChangePct>=0?'+':''}${cChangePct.toFixed(0)}%</div><div class="op-fig-sub">${T('vs. starting balance','对比起始余额')}</div></div>
               </div>
-              <div class="op-note">${fmt$(cInputs.startBalance)} starting balance over ${cInputs.years} years, ${incomeStreams.length} income stream(s), ${expenseStreams.length} expense stream(s).</div>
+              <div class="op-note">${T(`${fmt$(cInputs.startBalance)} starting balance over ${cInputs.years} years, ${incomeStreams.length} income stream(s), ${expenseStreams.length} expense stream(s).`, `起始余额${fmt$(cInputs.startBalance)}，为期${cInputs.years}年，${incomeStreams.length}项收入来源，${expenseStreams.length}项支出项目。`)}</div>
             </div>
             <div class="op-chart">${lineChartSVG(axisLabels(cSim.yearly.map(y=>y.year)), [{values: cSim.yearly.map(y=>y.balance), color: cGood?'#1F4B3F':'#9C3B2E'}], 70)}</div>
           </div>
           <div class="op-card">
             <div class="op-card-main">
-              <div class="op-eyebrow">04 &middot; Cost of Delay</div>
-              <div class="op-heading">What a year of hesitation costs</div>
+              <div class="op-eyebrow">04 &middot; ${T('Cost of Delay','延迟代价')}</div>
+              <div class="op-heading">${T('What a year of hesitation costs','犹豫一年的代价')}</div>
               <div class="op-figs">
-                <div><div class="op-fig-value" style="color:#7A4A1F;">${fmt$(dGap)}</div><div class="op-fig-sub">Smaller ending balance</div></div>
-                <div><div class="op-fig-value" style="color:#7A4A1F;">${dPct.toFixed(0)}%</div><div class="op-fig-sub">Reduction from waiting ${dInputs.delay}y</div></div>
+                <div><div class="op-fig-value" style="color:#7A4A1F;">${fmt$(dGap)}</div><div class="op-fig-sub">${T('Smaller ending balance','较少的期末余额')}</div></div>
+                <div><div class="op-fig-value" style="color:#7A4A1F;">${dPct.toFixed(0)}%</div><div class="op-fig-sub">${T(`Reduction from waiting ${dInputs.delay}y`, `延迟${dInputs.delay}年导致的减幅`)}</div></div>
               </div>
-              <div class="op-note">Same plan, started ${dInputs.delay} ${dInputs.delay===1?'year':'years'} later.</div>
+              <div class="op-note">${T(`Same plan, started ${dInputs.delay} ${dInputs.delay===1?'year':'years'} later.`, `相同方案，延迟${dInputs.delay}年开始。`)}</div>
             </div>
             <div class="op-chart">${lineChartSVG(axisLabels(dNow.yearly.map(y=>y.year)), [{values: dNow.yearly.map(y=>y.balance), color:'#1F4B3F'}], 70)}</div>
           </div>
         </div>
         <div class="op-notes">
-          <div class="op-notes-label">Notes</div>
+          <div class="op-notes-label">${T('Notes','备注')}</div>
         </div>
       </div>
     </div>
@@ -2008,6 +2168,7 @@ function collectAllData(){
   data.__cpfMode = cpfMode;
   data.__goalType = goalType;
   data.__cashflowView = cashflowView;
+  data.__lang = currentLang;
   data.__savedAt = new Date().toISOString();
   return data;
 }
@@ -2030,6 +2191,7 @@ function applyAllData(data){
   setCpfMode(!!data.__cpfMode);
   setGoalType(data.__goalType==='lump' ? 'lump' : 'income');
   setCashflowView(data.__cashflowView==='monthly' ? 'monthly' : 'yearly');
+  setLang(data.__lang==='zh' ? 'zh' : 'en');
   if(typeof data.__linkedMode === 'boolean'){
     setMode(data.__linkedMode ? 'linked' : 'independent');
   } else {
@@ -2099,6 +2261,7 @@ function checkForDraft(){
   }catch(err){}
 }
 
+applyLanguage();
 renderStreamsList();
 renderExpenseList();
 renderAll();
