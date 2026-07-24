@@ -172,6 +172,13 @@
     cursor:pointer; transition:background .15s ease;
   }
   .stype-btn.active{background:var(--ink); color:#fff; border-color:var(--ink);}
+  .val-input{
+    width:52px; border:1px solid var(--line); border-radius:3px; padding:2px 4px;
+    font-family:var(--mono); font-weight:600; color:var(--primary); font-size:13px;
+    text-align:right; background:#fff;
+  }
+  .val-input:focus{outline:none; border-color:var(--primary);}
+  .val-input::-webkit-inner-spin-button{opacity:0.4;}
   .add-stream-btn{
     width:100%; border:1px dashed var(--line); background:transparent; border-radius:2px;
     padding:9px; font-family:var(--sans); font-size:12.5px; font-weight:600; color:var(--primary);
@@ -366,25 +373,25 @@
 
   /* One-page leave-behind summary */
   .op-page{font-family:var(--sans); color:var(--ink); display:flex; flex-direction:column;}
-  .op-title{font-family:var(--serif); font-size:22px; font-weight:600; margin:2px 0 1px;}
-  .op-subtitle{font-size:11px; color:var(--muted); margin-bottom:14px;}
+  .op-title{font-family:var(--serif); font-size:22px; font-weight:600; margin:2px 0 1px; line-height:1.3;}
+  .op-subtitle{font-size:11px; color:var(--muted); margin-bottom:14px; line-height:1.4;}
   .op-body{display:flex; gap:18px; flex:1;}
   .op-list{flex:1; display:flex; flex-direction:column; gap:10px; min-width:0;}
   .op-card{border:1px solid var(--line); border-radius:2px; padding:10px 14px; display:flex; align-items:center; gap:14px;}
   .op-card .op-card-main{flex:1; min-width:0;}
-  .op-card .op-eyebrow{font-family:var(--mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:2px;}
-  .op-card .op-heading{font-family:var(--serif); font-size:13.5px; font-weight:600; margin-bottom:5px;}
-  .op-card .op-figs{display:flex; gap:16px; margin-bottom:5px;}
-  .op-card .op-fig-value{font-family:var(--serif); font-size:19px; font-weight:700; line-height:1.05;}
-  .op-card .op-fig-sub{font-size:8.5px; text-transform:uppercase; letter-spacing:.04em; opacity:.75; margin-top:2px;}
-  .op-card .op-note{font-size:10px; color:var(--muted); line-height:1.4;}
+  .op-card .op-eyebrow{font-family:var(--sans); font-size:9px; letter-spacing:.06em; text-transform:uppercase; color:var(--gold); margin-bottom:10px; line-height:1; font-weight:700; display:block;}
+  .op-card .op-heading{font-family:var(--serif); font-size:13px; font-weight:600; margin-bottom:8px; margin-top:0; line-height:1.4; display:block;}
+  .op-card .op-figs{display:flex; gap:16px; margin-bottom:6px;}
+  .op-card .op-fig-value{font-family:var(--serif); font-size:19px; font-weight:700; line-height:1.2;}
+  .op-card .op-fig-sub{font-size:8.5px; text-transform:uppercase; letter-spacing:.03em; opacity:.75; margin-top:3px; line-height:1.4;}
+  .op-card .op-note{font-size:10px; color:var(--muted); line-height:1.55;}
   .op-card .op-chart{width:190px; flex-shrink:0;}
   .op-notes{
     width:200px; flex-shrink:0; border:1px solid var(--line); border-radius:2px;
     background-image:repeating-linear-gradient(to bottom, transparent, transparent 27px, var(--line) 28px);
     padding:14px 12px;
   }
-  .op-notes .op-notes-label{font-family:var(--mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:8px;}
+  .op-notes .op-notes-label{font-family:var(--sans); font-size:9.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; line-height:1.4; font-weight:700;}
 </style>
 </head>
 <body>
@@ -478,16 +485,16 @@
           <div class="dollar-input"><span>$</span><input type="number" id="g_monthly" value="1000" min="0" step="50"></div>
         </div>
         <div class="field">
-          <label><span data-i18n="lbl_annualreturn">Annual return</span> <span class="val" id="g_returnVal">7.0%</span></label>
+          <label><span data-i18n="lbl_annualreturn">Annual return</span> <input type="number" class="val-input" id="g_returnVal" value="7" step="0.5" min="1" max="14">%</label>
           <input type="range" id="g_return" min="1" max="14" step="0.5" value="7">
         </div>
         <div class="field">
-          <label><span data-i18n="lbl_timeperiod">Time period</span> <span class="val" id="g_yearsVal">20 years</span></label>
-          <input type="range" id="g_years" min="1" max="40" step="1" value="20">
+          <label><span data-i18n="lbl_timeperiod">Time period</span> <input type="number" class="val-input" id="g_yearsVal" value="20" step="1" min="1" max="60"><span data-i18n="unit_years"> years</span></label>
+          <input type="range" id="g_years" min="1" max="60" step="1" value="20">
         </div>
         <div class="field">
-          <label><span data-i18n="lbl_yearscontrib">Years of contribution</span> <span class="val" id="g_contribYearsVal">20 years</span></label>
-          <input type="range" id="g_contribYears" min="0" max="40" step="1" value="20">
+          <label><span data-i18n="lbl_yearscontrib">Years of contribution</span> <input type="number" class="val-input" id="g_contribYearsVal" value="20" step="1" min="0" max="60"><span data-i18n="unit_years"> years</span></label>
+          <input type="range" id="g_contribYears" min="0" max="60" step="1" value="20">
           <div class="field-note"><span data-i18n="note_contribstop1">If less than the time period, contributions stop early and the balance keeps compounding on its own.</span></div>
         </div>
         <div class="field">
@@ -511,7 +518,7 @@
           </div>
         </div>
         <div class="field">
-          <label><span data-i18n="lbl_band">Optimistic / conservative range</span> <span class="val" id="g_bandVal">Off</span></label>
+          <label><span data-i18n="lbl_band">Optimistic / conservative range</span> <input type="number" class="val-input" id="g_bandVal" value="0" step="0.5" min="0" max="5">%</label>
           <input type="range" id="g_band" min="0" max="5" step="0.5" value="0">
           <div class="field-note"><span data-i18n="note_band">Shades a band above/below the return rate — e.g. &plusmn;2% around 7% shows a 5%–9% range.</span></div>
         </div>
@@ -602,17 +609,17 @@
             <div class="field-note"><span data-i18n="note_cashtoday">A lump sum left untouched &mdash; no further deposits or withdrawals.</span></div>
           </div>
           <div class="field">
-            <label><span data-i18n="lbl_timeperiod">Time period</span> <span class="val" id="i_yearsVal">20 years</span></label>
-            <input type="range" id="i_years" min="1" max="40" step="1" value="20">
+            <label><span data-i18n="lbl_timeperiod">Time period</span> <input type="number" class="val-input" id="i_yearsVal" value="20" step="1" min="1" max="60"><span data-i18n="unit_years"> years</span></label>
+            <input type="range" id="i_years" min="1" max="60" step="1" value="20">
           </div>
         </div>
         <div class="field">
-          <label><span data-i18n="lbl_bankrate">Bank / savings rate</span> <span class="val" id="i_bankVal">0.5%</span></label>
+          <label><span data-i18n="lbl_bankrate">Bank / savings rate</span> <input type="number" class="val-input" id="i_bankVal" value="0.5" step="0.25" min="0" max="5">%</label>
           <input type="range" id="i_bankRate" min="0" max="5" step="0.25" value="0.5">
           <div class="field-note" id="i_bankNote"><span data-i18n="note_bankrate">What a typical savings or current account pays &mdash; set to 0% to show cash earning nothing at all.</span></div>
         </div>
         <div class="field">
-          <label><span data-i18n="lbl_inflrate">Inflation rate</span> <span class="val" id="i_inflVal">3.0%</span></label>
+          <label><span data-i18n="lbl_inflrate">Inflation rate</span> <input type="number" class="val-input" id="i_inflVal" value="3" step="0.25" min="0" max="8">%</label>
           <input type="range" id="i_inflation" min="0" max="8" step="0.25" value="3">
           <div class="field-note"><span data-i18n="note_inflrate">Historical U.S. CPI inflation has averaged roughly 3% a year over the long run.</span></div>
         </div>
@@ -666,12 +673,12 @@
           <div class="field-note"><span data-i18n="note_expensestreams">Same idea for money going out &mdash; e.g. a mortgage ending in year 12 while living expenses run the full period.</span></div>
         </div>
         <div class="field">
-          <label><span data-i18n="lbl_idlerate">Interest on idle balance</span> <span class="val" id="c_rateVal">1.0%</span></label>
+          <label><span data-i18n="lbl_idlerate">Interest on idle balance</span> <input type="number" class="val-input" id="c_rateVal" value="1" step="0.25" min="0" max="8">%</label>
           <input type="range" id="c_rate" min="0" max="8" step="0.25" value="1">
         </div>
         <div class="field">
-          <label><span data-i18n="lbl_timehorizon">Time horizon</span> <span class="val" id="c_yearsVal">15 years</span></label>
-          <input type="range" id="c_years" min="1" max="40" step="1" value="15">
+          <label><span data-i18n="lbl_timehorizon">Time horizon</span> <input type="number" class="val-input" id="c_yearsVal" value="15" step="1" min="1" max="60"><span data-i18n="unit_years"> years</span></label>
+          <input type="range" id="c_years" min="1" max="60" step="1" value="15">
         </div>
         <div class="field-note" style="padding-top:10px; border-top:1px solid var(--line);"><span data-i18n="note_cfhorizon">Shows what happens if nothing changes &mdash; the balance simply runs on its own credits and debits.</span></div>
       </div>
@@ -730,22 +737,22 @@
             <div class="dollar-input"><span>$</span><input type="number" id="d_monthly" value="1000" min="0" step="50"></div>
           </div>
           <div class="field">
-            <label><span data-i18n="lbl_annualreturn">Annual return</span> <span class="val" id="d_returnVal">7.0%</span></label>
+            <label><span data-i18n="lbl_annualreturn">Annual return</span> <input type="number" class="val-input" id="d_returnVal" value="7" step="0.5" min="1" max="14">%</label>
             <input type="range" id="d_return" min="1" max="14" step="0.5" value="7">
           </div>
           <div class="field">
-            <label><span data-i18n="lbl_timeperiod">Time period</span> <span class="val" id="d_yearsVal">20 years</span></label>
-            <input type="range" id="d_years" min="1" max="40" step="1" value="20">
+            <label><span data-i18n="lbl_timeperiod">Time period</span> <input type="number" class="val-input" id="d_yearsVal" value="20" step="1" min="1" max="60"><span data-i18n="unit_years"> years</span></label>
+            <input type="range" id="d_years" min="1" max="60" step="1" value="20">
           </div>
           <div class="field">
-            <label><span data-i18n="lbl_yearscontrib">Years of contribution</span> <span class="val" id="d_contribYearsVal">20 years</span></label>
-            <input type="range" id="d_contribYears" min="0" max="40" step="1" value="20">
+            <label><span data-i18n="lbl_yearscontrib">Years of contribution</span> <input type="number" class="val-input" id="d_contribYearsVal" value="20" step="1" min="0" max="60"><span data-i18n="unit_years"> years</span></label>
+            <input type="range" id="d_contribYears" min="0" max="60" step="1" value="20">
             <div class="field-note"><span data-i18n="note_contribstop2">If less than the time period, contributions stop early in both scenarios below.</span></div>
           </div>
         </div>
         <div class="field">
-          <label><span data-i18n="lbl_delaystart">Delay before starting</span> <span class="val" id="d_delayVal">5 years</span></label>
-          <input type="range" id="d_delay" min="0" max="20" step="1" value="5">
+          <label><span data-i18n="lbl_delaystart">Delay before starting</span> <input type="number" class="val-input" id="d_delayVal" value="5" step="1" min="0" max="40"><span data-i18n="unit_years"> years</span></label>
+          <input type="range" id="d_delay" min="0" max="40" step="1" value="5">
           <div class="field-note"><span data-i18n="note_delaystart">Same lump sum and monthly contribution, invested for less time because of the delay &mdash; end date stays fixed.</span></div>
         </div>
         <div class="field">
@@ -910,6 +917,7 @@ const I18N = {
   lbl_agefilter: {en:"Highlight specific ages/years (optional)", zh:"标示特定年龄／年份（选填）"},
   note_agefilter: {en:"Comma-separated. Leave blank to show the full projection spread automatically. If client age is set, enter ages; otherwise enter years delayed.", zh:"以逗号分隔。留空则自动显示完整预测范围。若已设定客户年龄，请输入年龄；否则请输入延迟年数。"},
   ph_agefilter: {en:"e.g. 55, 60, 65", zh:"例如 55, 60, 65"},
+  unit_years: {en:" years", zh:" 年"},
   stat_totalcontrib: {en:"Total contributed", zh:"总供款额"},
   stat_endbal: {en:"Ending balance", zh:"期末余额"},
   stat_cpftotal: {en:"CPF OA + SA projected", zh:"公积金OA+SA预计金额"},
@@ -1052,6 +1060,35 @@ function fmtShort(v){
 }
 function escapeHtml(s){
   return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ---------------- slider <-> typed-number sync (lets an agent type an exact value instead of only dragging) ---------------- */
+function setValInput(id, numValue){
+  const el = els(id);
+  if(!el) return;
+  if(document.activeElement !== el) el.value = numValue;
+}
+function wireValInput(inputId, sliderId){
+  const input = els(inputId);
+  const slider = els(sliderId);
+  if(!input || !slider) return;
+  input.addEventListener('change', function(){
+    let v = parseFloat(this.value);
+    const min = parseFloat(slider.min), max = parseFloat(slider.max);
+    if(!isFinite(v)) v = parseFloat(slider.value);
+    v = Math.max(min, Math.min(max, v));
+    slider.value = v;
+    this.value = v;
+    renderAll();
+    autoSaveDraft();
+  });
+}
+function wireAllValInputs(){
+  [['g_returnVal','g_return'],['g_yearsVal','g_years'],['g_contribYearsVal','g_contribYears'],['g_bandVal','g_band'],
+   ['i_yearsVal','i_years'],['i_bankVal','i_bankRate'],['i_inflVal','i_inflation'],
+   ['c_rateVal','c_rate'],['c_yearsVal','c_years'],
+   ['d_returnVal','d_return'],['d_yearsVal','d_years'],['d_contribYearsVal','d_contribYears'],['d_delayVal','d_delay']
+  ].forEach(([inp,sl])=>wireValInput(inp,sl));
 }
 
 /* ---------------- interactive chart hover: shows the point under the cursor ---------------- */
@@ -1304,13 +1341,13 @@ function computeCpf(years){
   return {oa, sa, finalBalance: oa.finalBalance + sa.finalBalance};
 }
 function renderGrowth(){
-  els('g_returnVal').textContent = parseFloat(els('g_return').value).toFixed(1)+'%';
-  els('g_yearsVal').textContent = els('g_years').value + T(' years',' 年');
-  els('g_contribYearsVal').textContent = els('g_contribYears').value + T(' years',' 年');
+  setValInput('g_returnVal', parseFloat(els('g_return').value).toFixed(1));
+  setValInput('g_yearsVal', els('g_years').value);
+  setValInput('g_contribYearsVal', els('g_contribYears').value);
   const goalInfo = getGoalInfo();
   els('g_goalVal').textContent = goalInfo ? fmt$(goalInfo.value) : T('Off','关闭');
   const bandSpread = parseFloat(els('g_band').value)||0;
-  els('g_bandVal').textContent = bandSpread>0 ? '\u00b1'+bandSpread.toFixed(1)+'%' : T('Off','关闭');
+  setValInput('g_bandVal', bandSpread);
 
   const inputs = getGrowthInputs();
   const sim = simulateGrowth(inputs);
@@ -1481,9 +1518,9 @@ function getInflationInputs(){
   };
 }
 function renderInflation(){
-  els('i_bankVal').textContent = parseFloat(els('i_bankRate').value).toFixed(2).replace(/\.?0+$/,'').concat('%');
-  els('i_inflVal').textContent = parseFloat(els('i_inflation').value).toFixed(1)+'%';
-  els('i_yearsVal').textContent = els('i_years').value + T(' years',' 年');
+  setValInput('i_bankVal', parseFloat(els('i_bankRate').value));
+  setValInput('i_inflVal', parseFloat(els('i_inflation').value));
+  setValInput('i_yearsVal', els('i_years').value);
   const inputs = getInflationInputs();
   const sim = simulateInflation(inputs);
   const stat3 = els('i-stat3');
@@ -1729,8 +1766,8 @@ function getCashflowInputs(){
   };
 }
 function renderCashflow(){
-  els('c_rateVal').textContent = parseFloat(els('c_rate').value).toFixed(2).replace(/\.?0+$/,'').concat('%');
-  els('c_yearsVal').textContent = els('c_years').value + T(' years',' 年');
+  setValInput('c_rateVal', parseFloat(els('c_rate').value));
+  setValInput('c_yearsVal', els('c_years').value);
   els('c-headline-years').textContent = els('c_years').value + T(' years',' 年');
 
   const inputs = getCashflowInputs();
@@ -1841,11 +1878,11 @@ function runDelayScenario(inputs, delay){
   return {finalBalance: sim.finalBalance, yearly: padded};
 }
 function renderDelay(){
-  els('d_returnVal').textContent = parseFloat(els('d_return').value).toFixed(1)+'%';
-  els('d_yearsVal').textContent = els('d_years').value + T(' years',' 年');
-  els('d_contribYearsVal').textContent = els('d_contribYears').value + T(' years',' 年');
+  setValInput('d_returnVal', parseFloat(els('d_return').value));
+  setValInput('d_yearsVal', els('d_years').value);
+  setValInput('d_contribYearsVal', els('d_contribYears').value);
   const delay = parseInt(els('d_delay').value)||0;
-  els('d_delayVal').textContent = delay + T(delay===1?' year':' years', ' 年');
+  setValInput('d_delayVal', delay);
   els('d-costwaiting-label').textContent = T('The cost of waiting','等待的代价');
   els('d-delayinline').textContent = T('after ' + delay + (delay===1?' year':' years'), delay+'年后');
 
@@ -2510,6 +2547,7 @@ function checkForDraft(){
 }
 
 applyLanguage();
+wireAllValInputs();
 renderStreamsList();
 renderExpenseList();
 renderAll();
