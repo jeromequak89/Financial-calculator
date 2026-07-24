@@ -393,9 +393,50 @@
   }
   .op-notes .op-notes-label{font-family:var(--sans); font-size:9.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; line-height:1.4; font-weight:700;}
 </style>
+<style>
+  .authwrap{position:fixed;inset:0;background:var(--ink);display:flex;align-items:center;justify-content:center;padding:20px;z-index:9999;}
+  .authcard{background:var(--surface);border-radius:var(--radius);box-shadow:0 20px 60px rgba(0,0,0,0.35);padding:36px 34px;width:100%;max-width:360px;text-align:center;}
+  .authlogo{height:52px;width:auto;margin-bottom:14px;}
+  .autheyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin:0 0 4px;}
+  .authtitle{font-family:var(--serif);font-size:22px;margin:0 0 8px;color:var(--ink);}
+  .authsub{font-size:12.5px;color:var(--muted);margin:0 0 22px;line-height:1.5;}
+  .authcard .afield{text-align:left;margin-bottom:16px;}
+  .authcard .afield label{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px;font-weight:600;}
+  .authcard .afield input{width:100%;border:1.5px solid var(--line);border-radius:var(--radius);padding:10px 10px;font-family:var(--sans);font-size:16px;color:var(--ink);outline:none;box-sizing:border-box;}
+  .authcard .afield input:focus{border-color:var(--gold);}
+  .authbtn{width:100%;padding:12px;font-size:13.5px;margin-top:4px;background:var(--primary);border:1.5px solid var(--primary);color:#fff;font-family:var(--sans);font-weight:600;border-radius:var(--radius);cursor:pointer;}
+  .authbtn:hover{background:var(--primary-light);}
+  .authbtn:disabled{opacity:.6;cursor:not-allowed;}
+  .autherror{color:var(--danger);font-size:12px;margin:10px 0 0;min-height:16px;font-weight:600;}
+  .authfooter{font-size:11px;color:var(--muted);margin:20px 0 0;line-height:1.5;}
+  .topbar{display:flex;justify-content:flex-end;align-items:center;gap:12px;max-width:1480px;margin:0 auto;padding:14px 16px 0;}
+  .topbar .signedin{font-size:11px;color:var(--muted);font-family:var(--mono);}
+  .topbar button{background:transparent;border:1.5px solid var(--primary);color:var(--primary);font-family:var(--sans);font-weight:600;font-size:12px;padding:7px 14px;border-radius:var(--radius);cursor:pointer;}
+  .topbar button:hover{background:var(--primary);color:#fff;}
+  @media print{ .authwrap,.topbar{display:none !important;} }
+</style>
 </head>
 <body>
 
+<div id="authScreen" class="authwrap">
+  <div class="authcard">
+    <img class="authlogo" id="authLogoImg" alt="Financial Architects Advisory">
+    <p class="autheyebrow">Financial Architects Advisory</p>
+    <h2 class="authtitle">Agent Tools</h2>
+    <p class="authsub">Sign in with the account your team lead set up for you.</p>
+    <div class="afield"><label>Email</label><input id="authEmail" type="email" autocomplete="username"></div>
+    <div class="afield"><label>Password</label><input id="authPassword" type="password" autocomplete="current-password"></div>
+    <div id="authError" class="autherror"></div>
+    <button class="authbtn" id="authSignInBtn">Sign In</button>
+    <p class="authfooter">No account? Ask your team lead to create one for you in Supabase.</p>
+  </div>
+</div>
+
+<div id="mainApp" style="display:none;">
+<div class="topbar">
+  <span class="signedin" id="signedInAs"></span>
+  <button id="logoutBtn">Log out</button>
+</div>
 <div class="wrap no-print">
   <div class="draft-banner" id="draft-banner" style="display:none;">
     <span id="draft-banner-text"></span>
@@ -806,6 +847,7 @@
 
 <!-- PRINT-ONLY REPORT -->
 <div id="report"></div>
+</div>
 
 <script>
 /* ---------------- embedded brand assets (offline-safe, no external requests) ---------------- */
@@ -2552,6 +2594,52 @@ renderStreamsList();
 renderExpenseList();
 renderAll();
 checkForDraft();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  const SUPABASE_URL = 'https://ygbtbhyvpworrmuezsrf.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlnYnRiaHl2cHdvcnJtdWV6c3JmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ4ODQ2ODAsImV4cCI6MjEwMDQ2MDY4MH0.sSDhdcUPvSqDkaKakUHJSjEszVAaibEYwGqiDPh6Tc8';
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const g = function(id){ return document.getElementById(id); };
+
+  if (g('authLogoImg') && typeof LOGO_FULL !== 'undefined') { g('authLogoImg').src = LOGO_FULL; }
+
+  async function showApp(){
+    g('authScreen').style.display = 'none';
+    g('mainApp').style.display = 'block';
+    const { data: { user } } = await sb.auth.getUser();
+    g('signedInAs').textContent = user ? user.email : '';
+  }
+  function showAuthScreen(){
+    g('authScreen').style.display = 'flex';
+    g('mainApp').style.display = 'none';
+  }
+  async function checkSession(){
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) { showApp(); } else { showAuthScreen(); }
+  }
+  g('authSignInBtn').addEventListener('click', async function(){
+    const email = g('authEmail').value.trim();
+    const password = g('authPassword').value;
+    g('authError').textContent = '';
+    if (!email || !password){ g('authError').textContent = 'Enter both email and password.'; return; }
+    const btn = g('authSignInBtn');
+    btn.disabled = true; btn.textContent = 'Signing in…';
+    const { error } = await sb.auth.signInWithPassword({ email: email, password: password });
+    btn.disabled = false; btn.textContent = 'Sign In';
+    if (error){ g('authError').textContent = error.message; return; }
+    showApp();
+  });
+  g('authPassword').addEventListener('keydown', function(e){ if (e.key === 'Enter') g('authSignInBtn').click(); });
+  g('logoutBtn').addEventListener('click', async function(){
+    await sb.auth.signOut();
+    showAuthScreen();
+  });
+
+  checkSession();
+})();
 </script>
 </body>
 </html>
