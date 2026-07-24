@@ -413,6 +413,8 @@
   .topbar .signedin{font-size:11px;color:var(--muted);font-family:var(--mono);}
   .topbar button{background:transparent;border:1.5px solid var(--primary);color:var(--primary);font-family:var(--sans);font-weight:600;font-size:12px;padding:7px 14px;border-radius:var(--radius);cursor:pointer;}
   .topbar button:hover{background:var(--primary);color:#fff;}
+  .topbar a.homebtn{background:transparent;border:1.5px solid var(--primary);color:var(--primary);font-family:var(--sans);font-weight:600;font-size:12px;padding:7px 14px;border-radius:var(--radius);text-decoration:none;display:inline-flex;align-items:center;margin-right:auto;}
+  .topbar a.homebtn:hover{background:var(--primary);color:#fff;}
   @media print{ .authwrap,.topbar{display:none !important;} }
 </style>
 </head>
@@ -434,6 +436,7 @@
 
 <div id="mainApp" style="display:none;">
 <div class="topbar">
+  <a href="https://jeromequak89.github.io/Financial-Pyramid-tool/" class="homebtn">← Back to Tools</a>
   <span class="signedin" id="signedInAs"></span>
   <button id="logoutBtn">Log out</button>
 </div>
